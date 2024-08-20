@@ -8,6 +8,10 @@ const db = require('./db');
 const app = express();
 const port = 3000;
 
+// Set EJS as the view engine
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -39,8 +43,14 @@ passport.deserializeUser((obj, done) => {
 
 // Routes
 app.get('/', (req, res) => {
-    res.render('index', { user: req.user });
+    db.getPosts().then(posts => {
+        res.render('index', { user: req.user, posts });
+    }).catch(err => {
+        console.error('Failed to retrieve posts:', err);
+        res.render('index', { user: req.user, posts: [] }); // postsがない場合でもエラーを防ぐ
+    });
 });
+
 
 app.get('/login', (req, res) => {
     res.render('login');
@@ -74,8 +84,12 @@ app.post('/post', (req, res) => {
 app.get('/posts', (req, res) => {
     db.getPosts().then(posts => {
         res.render('index', { user: req.user, posts });
+    }).catch(err => {
+        console.error('Failed to retrieve posts:', err);
+        res.render('index', { user: req.user, posts: [] }); // postsがない場合でもエラーを防ぐ
     });
 });
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
