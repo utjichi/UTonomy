@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Electronic Bulletin Board</title>
+</head>
+<body>
+    <% if (user) { %>
+        <h1>Welcome, <%= user.displayName %>!</h1>
+        <form action="/post" method="post">
+            <textarea name="content" placeholder="Write your post here..." required></textarea>
+            <button type="submit">Post</button>
+        </form>
+        <a href="/logout">Logout</a>
+    <% } else { %>
+        <a href="/auth/google">Login with Google</a>
+    <% } %>
+
+    <h2>Posts</h2>
+    <ul>
+        <% posts.forEach(post => { %>
+            <li><strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %></li>
+        <% }) %>
+    </ul>
+</body>
+</html>

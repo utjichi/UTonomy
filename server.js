@@ -1,54 +1,82 @@
-const path = require("path");
+const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const SQLiteStore = require('connect-sqlite3')(session);
+const db = require('./db');
 
-// Require the fastify framework and instantiate it
-const fastify = require("fastify")({
-  // set this to true for detailed logging:
-  logger: false,
+const app = express();
+const port = 3000;
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(session({
+    store: new SQLiteStore({ db: 'sessions.db', dir: './db' }),
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport configuration
+passport.use(new GoogleStrategy({
+    clientID: 'YOUR_GOOGLE_CLIENT_ID',
+    clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
+    callbackURL: 'http://localhost:3000/auth/google/callback'
+}, (accessToken, refreshToken, profile, done) => {
+    return done(null, profile);
+}));
+
+passport.serializeUser((user, done) => {
+    done(null, user);
 });
 
-// Setup our static files
-fastify.register(require("@fastify/static"), {
-  root: path.join(__dirname, "public"),
-  prefix: "/", // optional: default '/'
+passport.deserializeUser((obj, done) => {
+    done(null, obj);
 });
 
-// fastify-formbody lets us parse incoming forms
-fastify.register(require("@fastify/formbody"));
-
-// point-of-view is a templating manager for fastify
-fastify.register(require("@fastify/view"), {
-  engine: {
-    handlebars: require("handlebars"),
-  },
+// Routes
+app.get('/', (req, res) => {
+    res.render('index', { user: req.user });
 });
 
-// Our main GET home page route, pulls from src/pages/index.hbs
-fastify.get("/", function (request, reply) {
-  // params is an object we'll pass to our handlebars template
-  let params = {
-    greeting: "Hello Node!",
-  };
-  // request.query.paramName <-- a querystring example
-  return reply.view("/src/pages/index.hbs", params);
+app.get('/login', (req, res) => {
+    res.render('login');
 });
 
-// A POST route to handle form submissions
-fastify.post("/", function (request, reply) {
-  let params = {
-    greeting: "Hello Form!",
-  };
-  // request.body.paramName <-- a form post example
-  return reply.view("/src/pages/index.hbs", params);
+app.get('/auth/google', passport.authenticate('google', {
+    scope: ['profile']
+}));
+
+app.get('/auth/google/callback', passport.authenticate('google', {
+    failureRedirect: '/login'
+}), (req, res) => {
+    res.redirect('/');
 });
 
-// Run the server and report out to the logs
-fastify.listen(
-  { port: process.env.PORT, host: "0.0.0.0" },
-  function (err, address) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+});
+
+app.post('/post', (req, res) => {
+    if (req.isAuthenticated()) {
+        const { content } = req.body;
+        db.addPost(req.user.id, content);
+        res.redirect('/');
+    } else {
+        res.redirect('/login');
     }
-    console.log(`Your app is listening on ${address}`);
-  }
-);
+});
+
+app.get('/posts', (req, res) => {
+    db.getPosts().then(posts => {
+        res.render('index', { user: req.user, posts });
+    });
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
