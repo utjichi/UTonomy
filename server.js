@@ -100,6 +100,34 @@ app.post("/post", (req, res) => {
   }
 });
 
+app.post("/post/:id/upvote", (req, res) => {
+  if (req.isAuthenticated()) {
+    const postId = req.params.id;
+    db.upvotePost(postId)
+      .then(() => res.redirect("/posts"))
+      .catch((err) => {
+        console.error("Failed to upvote post:", err);
+        res.redirect("/posts");
+      });
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.post("/post/:id/downvote", (req, res) => {
+  if (req.isAuthenticated()) {
+    const postId = req.params.id;
+    db.downvotePost(postId)
+      .then(() => res.redirect("/posts"))
+      .catch((err) => {
+        console.error("Failed to downvote post:", err);
+        res.redirect("/posts");
+      });
+  } else {
+    res.redirect("/login");
+  }
+});
+
 app.get("/posts", (req, res) => {
   if (req.isAuthenticated()) {
     db.getPosts()
@@ -118,3 +146,4 @@ app.get("/posts", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on https://u-tonomy-ai.glitch.me:${port}`);
 });
+
