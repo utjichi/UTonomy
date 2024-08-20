@@ -26,9 +26,9 @@ app.use(passport.session());
 
 // Passport configuration
 passport.use(new GoogleStrategy({
-    clientID: 'YOUR_GOOGLE_CLIENT_ID',
-    clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
-    callbackURL: 'http://localhost:3000/auth/google/callback'
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'https://u-tonomy-ai.glitch.me/auth/google/callback'
 }, (accessToken, refreshToken, profile, done) => {
     return done(null, profile);
 }));
@@ -67,7 +67,7 @@ app.get('/auth/google/callback', passport.authenticate('google', {
 });
 
 app.get('/logout', (req, res) => {
-    req.logout();
+    req.logout(()=>{});
     res.redirect('/');
 });
 
@@ -92,5 +92,5 @@ app.get('/posts', (req, res) => {
 
 
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on https://u-tonomy-ai.glitch.me:${port}`);
 });
