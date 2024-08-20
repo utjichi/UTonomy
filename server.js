@@ -17,8 +17,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   session({
-    store: new SQLiteStore({ db: "sessions.db", dir: "./db" }),
-    secret: "your_secret_key",
+    store: new SQLiteStore({ db: "sessions.db", dir: "./.data" }),
+    secret: process.env.GOOGLE_CLIENT_SECRET,
     resave: false,
     saveUninitialized: false,
   })
