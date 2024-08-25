@@ -29,154 +29,88 @@ const addPost = (userId, content) => {
 const upvotePost = (userId, postId) => {
   return new Promise((resolve, reject) => {
     // ユーザーがすでに投票しているか確認
-    db.get(
-      "SELECT * FROM votes WHERE user_id = ? AND post_id = ?",
-      [userId, postId],
-      (err, row) => {
-        if (err) return reject(err);
-        if (row) {
-          // すでに投票している場合、投票を取り消す
-          if (row.vote_type === "upvote") {
-            db.run(
-              "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
-              [userId, postId],
-              function (err) {
-                if (err) return reject(err);
-                // 投稿のupvote数を更新
-                db.run(
-                  "UPDATE posts SET upvotes = upvotes - 1 WHERE id = ?",
-                  postId,
-                  function (err) {
-                    if (err) return reject(err);
-                    resolve(this.changes);
-                  }
-                );
-              }
-            );
-          } else {
-            db.run(
-              "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
-              [userId, postId],
-              function (err) {
-                if (err) return reject(err);
-                // 投稿のdownvote数を更新
-                db.run(
-                  "UPDATE posts SET downvotes = downvotes - 1 WHERE id = ?",
-                  postId,
-                  function (err) {
-                    if (err) return reject(err);
-                    // 投稿のupvote数を更新
-                    db.run(
-                      "UPDATE posts SET upvotes = upvotes + 1 WHERE id = ?",
-                      postId,
-                      function (err) {
-                        if (err) return reject(err);
-                        resolve(this.changes);
-                      }
-                    );
-                  }
-                );
-              }
-            );
-          }
+    db.get("SELECT * FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], (err, row) => {
+      if (err) return reject(err);
+      if (row) {
+        // すでに投票している場合、投票を取り消す
+        if (row.vote_type === 'upvote') {
+          db.run("DELETE FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], function(err) {
+            if (err) return reject(err);
+            // 投稿のupvote数を更新
+            db.run("UPDATE posts SET upvotes = upvotes - 1 WHERE id = ?", postId, function(err) {
+              if (err) return reject(err);
+              resolve(this.changes);
+            });
+          });
         } else {
-          // 投票を追加
-          db.run(
-            "INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, 'upvote')",
-            [userId, postId],
-            function (err) {
+          db.run("DELETE FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], function(err) {
+            if (err) return reject(err);
+            // 投稿のdownvote数を更新
+            db.run("UPDATE posts SET downvotes = downvotes - 1 WHERE id = ?", postId, function(err) {
               if (err) return reject(err);
               // 投稿のupvote数を更新
-              db.run(
-                "UPDATE posts SET upvotes = upvotes + 1 WHERE id = ?",
-                postId,
-                function (err) {
-                  if (err) return reject(err);
-                  resolve(this.changes);
-                }
-              );
-            }
-          );
+              db.run("UPDATE posts SET upvotes = upvotes + 1 WHERE id = ?", postId, function(err) {
+                if (err) return reject(err);
+                resolve(this.changes);
+              });
+            });
+          });
         }
+      } else {
+        // 投票を追加
+        db.run("INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, 'upvote')", [userId, postId], function(err) {
+          if (err) return reject(err);
+          // 投稿のupvote数を更新
+          db.run("UPDATE posts SET upvotes = upvotes + 1 WHERE id = ?", postId, function(err) {
+            if (err) return reject(err);
+            resolve(this.changes);
+          });
+        });
       }
-    );
+    });
   });
 };
 
 const downvotePost = (userId, postId) => {
   return new Promise((resolve, reject) => {
     // ユーザーがすでに投票しているか確認
-    db.get(
-      "SELECT * FROM votes WHERE user_id = ? AND post_id = ?",
-      [userId, postId],
-      (err, row) => {
-        if (err) return reject(err);
-        if (row) {
-          // すでに投票している場合、投票を取り消す
-          if (row.vote_type === "downvote") {
-            db.run(
-              "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
-              [userId, postId],
-              function (err) {
-                if (err) return reject(err);
-                // 投稿のdownvote数を更新
-                db.run(
-                  "UPDATE posts SET downvotes = downvotes - 1 WHERE id = ?",
-                  postId,
-                  function (err) {
-                    if (err) return reject(err);
-                    resolve(this.changes);
-                  }
-                );
-              }
-            );
-          } else {
-            db.run(
-              "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
-              [userId, postId],
-              function (err) {
-                if (err) return reject(err);
-                // 投稿のupvote数を更新
-                db.run(
-                  "UPDATE posts SET upvotes = upvotes - 1 WHERE id = ?",
-                  postId,
-                  function (err) {
-                    if (err) return reject(err);
-                    // 投稿のdownvote数を更新
-                    db.run(
-                      "UPDATE posts SET downvotes = downvotes + 1 WHERE id = ?",
-                      postId,
-                      function (err) {
-                        if (err) return reject(err);
-                        resolve(this.changes);
-                      }
-                    );
-                  }
-                );
-              }
-            );
-          }
-        } else {
-          // 投票を追加
-          db.run(
-            "INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, 'downvote')",
-            [userId, postId],
-            function (err) {
+    db.get("SELECT * FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], (err, row) => {
+      if (err) return reject(err);
+
+      if (row) {
+        // すでに投票している場合、投票を取り消す
+        if (row.vote_type === 'downvote') {
+          db.run("DELETE FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], function(err) {
+            if (err) return reject(err);
+            // 投稿のdownvote数を更新
+            db.run("UPDATE posts SET downvotes = downvotes - 1 WHERE id = ?", postId, function(err) {
               if (err) return reject(err);
-              // 投稿のdownvote数を更新
-              db.run(
-                "UPDATE posts SET downvotes = downvotes + 1 WHERE id = ?",
-                postId,
-                function (err) {
-                  if (err) return reject(err);
-                  resolve(this.changes);
-                }
-              );
-            }
-          );
+              resolve(this.changes);
+            });
+          });
+        } else {
+          // 既存の投票をdownvoteに更新
+          db.run("UPDATE votes SET vote_type = 'downvote' WHERE user_id = ? AND post_id = ?", [userId, postId], function(err) {
+            if (err) return reject(err);
+            // 投稿のdownvote数を更新
+            db.run("UPDATE posts SET downvotes = downvotes + 1 WHERE id = ?", postId, function(err) {
+              if (err) return reject(err);
+              resolve(this.changes);
+            });
+          });
         }
+      } else {
+        // 投票を追加
+        db.run("INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, 'downvote')", [userId, postId], function(err) {
+          if (err) return reject(err);
+          // 投稿のdownvote数を更新
+          db.run("UPDATE posts SET downvotes = downvotes + 1 WHERE id = ?", postId, function(err) {
+            if (err) return reject(err);
+            resolve(this.changes);
+          });
+        });
       }
-    );
+    });
   });
 };
 
