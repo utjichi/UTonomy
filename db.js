@@ -31,6 +31,7 @@ const upvotePost = (userId, postId) => {
     // ユーザーがすでに投票しているか確認
     db.get("SELECT * FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], (err, row) => {
       if (err) return reject(err);
+
       if (row) {
         // すでに投票している場合、投票を取り消す
         if (row.vote_type === 'upvote') {
@@ -43,16 +44,13 @@ const upvotePost = (userId, postId) => {
             });
           });
         } else {
-          db.run("DELETE FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], function(err) {
+          // 既存の投票をupvoteに更新
+          db.run("UPDATE votes SET vote_type = 'upvote' WHERE user_id = ? AND post_id = ?", [userId, postId], function(err) {
             if (err) return reject(err);
-            // 投稿のdownvote数を更新
-            db.run("UPDATE posts SET downvotes = downvotes - 1 WHERE id = ?", postId, function(err) {
+            // 投稿のupvote数を更新
+            db.run("UPDATE posts SET upvotes = upvotes + 1, downvotes = downvotes - 1 WHERE id = ?", postId, function(err) {
               if (err) return reject(err);
-              // 投稿のupvote数を更新
-              db.run("UPDATE posts SET upvotes = upvotes + 1 WHERE id = ?", postId, function(err) {
-                if (err) return reject(err);
-                resolve(this.changes);
-              });
+              resolve(this.changes);
             });
           });
         }
