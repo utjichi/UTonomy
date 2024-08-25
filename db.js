@@ -28,61 +28,61 @@ const addPost = (userId, content) => {
 
 const upvotePost = (userId, postId) => {
   return new Promise((resolve, reject) => {
-    db.get(
-      "SELECT * FROM votes WHERE user_id = ? AND post_id = ?",
-      [userId, postId],
-      (err, row) => {
-        if (err) return reject(err);
-        if (row)
-          return reject(new Error("User has already voted on this post"));
-
-        db.run(
-          "INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, 'upvote')",
-          [userId, postId],
-          function (err) {
+    // ユーザーがすでに投票しているか確認
+    db.get("SELECT * FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], (err, row) => {
+      if (err) return reject(err);
+      if (row) {
+        // すでに投票している場合、投票を取り消す
+        db.run("DELETE FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], function(err) {
+          if (err) return reject(err);
+          // 投稿のupvote数を更新
+          db.run("UPDATE posts SET upvotes = upvotes - 1 WHERE id = ?", postId, function(err) {
             if (err) return reject(err);
-            db.run(
-              "UPDATE posts SET upvotes = upvotes + 1 WHERE id = ?",
-              postId,
-              function (err) {
-                if (err) return reject(err);
-                resolve(this.changes);
-              }
-            );
-          }
-        );
+            resolve(this.changes);
+          });
+        });
+      } else {
+        // 投票を追加
+        db.run("INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, 'upvote')", [userId, postId], function(err) {
+          if (err) return reject(err);
+          // 投稿のupvote数を更新
+          db.run("UPDATE posts SET upvotes = upvotes + 1 WHERE id = ?", postId, function(err) {
+            if (err) return reject(err);
+            resolve(this.changes);
+          });
+        });
       }
-    );
+    });
   });
 };
 
 const downvotePost = (userId, postId) => {
   return new Promise((resolve, reject) => {
-    db.get(
-      "SELECT * FROM votes WHERE user_id = ? AND post_id = ?",
-      [userId, postId],
-      (err, row) => {
-        if (err) return reject(err);
-        if (row)
-          return reject(new Error("User has already voted on this post"));
-
-        db.run(
-          "INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, 'downvote')",
-          [userId, postId],
-          function (err) {
+    // ユーザーがすでに投票しているか確認
+    db.get("SELECT * FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], (err, row) => {
+      if (err) return reject(err);
+      if (row) {
+        // すでに投票している場合、投票を取り消す
+        db.run("DELETE FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], function(err) {
+          if (err) return reject(err);
+          // 投稿のdownvote数を更新
+          db.run("UPDATE posts SET downvotes = downvotes - 1 WHERE id = ?", postId, function(err) {
             if (err) return reject(err);
-            db.run(
-              "UPDATE posts SET downvotes = downvotes + 1 WHERE id = ?",
-              postId,
-              function (err) {
-                if (err) return reject(err);
-                resolve(this.changes);
-              }
-            );
-          }
-        );
+            resolve(this.changes);
+          });
+        });
+      } else {
+        // 投票を追加
+        db.run("INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, 'downvote')", [userId, postId], function(err) {
+          if (err) return reject(err);
+          // 投稿のdownvote数を更新
+          db.run("UPDATE posts SET downvotes = downvotes + 1 WHERE id = ?", postId, function(err) {
+            if (err) return reject(err);
+            resolve(this.changes);
+          });
+        });
       }
-    );
+    });
   });
 };
 
@@ -95,4 +95,13 @@ const getPosts = () => {
   });
 };
 
-module.exports = { addPost, getPosts, upvotePost, downvotePost };
+const getVote = (userId, postId) => {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * FROM votes WHERE user_id = ? AND post_id = ?", [userId, postId], (err, row) => {
+      if (err) reject(err);
+      else resolve(row);
+    });
+  });
+};
+
+module.exports = { addPost, getPosts, upvotePost, downvotePost, getVote };

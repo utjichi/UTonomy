@@ -102,29 +102,30 @@ app.post("/post", (req, res) => {
 
 app.post("/post/:id/upvote", (req, res) => {
   if (req.isAuthenticated()) {
-    const postId = req.params.id; // ここで postId を取得
-    const userId = req.user.id; // ユーザーIDを取得
+    const postId = req.params.id;
+    const userId = req.user.id;
     db.upvotePost(userId, postId)
       .then(() => res.redirect("/posts"))
       .catch((err) => {
         console.error("Failed to upvote post:", err);
-        res.redirect("/posts");
+        // エラーメッセージを渡す
+        res.redirect("/posts?error=" + encodeURIComponent(err.message));
       });
   } else {
     res.redirect("/login");
   }
 });
 
-
 app.post("/post/:id/downvote", (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
-    const userId = req.user.id; // ユーザーIDを取得
+    const userId = req.user.id;
     db.downvotePost(userId, postId)
       .then(() => res.redirect("/posts"))
       .catch((err) => {
         console.error("Failed to downvote post:", err);
-        res.redirect("/posts");
+        // エラーメッセージを渡す
+        res.redirect("/posts?error=" + encodeURIComponent(err.message));
       });
   } else {
     res.redirect("/login");
@@ -135,11 +136,13 @@ app.get("/posts", (req, res) => {
   if (req.isAuthenticated()) {
     db.getPosts()
       .then((posts) => {
-        res.render("index", { user: req.user, posts });
+        // エラーメッセージを取得
+        const error = req.query.error ? decodeURIComponent(req.query.error) : null;
+        res.render("index", { user: req.user, posts, error }); // errorを渡す
       })
       .catch((err) => {
         console.error("Failed to retrieve posts:", err);
-        res.render("index", { user: req.user, posts: [] }); // postsがない場合でもエラーを防ぐ
+        res.render("index", { user: req.user, posts: [], error: null }); // エラーが発生した場合
       });
   } else {
     res.redirect("/login");
