@@ -26,30 +26,12 @@
   <% (posts || []).forEach(post => { %>
     <li>
       <strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %>
-      <% if (post.vote && post.vote.post_id === post.id) { %>
-        <% if (post.vote.vote_type === 'upvote') { %>
-          <form action="/post/<%= post.id %>/upvote" method="post" style="display:inline;">
-            <button type="submit" disabled>Upvote (<%= post.upvotes %>)</button>
-          </form>
-          <form action="/post/<%= post.id %>/downvote" method="post" style="display:inline;">
-            <button type="submit">Downvote (<%= post.downvotes %>)</button>
-          </form>
-        <% } else { %>
-          <form action="/post/<%= post.id %>/upvote" method="post" style="display:inline;">
-            <button type="submit">Upvote (<%= post.upvotes %>)</button>
-          </form>
-          <form action="/post/<%= post.id %>/downvote" method="post" style="display:inline;">
-            <button type="submit" disabled>Downvote (<%= post.downvotes %>)</button>
-          </form>
-        <% } %>
-      <% } else { %>
         <form action="/post/<%= post.id %>/upvote" method="post" style="display:inline;">
           <button type="submit">Upvote (<%= post.upvotes %>)</button>
         </form>
         <form action="/post/<%= post.id %>/downvote" method="post" style="display:inline;">
           <button type="submit">Downvote (<%= post.downvotes %>)</button>
         </form>
-      <% } %>
     </li>
   <% }) %>
 </ul>
