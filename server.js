@@ -53,11 +53,30 @@ app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
     db.getPosts()
       .then((posts) => {
-        res.render("index", { user: req.user, posts });
+        const promises = posts.map((post) => {
+          return db.getVote(req.user.id, post.id)
+            .then((vote) => {
+              post.vote = vote;
+              return post;
+            })
+            .catch((err) => {
+              console.error("Failed to retrieve vote:", err);
+              post.vote = null;
+              return post;
+            });
+        });
+        Promise.all(promises)
+          .then((posts) => {
+            res.render("index", { user: req.user, posts, error: null });
+          })
+          .catch((err) => {
+            console.error("Failed to retrieve posts:", err);
+            res.render("index", { user: req.user, posts: [], error: err.message });
+          });
       })
       .catch((err) => {
         console.error("Failed to retrieve posts:", err);
-        res.render("index", { user: req.user, posts: [] }); // postsがない場合でもエラーを防ぐ
+        res.render("index", { user: req.user, posts: [], error: err.message });
       });
   } else {
     res.redirect("/login");
@@ -136,13 +155,19 @@ app.get("/posts", (req, res) => {
   if (req.isAuthenticated()) {
     db.getPosts()
       .then((posts) => {
-        // エラーメッセージを取得
         const error = req.query.error ? decodeURIComponent(req.query.error) : null;
-        res.render("index", { user: req.user, posts, error }); // errorを渡す
+        db.getVote(req.user.id, posts[0].id)
+          .then((vote) => {
+            res.render("index", { user: req.user, posts, error: error || null, vote });
+          })
+          .catch((err) => {
+            console.error("Failed to retrieve vote:", err);
+            res.render("index", { user: req.user, posts, error: error || null });
+          });
       })
       .catch((err) => {
         console.error("Failed to retrieve posts:", err);
-        res.render("index", { user: req.user, posts: [], error: null }); // エラーが発生した場合
+        res.render("index", { user: req.user, posts: [], error: err.message });
       });
   } else {
     res.redirect("/login");
