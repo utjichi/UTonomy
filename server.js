@@ -32,7 +32,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://u-tonomy-ai.glitch.me/auth/google/callback",
+      callbackURL: "https://u-tonomy.glitch.me/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
@@ -144,6 +144,6 @@ app.get("/posts", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on https://u-tonomy-ai.glitch.me:${port}`);
+  console.log(`Server is running on https://u-tonomy.glitch.me:${port}`);
 });
 
