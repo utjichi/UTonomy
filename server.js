@@ -102,8 +102,10 @@ app.post("/post", (req, res) => {
 
 app.post("/post/:id/upvote", (req, res) => {
   if (req.isAuthenticated()) {
-    const postId = req.params.id;
-    db.upvotePost(postId)
+    const postId = req.params.id; // ここで postId を取得
+    const userId = req.user.id; // ユーザーIDを取得
+    console.log("Post ID:", postId); // 追加
+    db.upvotePost(userId, postId)
       .then(() => res.redirect("/posts"))
       .catch((err) => {
         console.error("Failed to upvote post:", err);
@@ -113,6 +115,7 @@ app.post("/post/:id/upvote", (req, res) => {
     res.redirect("/login");
   }
 });
+
 
 app.post("/post/:id/downvote", (req, res) => {
   if (req.isAuthenticated()) {
