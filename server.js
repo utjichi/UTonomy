@@ -49,6 +49,7 @@ passport.deserializeUser((obj, done) => {
 });
 
 // Routes
+// Routes
 app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
     db.getPosts()
@@ -65,18 +66,55 @@ app.get("/", (req, res) => {
               return post;
             });
         });
-        Promise.all(promises)
-          .then((posts) => {
-            res.render("index", { user: req.user, posts, error: null });
-          })
-          .catch((err) => {
-            console.error("Failed to retrieve posts:", err);
-            res.render("index", { user: req.user, posts: [], error: err.message });
-          });
+        return Promise.all(promises);
+      })
+      .then((posts) => {
+        res.render("index", { user: req.user, posts, error: null });
       })
       .catch((err) => {
         console.error("Failed to retrieve posts:", err);
         res.render("index", { user: req.user, posts: [], error: err.message });
+      });
+  } else {
+    res.redirect("/login");
+  }
+});
+
+// 投稿の追加や投票の処理はそのまま
+app.post("/post", (req, res) => {
+  if (req.isAuthenticated()) {
+    const { content } = req.body;
+    db.addPost(req.user.id, content);
+    res.redirect("/"); // 投稿後は / へリダイレクト
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.post("/post/:id/upvote", (req, res) => {
+  if (req.isAuthenticated()) {
+    const postId = req.params.id;
+    const userId = req.user.id;
+    db.upvotePost(userId, postId)
+      .then(() => res.redirect("/")) // 投票後は / へリダイレクト
+      .catch((err) => {
+        console.error("Failed to upvote post:", err);
+        res.redirect("/?error=" + encodeURIComponent(err.message));
+      });
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.post("/post/:id/downvote", (req, res) => {
+  if (req.isAuthenticated()) {
+    const postId = req.params.id;
+    const userId = req.user.id;
+    db.downvotePost(userId, postId)
+      .then(() => res.redirect("/")) // 投票後は / へリダイレクト
+      .catch((err) => {
+        console.error("Failed to downvote post:", err);
+        res.redirect("/?error=" + encodeURIComponent(err.message));
       });
   } else {
     res.redirect("/login");
@@ -107,48 +145,6 @@ app.get(
 app.get("/logout", (req, res) => {
   req.logout(() => {});
   res.redirect("/");
-});
-
-app.post("/post", (req, res) => {
-  if (req.isAuthenticated()) {
-    const { content } = req.body;
-    db.addPost(req.user.id, content);
-    res.redirect("/");
-  } else {
-    res.redirect("/login");
-  }
-});
-
-app.post("/post/:id/upvote", (req, res) => {
-  if (req.isAuthenticated()) {
-    const postId = req.params.id;
-    const userId = req.user.id;
-    db.upvotePost(userId, postId)
-      .then(() => res.redirect("/posts"))
-      .catch((err) => {
-        console.error("Failed to upvote post:", err);
-        // エラーメッセージを渡す
-        res.redirect("/posts?error=" + encodeURIComponent(err.message));
-      });
-  } else {
-    res.redirect("/login");
-  }
-});
-
-app.post("/post/:id/downvote", (req, res) => {
-  if (req.isAuthenticated()) {
-    const postId = req.params.id;
-    const userId = req.user.id;
-    db.downvotePost(userId, postId)
-      .then(() => res.redirect("/posts"))
-      .catch((err) => {
-        console.error("Failed to downvote post:", err);
-        // エラーメッセージを渡す
-        res.redirect("/posts?error=" + encodeURIComponent(err.message));
-      });
-  } else {
-    res.redirect("/login");
-  }
 });
 
 app.get("/posts", (req, res) => {
