@@ -27,10 +27,10 @@
     <li>
       <strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %>
         <form action="/post/<%= post.id %>/upvote" method="post" style="display:inline;">
-          <button type="submit">Upvote (<%= post.upvotes %>)</button>
+          <button type="submit">👍 (<%= post.upvotes %>)</button>
         </form>
         <form action="/post/<%= post.id %>/downvote" method="post" style="display:inline;">
-          <button type="submit">Downvote (<%= post.downvotes %>)</button>
+          <button type="submit">👎 (<%= post.downvotes %>)</button>
         </form>
     </li>
   <% }) %>
