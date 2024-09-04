@@ -200,4 +200,14 @@ const getVote = (userId, postId) => {
   });
 };
 
-module.exports = { addPost, getPosts, upvotePost, downvotePost, getVote };
+const getUser = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * FROM users WHERE id = ?", [userId], (err, row) => {
+      if (err) return reject(err);
+      else resolve(row);
+    });
+  });
+};
+
+// 他の関数と一緒にエクスポート
+module.exports = { addPost, getPosts, upvotePost, downvotePost, getVote, getUser };

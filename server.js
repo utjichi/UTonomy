@@ -141,15 +141,18 @@ app.get(
   async (req, res) => {
     // Check if the user is already in the database
     const user = req.user;
-    db.getUser(user.id).then((existingUser) => {
-      if (!existingUser) {
-        // Redirect to setup page if user is not in the database
-        res.redirect("/setup");
-      } else {
-        // Redirect to home if user already exists
-        res.redirect("/");
-      }
-    });
+    db.getUser(user.id)
+      .then((existingUser) => {
+        if (!existingUser) {
+          res.redirect("/setup");
+        } else {
+          res.redirect("/");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching user:", err);
+        res.redirect("/login"); // エラーが発生した場合はログインページにリダイレクト
+      });
   }
 );
 
