@@ -6,7 +6,7 @@ const SQLiteStore = require("connect-sqlite3")(session);
 const db = require("./db");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Set EJS as the view engine
 app.set("view engine", "ejs");
@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(
   session({
     store: new SQLiteStore({ db: "sessions.db", dir: "./.data" }),
-    secret: process.env.GOOGLE_CLIENT_SECRET,
+    secret: process.env.SESSION_SECRET || 'default_secret', // Use a default value or an environment variable
     resave: false,
     saveUninitialized: false,
   })
@@ -32,90 +32,88 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://u-tonomy.glitch.me/auth/google/callback",
+      callbackURL: process.env.CALLBACK_URL || "http://localhost:3000/auth/google/callback", // Default to localhost for local development
     },
     (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+      // Serialize only the user ID
+      return done(null, profile.id);
     }
   )
 );
 
-passport.serializeUser((user, done) => {
-  done(null, user);
+passport.serializeUser((userId, done) => {
+  done(null, userId);
 });
 
-passport.deserializeUser((obj, done) => {
-  done(null, obj);
+passport.deserializeUser((userId, done) => {
+  // Fetch the user object based on userId if needed
+  done(null, { id: userId });
 });
 
 // Routes
-// Routes
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   if (req.isAuthenticated()) {
-    db.getPosts()
-      .then((posts) => {
-        const promises = posts.map((post) => {
-          return db.getVote(req.user.id, post.id)
-            .then((vote) => {
-              post.vote = vote;
-              return post;
-            })
-            .catch((err) => {
-              console.error("Failed to retrieve vote:", err);
-              post.vote = null;
-              return post;
-            });
-        });
-        return Promise.all(promises);
-      })
-      .then((posts) => {
-        res.render("index", { user: req.user, posts, error: null });
-      })
-      .catch((err) => {
-        console.error("Failed to retrieve posts:", err);
-        res.render("index", { user: req.user, posts: [], error: err.message });
-      });
+    try {
+      const posts = await db.getPosts();
+      const updatedPosts = await Promise.all(posts.map(async (post) => {
+        try {
+          post.vote = await db.getVote(req.user.id, post.id);
+        } catch (err) {
+          console.error("Failed to retrieve vote:", err);
+          post.vote = null;
+        }
+        return post;
+      }));
+      res.render("index", { user: req.user, posts: updatedPosts, error: null });
+    } catch (err) {
+      console.error("Failed to retrieve posts:", err);
+      res.render("index", { user: req.user, posts: [], error: err.message });
+    }
   } else {
     res.redirect("/login");
   }
 });
 
-// 投稿の追加や投票の処理はそのまま
-app.post("/post", (req, res) => {
+app.post("/post", async (req, res) => {
   if (req.isAuthenticated()) {
     const { content } = req.body;
-    db.addPost(req.user.id, content);
-    res.redirect("/"); // 投稿後は / へリダイレクト
+    try {
+      await db.addPost(req.user.id, content);
+      res.redirect("/");
+    } catch (err) {
+      console.error("Failed to add post:", err);
+      res.redirect("/?error=" + encodeURIComponent(err.message));
+    }
   } else {
     res.redirect("/login");
   }
 });
 
-app.post("/post/:id/upvote", (req, res) => {
+app.post("/post/:id/upvote", async (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
-    const userId = req.user.id;
-    db.upvotePost(userId, postId)
-      .then(() => res.redirect("/")) // 投票後は / へリダイレクト
-      .catch((err) => {
-        console.error("Failed to upvote post:", err);
-        res.redirect("/?error=" + encodeURIComponent(err.message));
-      });
+    try {
+      await db.upvotePost(req.user.id, postId);
+      res.redirect("/");
+    } catch (err) {
+      console.error("Failed to upvote post:", err);
+      res.redirect("/?error=" + encodeURIComponent(err.message));
+    }
   } else {
     res.redirect("/login");
   }
 });
 
-app.post("/post/:id/downvote", (req, res) => {
+app.post("/post/:id/downvote", async (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
-    const userId = req.user.id;
-    db.downvotePost(userId, postId)
-      .then(() => res.redirect("/")) // 投票後は / へリダイレクト
-      .catch((err) => {
-        console.error("Failed to downvote post:", err);
-        res.redirect("/?error=" + encodeURIComponent(err.message));
-      });
+    try {
+      await db.downvotePost(req.user.id, postId);
+      res.redirect("/");
+    } catch (err) {
+      console.error("Failed to downvote post:", err);
+      res.redirect("/?error=" + encodeURIComponent(err.message));
+    }
   } else {
     res.redirect("/login");
   }
@@ -147,30 +145,25 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-app.get("/posts", (req, res) => {
+app.get("/posts", async (req, res) => {
   if (req.isAuthenticated()) {
-    db.getPosts()
-      .then((posts) => {
-        const error = req.query.error ? decodeURIComponent(req.query.error) : null;
-        db.getVote(req.user.id, posts[0].id)
-          .then((vote) => {
-            res.render("index", { user: req.user, posts, error: error || null, vote });
-          })
-          .catch((err) => {
-            console.error("Failed to retrieve vote:", err);
-            res.render("index", { user: req.user, posts, error: error || null });
-          });
-      })
-      .catch((err) => {
-        console.error("Failed to retrieve posts:", err);
-        res.render("index", { user: req.user, posts: [], error: err.message });
+    try {
+      const posts = await db.getPosts();
+      const error = req.query.error ? decodeURIComponent(req.query.error) : null;
+      const vote = await db.getVote(req.user.id, posts[0].id).catch(err => {
+        console.error("Failed to retrieve vote:", err);
+        return null;
       });
+      res.render("index", { user: req.user, posts, error: error || null, vote });
+    } catch (err) {
+      console.error("Failed to retrieve posts:", err);
+      res.render("index", { user: req.user, posts: [], error: err.message });
+    }
   } else {
     res.redirect("/login");
   }
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on https://u-tonomy.glitch.me:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
-
