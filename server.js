@@ -1,24 +1,26 @@
-const express = require("express");
-const session = require("express-session");
-const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const SQLiteStore = require("connect-sqlite3")(session);
-const db = require("./db");
+// server.js
+
+const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const SQLiteStore = require('connect-sqlite3')(session);
+const db = require('./db');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 // Set EJS as the view engine
-app.set("view engine", "ejs");
-app.set("views", "./views");
+app.set('view engine', 'ejs');
+app.set('views', './views');
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   session({
-    store: new SQLiteStore({ db: "sessions.db", dir: "./.data" }),
-    secret: process.env.SESSION_SECRET || 'default_secret', // Use a default value or an environment variable
+    store: new SQLiteStore({ db: 'sessions.db', dir: './.data' }),
+    secret: process.env.GOOGLE_CLIENT_SECRET,
     resave: false,
     saveUninitialized: false,
   })
@@ -32,138 +34,157 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.CALLBACK_URL || "http://localhost:3000/auth/google/callback", // Default to localhost for local development
+      callbackURL: 'https://u-tonomy.glitch.me/auth/google/callback',
     },
     (accessToken, refreshToken, profile, done) => {
-      // Serialize only the user ID
-      return done(null, profile.id);
+      return done(null, profile);
     }
   )
 );
 
-passport.serializeUser((userId, done) => {
-  done(null, userId);
+passport.serializeUser((user, done) => {
+  done(null, user);
 });
 
-passport.deserializeUser((userId, done) => {
-  // Fetch the user object based on userId if needed
-  done(null, { id: userId });
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
 });
 
 // Routes
-app.get("/", async (req, res) => {
+app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
-    try {
-      const posts = await db.getPosts();
-      const updatedPosts = await Promise.all(posts.map(async (post) => {
-        try {
-          post.vote = await db.getVote(req.user.id, post.id);
-        } catch (err) {
-          console.error("Failed to retrieve vote:", err);
-          post.vote = null;
-        }
-        return post;
-      }));
-      res.render("index", { user: req.user, posts: updatedPosts, error: null });
-    } catch (err) {
-      console.error("Failed to retrieve posts:", err);
-      res.render("index", { user: req.user, posts: [], error: err.message });
-    }
+    db.getPosts()
+      .then((posts) => {
+        const promises = posts.map((post) => {
+          return db.getVote(req.user.id, post.id)
+            .then((vote) => {
+              post.vote = vote;
+              return post;
+            })
+            .catch((err) => {
+              console.error('Failed to retrieve vote:', err);
+              post.vote = null;
+              return post;
+            });
+        });
+        return Promise.all(promises);
+      })
+      .then((posts) => {
+        res.render('index', { user: req.user, posts, error: null });
+      })
+      .catch((err) => {
+        console.error('Failed to retrieve posts:', err);
+        res.render('index', { user: req.user, posts: [], error: err.message });
+      });
   } else {
-    res.redirect("/login");
+    res.redirect('/login');
   }
 });
 
-app.post("/post", async (req, res) => {
+app.post('/post', (req, res) => {
   if (req.isAuthenticated()) {
     const { content } = req.body;
-    try {
-      await db.addPost(req.user.id, content);
-      res.redirect("/");
-    } catch (err) {
-      console.error("Failed to add post:", err);
-      res.redirect("/?error=" + encodeURIComponent(err.message));
-    }
+    db.addPost(req.user.id, content);
+    res.redirect('/'); // 投稿後は / へリダイレクト
   } else {
-    res.redirect("/login");
+    res.redirect('/login');
   }
 });
 
-app.post("/post/:id/upvote", async (req, res) => {
+app.post('/post/:id/upvote', (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
-    try {
-      await db.upvotePost(req.user.id, postId);
-      res.redirect("/");
-    } catch (err) {
-      console.error("Failed to upvote post:", err);
-      res.redirect("/?error=" + encodeURIComponent(err.message));
-    }
+    const userId = req.user.id;
+    db.upvotePost(userId, postId)
+      .then(() => res.redirect('/')) // 投票後は / へリダイレクト
+      .catch((err) => {
+        console.error('Failed to upvote post:', err);
+        res.redirect('/?error=' + encodeURIComponent(err.message));
+      });
   } else {
-    res.redirect("/login");
+    res.redirect('/login');
   }
 });
 
-app.post("/post/:id/downvote", async (req, res) => {
+app.post('/post/:id/downvote', (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
-    try {
-      await db.downvotePost(req.user.id, postId);
-      res.redirect("/");
-    } catch (err) {
-      console.error("Failed to downvote post:", err);
-      res.redirect("/?error=" + encodeURIComponent(err.message));
-    }
+    const userId = req.user.id;
+    db.downvotePost(userId, postId)
+      .then(() => res.redirect('/')) // 投票後は / へリダイレクト
+      .catch((err) => {
+        console.error('Failed to downvote post:', err);
+        res.redirect('/?error=' + encodeURIComponent(err.message));
+      });
   } else {
-    res.redirect("/login");
+    res.redirect('/login');
   }
 });
 
-app.get("/login", (req, res) => {
-  res.render("login");
+app.get('/login', (req, res) => {
+  res.render('login');
 });
 
 app.get(
-  "/auth/google",
-  passport.authenticate("google", {
-    scope: ["profile"],
+  '/auth/google',
+  passport.authenticate('google', {
+    scope: ['profile'],
   })
 );
 
 app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/login",
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: '/login',
   }),
-  (req, res) => {
-    res.redirect("/");
+  async (req, res) => {
+    // Check if the user is already in the database
+    const user = req.user;
+    db.getUser(user.id).then((existingUser) => {
+      if (!existingUser) {
+        // Redirect to setup page if user is not in the database
+        res.redirect('/setup');
+      } else {
+        // Redirect to home if user already exists
+        res.redirect('/');
+      }
+    });
   }
 );
 
-app.get("/logout", (req, res) => {
-  req.logout(() => {});
-  res.redirect("/");
-});
-
-app.get("/posts", async (req, res) => {
+app.get('/setup', (req, res) => {
   if (req.isAuthenticated()) {
-    try {
-      const posts = await db.getPosts();
-      const error = req.query.error ? decodeURIComponent(req.query.error) : null;
-      const vote = await db.getVote(req.user.id, posts[0].id).catch(err => {
-        console.error("Failed to retrieve vote:", err);
-        return null;
-      });
-      res.render("index", { user: req.user, posts, error: error || null, vote });
-    } catch (err) {
-      console.error("Failed to retrieve posts:", err);
-      res.render("index", { user: req.user, posts: [], error: err.message });
-    }
+    db.getUser(req.user.id).then((user) => {
+      if (user && user.affiliation) {
+        res.redirect('/');
+      } else {
+        res.render('setup');
+      }
+    });
   } else {
-    res.redirect("/login");
+    res.redirect('/login');
   }
 });
 
+app.post('/setup', (req, res) => {
+  if (req.isAuthenticated()) {
+    const { affiliation } = req.body;
+    db.addUser(req.user.id, req.user.displayName, affiliation)
+      .then(() => res.redirect('/'))
+      .catch((err) => {
+        console.error('Failed to add user:', err);
+        res.redirect('/setup?error=' + encodeURIComponent(err.message));
+      });
+  } else {
+    res.redirect('/login');
+  }
+});
+
+app.get('/logout', (req, res) => {
+  req.logout(() => {});
+  res.redirect('/');
+});
+
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on https://u-tonomy.glitch.me:${port}`);
 });

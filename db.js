@@ -1,23 +1,38 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
 
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS posts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id TEXT NOT NULL,
-        content TEXT NOT NULL,
-        upvotes INTEGER DEFAULT 0,
-        downvotes INTEGER DEFAULT 0,
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`);
+// db.js
 
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database(process.env.DATABASE_URL);
+
+db.serialize(() => {
+  // Create the posts table if it doesn't exist
+  db.run(`CREATE TABLE IF NOT EXISTS posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    content TEXT NOT NULL,
+    upvotes INTEGER DEFAULT 0,
+    downvotes INTEGER DEFAULT 0,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+
+  // Create the votes table if it doesn't exist
   db.run(`CREATE TABLE IF NOT EXISTS votes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id TEXT NOT NULL,
-        post_id INTEGER NOT NULL,
-        vote_type TEXT NOT NULL, -- 'upvote' または 'downvote'
-        UNIQUE(user_id, post_id) -- ユーザーと投稿の組み合わせがユニークであることを保証
-    )`);
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    post_id INTEGER NOT NULL,
+    vote_type TEXT NOT NULL,
+    UNIQUE(user_id, post_id)
+  )`);
+
+  // Create the users table if it doesn't exist
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    affiliation TEXT,
+    UNIQUE(id)
+  )`);
 });
 
 const addPost = (userId, content) => {
