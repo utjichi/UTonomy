@@ -1,25 +1,25 @@
 // server.js
 
-const express = require('express');
-const session = require('express-session');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const SQLiteStore = require('connect-sqlite3')(session);
-const db = require('./db');
+const express = require("express");
+const session = require("express-session");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const SQLiteStore = require("connect-sqlite3")(session);
+const db = require("./db");
 
 const app = express();
 const port = 3000;
 
 // Set EJS as the view engine
-app.set('view engine', 'ejs');
-app.set('views', './views');
+app.set("view engine", "ejs");
+app.set("views", "./views");
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   session({
-    store: new SQLiteStore({ db: 'sessions.db', dir: './.data' }),
+    store: new SQLiteStore({ db: "sessions.db", dir: "./.data" }),
     secret: process.env.GOOGLE_CLIENT_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -34,7 +34,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: 'https://u-tonomy.glitch.me/auth/google/callback',
+      callbackURL: "https://u-tonomy.glitch.me/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
@@ -51,18 +51,19 @@ passport.deserializeUser((obj, done) => {
 });
 
 // Routes
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
     db.getPosts()
       .then((posts) => {
         const promises = posts.map((post) => {
-          return db.getVote(req.user.id, post.id)
+          return db
+            .getVote(req.user.id, post.id)
             .then((vote) => {
               post.vote = vote;
               return post;
             })
             .catch((err) => {
-              console.error('Failed to retrieve vote:', err);
+              console.error("Failed to retrieve vote:", err);
               post.vote = null;
               return post;
             });
@@ -70,72 +71,72 @@ app.get('/', (req, res) => {
         return Promise.all(promises);
       })
       .then((posts) => {
-        res.render('index', { user: req.user, posts, error: null });
+        res.render("index", { user: req.user, posts, error: null });
       })
       .catch((err) => {
-        console.error('Failed to retrieve posts:', err);
-        res.render('index', { user: req.user, posts: [], error: err.message });
+        console.error("Failed to retrieve posts:", err);
+        res.render("index", { user: req.user, posts: [], error: err.message });
       });
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 });
 
-app.post('/post', (req, res) => {
+app.post("/post", (req, res) => {
   if (req.isAuthenticated()) {
     const { content } = req.body;
     db.addPost(req.user.id, content);
-    res.redirect('/'); // 投稿後は / へリダイレクト
+    res.redirect("/"); // 投稿後は / へリダイレクト
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 });
 
-app.post('/post/:id/upvote', (req, res) => {
+app.post("/post/:id/upvote", (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
     const userId = req.user.id;
     db.upvotePost(userId, postId)
-      .then(() => res.redirect('/')) // 投票後は / へリダイレクト
+      .then(() => res.redirect("/")) // 投票後は / へリダイレクト
       .catch((err) => {
-        console.error('Failed to upvote post:', err);
-        res.redirect('/?error=' + encodeURIComponent(err.message));
+        console.error("Failed to upvote post:", err);
+        res.redirect("/?error=" + encodeURIComponent(err.message));
       });
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 });
 
-app.post('/post/:id/downvote', (req, res) => {
+app.post("/post/:id/downvote", (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
     const userId = req.user.id;
     db.downvotePost(userId, postId)
-      .then(() => res.redirect('/')) // 投票後は / へリダイレクト
+      .then(() => res.redirect("/")) // 投票後は / へリダイレクト
       .catch((err) => {
-        console.error('Failed to downvote post:', err);
-        res.redirect('/?error=' + encodeURIComponent(err.message));
+        console.error("Failed to downvote post:", err);
+        res.redirect("/?error=" + encodeURIComponent(err.message));
       });
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 });
 
-app.get('/login', (req, res) => {
-  res.render('login');
+app.get("/login", (req, res) => {
+  res.render("login");
 });
 
 app.get(
-  '/auth/google',
-  passport.authenticate('google', {
-    scope: ['profile'],
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile"],
   })
 );
 
 app.get(
-  '/auth/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: '/login',
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/login",
   }),
   async (req, res) => {
     // Check if the user is already in the database
@@ -143,46 +144,46 @@ app.get(
     db.getUser(user.id).then((existingUser) => {
       if (!existingUser) {
         // Redirect to setup page if user is not in the database
-        res.redirect('/setup');
+        res.redirect("/setup");
       } else {
         // Redirect to home if user already exists
-        res.redirect('/');
+        res.redirect("/");
       }
     });
   }
 );
 
-app.get('/setup', (req, res) => {
+app.get("/setup", (req, res) => {
   if (req.isAuthenticated()) {
     db.getUser(req.user.id).then((user) => {
       if (user && user.affiliation) {
-        res.redirect('/');
+        res.redirect("/");
       } else {
-        res.render('setup');
+        res.render("setup");
       }
     });
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 });
 
-app.post('/setup', (req, res) => {
+app.post("/setup", (req, res) => {
   if (req.isAuthenticated()) {
     const { affiliation } = req.body;
     db.addUser(req.user.id, req.user.displayName, affiliation)
-      .then(() => res.redirect('/'))
+      .then(() => res.redirect("/"))
       .catch((err) => {
-        console.error('Failed to add user:', err);
-        res.redirect('/setup?error=' + encodeURIComponent(err.message));
+        console.error("Failed to add user:", err);
+        res.redirect("/setup?error=" + encodeURIComponent(err.message));
       });
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 });
 
-app.get('/logout', (req, res) => {
+app.get("/logout", (req, res) => {
   req.logout(() => {});
-  res.redirect('/');
+  res.redirect("/");
 });
 
 app.listen(port, () => {
