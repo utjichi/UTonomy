@@ -1,6 +1,7 @@
 // server.js
 
 const express = require("express");
+const path = require('path');
 const session = require("express-session");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -81,10 +82,6 @@ app.get("/", (req, res) => {
     res.redirect("/login");
   }
 });
-
-app.get("/script.js",(req,res)=>{
-  res.sendFile("script.js");
-})
 
 app.post("/post", (req, res) => {
   if (req.isAuthenticated()) {
