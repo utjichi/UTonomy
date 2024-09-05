@@ -40,7 +40,7 @@ db.serialize(() => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member TEXT NOT NULL,
     target TEXT NOT NULL,
-    role TEXT,
+    role TEXT DEFAULT 'member',
     UNIQUE(id)
   )`);
 });
@@ -193,7 +193,7 @@ const downvotePost = (userId, postId) => {
   });
 };
 
-const invite = (inviter, groupId, invited, role) => {
+const invite = (inviter, groupId, invited) => {
   return new Promise((resolve, reject) => {
     db.get(
       "SELECT * FROM permissions WHERE member = ? AND target = ?",
@@ -202,21 +202,18 @@ const invite = (inviter, groupId, invited, role) => {
         if (err) return reject(err);
 
         if (row) {
-          if (
-            row.role == "owner" ||
-            (row.role == "admin" && role == "member")
-          ) {
+          if (row.role == "owner" || row.role == "admin") {
             db.get(
-              "SELECT id,role from permissions WHERE member = ? AND target = ?",
+              "SELECT id from permissions WHERE member = ? AND target = ?",
               [invited, groupId],
               (err, existing) => {
                 if (err) return reject(err);
-                
-                if(existing){
-                  if(existing.role==role){
-                    
-                  }
-                }else{}
+
+                if (existing)
+                  return reject("そのユーザーはすでに参加しています");
+                else {
+                  db.run("INSERT INTO permissions ()");
+                }
               }
             );
             db.run(

@@ -162,7 +162,7 @@ app.post("/group/:id/invite", (req, res) => {
     const groupId = req.params.id;
     const inviter = req.user.id;
     const invited = req.body.id;
-    db.invite(inviter, groupId, invited, req.body.role)
+    db.invite(inviter, groupId, invited)
       .then(() => res.redirect("/user")) // 招待後は /user へリダイレクト
       .catch((err) => {
         console.error("Failed to downvote post:", err);
