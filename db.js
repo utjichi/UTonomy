@@ -195,10 +195,9 @@ const downvotePost = (userId, postId) => {
 
 const addGroup = (userId, name) => {
   const groupId = uuidv4();
-  db.run("INSERT INTO groups (id,name,member_limit) VALUES (?,?,?)", [
+  db.run("INSERT INTO groups (id,name) VALUES (?,?)", [
     groupId,
     name,
-    -1,
   ]);
   db.run("INSERT INTO permissions (member,target,permission) VALUES (?,?,?)", [
     userId,
