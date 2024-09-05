@@ -34,6 +34,13 @@ db.serialize(() => {
     member_limit INTEGER,
     UNIQUE(id)
   )`);
+  
+  db.run(`CREATE TABLE IF NOT EXISTS groups (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    member_limit INTEGER,
+    UNIQUE(id)
+  )`);
 });
 
 const addPost = (userId, content) => {
