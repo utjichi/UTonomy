@@ -80,7 +80,7 @@ app.get("/", (req, res) => {
         res.render("index", { user: req.user, posts: [], error: err.message });
       });
   } else {
-    res.redirect("/login");
+    res.render("index", { user: req.user, posts: [], error: null });
   }
 });
 
@@ -90,7 +90,7 @@ app.post("/post", (req, res) => {
     db.addPost(req.user.id, content);
     res.redirect("/"); // 投稿後は / へリダイレクト
   } else {
-    res.redirect("/login");
+    res.redirect("/");
   }
 });
 
@@ -105,7 +105,7 @@ app.post("/post/:id/upvote", (req, res) => {
         res.redirect("/?error=" + encodeURIComponent(err.message));
       });
   } else {
-    res.redirect("/login");
+    res.redirect("/");
   }
 });
 
@@ -120,17 +120,13 @@ app.post("/post/:id/downvote", (req, res) => {
         res.redirect("/?error=" + encodeURIComponent(err.message));
       });
   } else {
-    res.redirect("/login");
+    res.redirect("/");
   }
 });
 
 app.post("/group", (req, res) => {
   db.addGroup(req.user.id, req.body.name)
     .then(() => res.redirect("/"));
-});
-
-app.get("/login", (req, res) => {
-  res.render("login");
 });
 
 app.get(
@@ -143,7 +139,7 @@ app.get(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/login",
+    failureRedirect: "/",
   }),
   async (req, res) => {
     // Check if the user is already in the database
@@ -158,7 +154,7 @@ app.get(
       })
       .catch((err) => {
         console.error("Error fetching user:", err);
-        res.redirect("/login"); // エラーが発生した場合はログインページにリダイレクト
+        res.redirect("/"); // エラーが発生した場合はログインページにリダイレクト
       });
   }
 );

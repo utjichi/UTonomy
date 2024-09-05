@@ -27,14 +27,14 @@ db.serialize(() => {
     name TEXT NOT NULL,
     UNIQUE(id)
   )`);
-  
+
   db.run(`CREATE TABLE IF NOT EXISTS groups (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     member_limit INTEGER,
     UNIQUE(id)
   )`);
-  
+
   db.run(`CREATE TABLE IF NOT EXISTS belongings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member TEXT NOT NULL,
@@ -192,8 +192,14 @@ const downvotePost = (userId, postId) => {
   });
 };
 
-const addGroup=(name)=>{
-  db.run("INSERT INTO groups (id,name,member_limit)");
+const addGroup = (userId,name) => {
+  const groupId=crypto.randomUUID();
+  db.run("INSERT INTO groups (id,name,member_limit) VALUES (?,?,?)", [
+    groupId,
+    name,
+    -1,
+  ]);
+  db.run("INSERT INTO belongings (member,belonging,permission) VALUES (?,?,?)",[userId,groupId,"config"])
 };
 
 const getPosts = () => {
@@ -228,4 +234,12 @@ const getUser = (userId) => {
 };
 
 // 他の関数と一緒にエクスポート
-module.exports = { addPost, getPosts, upvotePost, downvotePost, getVote, getUser };
+module.exports = {
+  addPost,
+  getPosts,
+  upvotePost,
+  downvotePost,
+  addGroup,
+  getVote,
+  getUser,
+};
