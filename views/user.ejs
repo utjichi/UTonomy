@@ -12,15 +12,18 @@
     <div>
     <table>
       <caption>所属しているグループ</caption>
-      <thead></thead>
-    </table>
-      <ul>
+      <thead><tr><th>ID</th><th>グループ名</th><th>権限</th><th>人数制限</th></tr></thead>
+      <tbody>
         <% (permissions || []).forEach(permission => { %>
-          <li>
-            <%= permission.group.name %>
-          </li>
+          <tr>
+            <td><%= permission.target %></td>
+            <td><%= permission.group.name %></td>
+            <td><%= permission.permission %></td>
+            <td><%= permission.group.member_limit||なし %></td>
+          </tr>
         <% }) %>
-      </ul>
+      </tbody>
+    </table>
     </div>
 </body>
 </html>
