@@ -82,6 +82,10 @@ app.get("/", (req, res) => {
   }
 });
 
+app.get("/script.js",(req,res)=>{
+  res.sendFile("script.js");
+})
+
 app.post("/post", (req, res) => {
   if (req.isAuthenticated()) {
     const { content } = req.body;
