@@ -29,6 +29,7 @@ db.serialize(() => {
     UNIQUE(id)
   )`);
 
+  // Create the groups table if it doesn't exist
   db.run(`CREATE TABLE IF NOT EXISTS groups (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
@@ -193,6 +194,10 @@ const downvotePost = (userId, postId) => {
   });
 };
 
+const addUser=(id,user)=>{
+  db.run("INSERT INTO users (id,name) VALUES (?,?)",[id,user])
+}
+
 const invite = (inviter, groupId, invited) => {
   return new Promise((resolve, reject) => {
     db.get(
@@ -299,6 +304,7 @@ module.exports = {
   getPosts,
   upvotePost,
   downvotePost,
+  addUser,
   invite,
   addGroup,
   getVote,

@@ -189,6 +189,7 @@ app.get(
     db.getUser(user.id)
       .then((existingUser) => {
         if (!existingUser) {
+          db.addUser(user.id, user.displayName);
           res.redirect("/");
         } else {
           res.redirect("/");
