@@ -1,4 +1,6 @@
 const newGroupBtn=document.getElementById("newGroup");
 newGroupBtn.onclick=()=>{
-  newGroupBtn.textContent=newGroupBtn.textContent=="+"?"x":"+";
+  const isHidden=newGroupBtn.textContent=="+";
+  newGroupBtn.textContent=isHidden?"x":"+";
+  document.getElementById("newGroupConfig").style.display=isHidden?"block":"none"
 };
