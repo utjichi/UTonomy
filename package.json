@@ -13,7 +13,8 @@
     "passport-google-oauth20": "^2.0.0",
     "express-session": "^1.18.0",
     "connect-sqlite3": "^0.9.15",
-    "ejs": "^3.1.10"
+    "ejs": "^3.1.10",
+    "uuid": "^10.0.0"
   },
   "engines": {
     "node": "14.x"

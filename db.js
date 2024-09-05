@@ -1,5 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
+const { v4: uuidv4 } = require('uuid');
 
 db.serialize(() => {
   // Create the posts table if it doesn't exist
@@ -193,7 +194,7 @@ const downvotePost = (userId, postId) => {
 };
 
 const addGroup = (userId, name) => {
-  const groupId = self.crypto.randomUUID();
+  const groupId = uuidv4();
   db.run("INSERT INTO groups (id,name,member_limit) VALUES (?,?,?)", [
     groupId,
     name,

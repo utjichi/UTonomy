@@ -151,8 +151,8 @@ app.post("/post/:id/downvote", (req, res) => {
 });
 
 app.post("/group", (req, res) => {
-  db.addGroup(req.user.id, req.body.name)
-    .then(() => res.redirect("/"));
+  db.addGroup(req.user.id, req.body.name);
+  res.redirect("/");
 });
 
 app.get(
