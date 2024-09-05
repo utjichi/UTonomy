@@ -236,13 +236,11 @@ const getUser = (userId) => {
   });
 };
 
-const getGroups = (userId) => {
+const getBelongings = (userId) => {
   return new Promise((resolve, reject) => {
     db.all("SELECT * FROM belongings WHERE member = ?", (err, rows) => {
       if (err) reject(err);
-      else {
-        resolve(rows);
-      }
+      else resolve(rows);
     });
   });
 };
@@ -256,4 +254,5 @@ module.exports = {
   addGroup,
   getVote,
   getUser,
+  getBelongings,
 };

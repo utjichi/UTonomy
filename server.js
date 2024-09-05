@@ -86,8 +86,8 @@ app.get("/", (req, res) => {
 
 app.get("user",(req, res) => {
   if (req.isAuthenticated()) {
-    db.getGroups()
-      .then((posts) => {
+    db.getBelongings(req.user.id)
+      .then((belongings) => {
         const promises = posts.map((post) => {
           return db
             .getVote(req.user.id, post.id)
