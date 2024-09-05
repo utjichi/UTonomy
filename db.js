@@ -35,10 +35,10 @@ db.serialize(() => {
     UNIQUE(id)
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS belongings (
+  db.run(`CREATE TABLE IF NOT EXISTS permissions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member TEXT NOT NULL,
-    belonging TEXT NOT NULL,
+    target TEXT NOT NULL,
     permission TEXT,
     UNIQUE(id)
   )`);
@@ -200,7 +200,7 @@ const addGroup = (userId, name) => {
     -1,
   ]);
   db.run(
-    "INSERT INTO belongings (member,belonging,permission) VALUES (?,?,?)",
+    "INSERT INTO permissions (member,target,permission) VALUES (?,?,?)",
     [userId, groupId, "config"]
   );
 };
@@ -227,18 +227,27 @@ const getVote = (userId, postId) => {
   });
 };
 
-const getUser = (userId) => {
+const getUser = (id) => {
   return new Promise((resolve, reject) => {
-    db.get("SELECT * FROM users WHERE id = ?", [userId], (err, row) => {
+    db.get("SELECT * FROM users WHERE id = ?", [id], (err, row) => {
       if (err) return reject(err);
       else resolve(row);
     });
   });
 };
 
-const getBelongings = (userId) => {
+const getGroup = (id) => {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM belongings WHERE member = ?", (err, rows) => {
+    db.get("SELECT * FROM groups WHERE id = ?", [id], (err, row) => {
+      if (err) return reject(err);
+      else resolve(row);
+    });
+  });
+};
+
+const getPermissions = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.all("SELECT * FROM permissions WHERE member = ?", (err, rows) => {
       if (err) reject(err);
       else resolve(rows);
     });
@@ -254,5 +263,5 @@ module.exports = {
   addGroup,
   getVote,
   getUser,
-  getBelongings,
+  getPermissions,
 };

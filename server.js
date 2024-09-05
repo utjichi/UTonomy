@@ -86,25 +86,20 @@ app.get("/", (req, res) => {
 
 app.get("user",(req, res) => {
   if (req.isAuthenticated()) {
-    db.getBelongings(req.user.id)
-      .then((belongings) => {
-        const promises = posts.map((post) => {
+    db.getPermissions(req.user.id)
+      .then((permissions) => {
+        const promises = permissions.map((permission) => {
           return db
-            .getVote(req.user.id, post.id)
-            .then((vote) => {
-              post.vote = vote;
-              return post;
-            })
-            .catch((err) => {
-              console.error("Failed to retrieve vote:", err);
-              post.vote = null;
-              return post;
+            .getGroup(permission.group)
+            .then((group) => {
+              permission.group = group;
+              return permission;
             });
         });
         return Promise.all(promises);
       })
-      .then((posts) => {
-        res.render("index", { user: req.user, posts, error: null });
+      .then((belongings) => {
+        res.render("index", { user: req.user, belongings, error: null });
       })
       .catch((err) => {
         console.error("Failed to retrieve posts:", err);
