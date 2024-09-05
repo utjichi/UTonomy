@@ -8,13 +8,9 @@
     <% if (user) { %>
       <header>
         <h1>U-tonomy</h1>
-        <a href="/user"><%= user.displayName %></a>
-      </header>
-        <form action="/post" method="post">
-            <textarea name="content" placeholder="Write your post here..." required></textarea>
-            <button type="submit">Post</button>
-        </form>
+        <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
         <a href="/logout">Logout</a>
+      </header>
     <% } else { %>
         <a href="/auth/google">Login with Google</a>
     <% } %>
@@ -39,6 +35,10 @@
         </li>
       <% }) %>
     </ul>
+        <form action="/post" method="post">
+            <textarea name="content" placeholder="Write your post here..." required></textarea>
+            <button type="submit">Post</button>
+        </form>
             
     <div>
       <button type="button" id="newGroup">+</button>

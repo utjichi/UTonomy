@@ -8,12 +8,12 @@
     <p>
       <%= user.id %>
     </p>
-    <%= JSON.stringify(user) %>
-    <img>
+    <img src="<%= user.photos[0].value %>">
     <div>
-      <h2>
-        所属しているグループ
-      </h2>
+    <table>
+      <caption>所属しているグループ</caption>
+      <thead></thead>
+    </table>
       <ul>
         <% (permissions || []).forEach(permission => { %>
           <li>

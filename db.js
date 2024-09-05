@@ -203,7 +203,7 @@ const addGroup = (userId, name) => {
   db.run("INSERT INTO permissions (member,target,permission) VALUES (?,?,?)", [
     userId,
     groupId,
-    "config",
+    "owner",
   ]);
 };
 
