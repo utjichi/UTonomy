@@ -144,7 +144,7 @@ app.get(
     db.getUser(user.id)
       .then((existingUser) => {
         if (!existingUser) {
-          res.redirect("/setup");
+          res.redirect("/");
         } else {
           res.redirect("/");
         }
@@ -155,34 +155,6 @@ app.get(
       });
   }
 );
-
-app.get("/setup", (req, res) => {
-  if (req.isAuthenticated()) {
-    db.getUser(req.user.id).then((user) => {
-      if (user && user.affiliation) {
-        res.redirect("/");
-      } else {
-        res.render("setup",{ error: null });
-      }
-    });
-  } else {
-    res.redirect("/login");
-  }
-});
-
-app.post("/setup", (req, res) => {
-  if (req.isAuthenticated()) {
-    const { affiliation } = req.body;
-    db.addUser(req.user.id, req.user.displayName, affiliation)
-      .then(() => res.redirect("/"))
-      .catch((err) => {
-        console.error("Failed to add user:", err);
-        res.redirect("/setup?error=" + encodeURIComponent(err.message));
-      });
-  } else {
-    res.redirect("/login");
-  }
-});
 
 app.get("/logout", (req, res) => {
   req.logout(() => {});
