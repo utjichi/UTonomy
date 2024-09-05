@@ -162,7 +162,7 @@ app.get("/setup", (req, res) => {
       if (user && user.affiliation) {
         res.redirect("/");
       } else {
-        res.render("setup");
+        res.render("setup",{ error: null });
       }
     });
   } else {
