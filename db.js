@@ -193,7 +193,7 @@ const downvotePost = (userId, postId) => {
 };
 
 const addGroup = (userId, name) => {
-  const groupId = crypto.randomUUID();
+  const groupId = self.crypto.randomUUID();
   db.run("INSERT INTO groups (id,name,member_limit) VALUES (?,?,?)", [
     groupId,
     name,

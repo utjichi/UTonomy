@@ -10,9 +10,9 @@
         所属しているグループ
       </h2>
       <ul>
-        <% (groups || []).forEach(group => { %>
+        <% (permissions || []).forEach(permission => { %>
           <li>
-            <%= group.name %>
+            <%= permissions.group.name %>
           </li>
         <% }) %>
       </ul>

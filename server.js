@@ -84,7 +84,7 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get("user",(req, res) => {
+app.get("/user",(req, res) => {
   if (req.isAuthenticated()) {
     db.getPermissions(req.user.id)
       .then((permissions) => {
@@ -98,12 +98,12 @@ app.get("user",(req, res) => {
         });
         return Promise.all(promises);
       })
-      .then((belongings) => {
-        res.render("index", { user: req.user, belongings, error: null });
+      .then((permissions) => {
+        res.render("user", { user: req.user, permissions, error: null });
       })
       .catch((err) => {
-        console.error("Failed to retrieve posts:", err);
-        res.render("index", { user: req.user, posts: [], error: err.message });
+        console.error("Failed to retrieve groups:", err);
+        res.render("user", { user: req.user, permissions: [], error: err.message });
       });
   } else {
     res.render("index", { user: req.user, posts: [], error: null });
