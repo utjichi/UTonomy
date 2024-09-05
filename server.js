@@ -88,9 +88,9 @@ app.get("/user", (req, res) => {
   if (req.isAuthenticated()) {
     db.getPermissions(req.user.id)
       .then((permissions) => {
-      console.log(req.user.id,permissions)
+        console.log(req.user.id, permissions);
         const promises = permissions.map((permission) => {
-          return db.getGroup(permission.group).then((group) => {
+          return db.getGroup(permission.target).then((group) => {
             permission.group = group;
             return permission;
           });

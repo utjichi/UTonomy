@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 db.serialize(() => {
   // Create the posts table if it doesn't exist
@@ -200,10 +200,11 @@ const addGroup = (userId, name) => {
     name,
     -1,
   ]);
-  db.run(
-    "INSERT INTO permissions (member,target,permission) VALUES (?,?,?)",
-    [userId, groupId, "config"]
-  );
+  db.run("INSERT INTO permissions (member,target,permission) VALUES (?,?,?)", [
+    userId,
+    groupId,
+    "config",
+  ]);
 };
 
 const getPosts = () => {
@@ -246,12 +247,16 @@ const getGroup = (id) => {
   });
 };
 
-const getPermissions = (userId) => {
+const getPermissions = (member) => {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM permissions WHERE member = ?", (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
+    db.all(
+      "SELECT * FROM permissions WHERE member = ?",
+      [member],
+      (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      }
+    );
   });
 };
 
@@ -264,5 +269,6 @@ module.exports = {
   addGroup,
   getVote,
   getUser,
+  getGroup,
   getPermissions,
 };
