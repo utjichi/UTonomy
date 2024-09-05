@@ -141,6 +141,7 @@ app.get(
   async (req, res) => {
     // Check if the user is already in the database
     const user = req.user;
+    console.log(user);
     db.getUser(user.id)
       .then((existingUser) => {
         if (!existingUser) {
