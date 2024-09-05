@@ -39,6 +39,7 @@ db.serialize(() => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member TEXT NOT NULL,
     belonging TEXT NOT NULL,
+    permission TEXT,
     UNIQUE(id)
   )`);
 });
@@ -189,6 +190,10 @@ const downvotePost = (userId, postId) => {
       }
     );
   });
+};
+
+const addGroup=(name)=>{
+  db.run("INSERT INTO groups (id,name,member_limit)");
 };
 
 const getPosts = () => {

@@ -1,7 +1,7 @@
 // server.js
 
 const express = require("express");
-const path = require('path');
+const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -28,7 +28,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Passport configuration
 passport.use(
@@ -122,6 +122,11 @@ app.post("/post/:id/downvote", (req, res) => {
   } else {
     res.redirect("/login");
   }
+});
+
+app.post("/group", (req, res) => {
+  db.addGroup(req.user.id, req.body.name)
+    .then(() => res.redirect("/"));
 });
 
 app.get("/login", (req, res) => {
