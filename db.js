@@ -29,14 +29,14 @@ db.serialize(() => {
   )`);
   
   db.run(`CREATE TABLE IF NOT EXISTS groups (
-    id TEXT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     member_limit INTEGER,
     UNIQUE(id)
   )`);
   
-  db.run(`CREATE TABLE IF NOT EXISTS groups (
-    id TEXT PRIMARY KEY,
+  db.run(`CREATE TABLE IF NOT EXISTS belongings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     member_limit INTEGER,
     UNIQUE(id)
