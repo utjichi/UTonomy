@@ -6,7 +6,10 @@
 </head>
 <body>
     <% if (user) { %>
+      <header>
         <h1>U-tonomy</h1>
+        <a href="/user"><%= user.displayName %></a>
+      </header>
         <form action="/post" method="post">
             <textarea name="content" placeholder="Write your post here..." required></textarea>
             <button type="submit">Post</button>

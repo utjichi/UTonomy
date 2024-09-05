@@ -6,14 +6,16 @@
 <body>
     <h1><%= user.displayName %></h1>
     <div>
-        
+      <h2>
+        所属しているグループ
+      </h2>
+      <ul>
+        <% (groups || []).forEach(group => { %>
+          <li>
+            <%= group.name %>
+          </li>
+        <% }) %>
+      </ul>
     </div>
-    <ul>
-      <% (groups || []).forEach(group => { %>
-        <li>
-          <%= group.name %>
-        </li>
-      <% }) %>
-    </ul>
 </body>
 </html>

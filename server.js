@@ -84,6 +84,37 @@ app.get("/", (req, res) => {
   }
 });
 
+app.get("user",(req, res) => {
+  if (req.isAuthenticated()) {
+    db.getGroups()
+      .then((posts) => {
+        const promises = posts.map((post) => {
+          return db
+            .getVote(req.user.id, post.id)
+            .then((vote) => {
+              post.vote = vote;
+              return post;
+            })
+            .catch((err) => {
+              console.error("Failed to retrieve vote:", err);
+              post.vote = null;
+              return post;
+            });
+        });
+        return Promise.all(promises);
+      })
+      .then((posts) => {
+        res.render("index", { user: req.user, posts, error: null });
+      })
+      .catch((err) => {
+        console.error("Failed to retrieve posts:", err);
+        res.render("index", { user: req.user, posts: [], error: err.message });
+      });
+  } else {
+    res.render("index", { user: req.user, posts: [], error: null });
+  }
+});
+
 app.post("/post", (req, res) => {
   if (req.isAuthenticated()) {
     const { content } = req.body;

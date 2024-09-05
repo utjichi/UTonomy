@@ -192,14 +192,17 @@ const downvotePost = (userId, postId) => {
   });
 };
 
-const addGroup = (userId,name) => {
-  const groupId=crypto.randomUUID();
+const addGroup = (userId, name) => {
+  const groupId = crypto.randomUUID();
   db.run("INSERT INTO groups (id,name,member_limit) VALUES (?,?,?)", [
     groupId,
     name,
     -1,
   ]);
-  db.run("INSERT INTO belongings (member,belonging,permission) VALUES (?,?,?)",[userId,groupId,"config"])
+  db.run(
+    "INSERT INTO belongings (member,belonging,permission) VALUES (?,?,?)",
+    [userId, groupId, "config"]
+  );
 };
 
 const getPosts = () => {
@@ -229,6 +232,17 @@ const getUser = (userId) => {
     db.get("SELECT * FROM users WHERE id = ?", [userId], (err, row) => {
       if (err) return reject(err);
       else resolve(row);
+    });
+  });
+};
+
+const getGroups = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.all("SELECT * FROM belongings WHERE member = ?", (err, rows) => {
+      if (err) reject(err);
+      else {
+        resolve(rows);
+      }
     });
   });
 };
