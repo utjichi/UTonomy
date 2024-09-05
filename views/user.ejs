@@ -23,9 +23,7 @@
             <td>
               <% if(permission.role=="owner"||permission.role=="admin"){ %>
                 <form action="/group/<%= permission.target %>/invite" method="post">
-                  <label>id<input name="id"></label>
-                  <select name="role">
-                    <option>member</option>
+                  <label>ID<input name="id"></label>
                   <button>
                     招待
                   </button>

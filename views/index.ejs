@@ -5,15 +5,15 @@
   <script type="module" src="/client.js"></script>
 </head>
 <body>
+  <header>
+    <h1>U-tonomy</h1>
     <% if (user) { %>
-      <header>
-        <h1>U-tonomy</h1>
-        <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
-        <a href="/logout">Logout</a>
-      </header>
+      <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
+      <a href="/logout">Logout</a>
     <% } else { %>
         <a href="/auth/google">Login with Google</a>
     <% } %>
+  </header>
 
     <h2>Posts</h2>
 

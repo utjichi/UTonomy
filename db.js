@@ -200,44 +200,27 @@ const invite = (inviter, groupId, invited) => {
       [inviter, groupId],
       (err, row) => {
         if (err) return reject(err);
-
-        if (row) {
-          if (row.role == "owner" || row.role == "admin") {
-            db.get(
-              "SELECT id from permissions WHERE member = ? AND target = ?",
-              [invited, groupId],
-              (err, existing) => {
-                if (err) return reject(err);
-
-                if (existing)
-                  return reject("そのユーザーはすでに参加しています");
-                else {
-                  db.run("INSERT INTO permissions ()");
+        if (!row) return reject("権限がありません");
+        if (!(row.role == "owner" || row.role == "admin")) return reject("権限がありません");
+        db.get("SELECT id from users WHERE id = ?",[invited],())
+        db.get(
+          "SELECT id from permissions WHERE member = ? AND target = ?",
+          [invited, groupId],
+          (err, existing) => {
+            if (err) return reject(err);
+            if (existing) return reject("そのユーザーはすでに参加しています");
+            else {
+              db.run(
+                "INSERT INTO permissions (member,target) VALUES (?,?)",
+                [invited, groupId],
+                (err) => {
+                  if (err) return reject(err);
+                  resolve(this.changes);
                 }
-              }
-            );
-            db.run(
-              "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
-              [userId, postId],
-              function (err) {
-                if (err) return reject(err);
-                // 投稿のdownvote数を更新
-                db.run(
-                  "UPDATE posts SET downvotes = downvotes - 1 WHERE id = ?",
-                  postId,
-                  function (err) {
-                    if (err) return reject(err);
-                    resolve(this.changes);
-                  }
-                );
-              }
-            );
-          } else {
-            return reject("権限がありません");
+              );
+            }
           }
-        } else {
-          return reject("権限がありません");
-        }
+        );
       }
     );
   });
