@@ -203,7 +203,7 @@ const invite = (inviter, groupId, invited) => {
         if (!row) return reject("権限がありません");
         if (!(row.role == "owner" || row.role == "admin"))
           return reject("権限がありません");
-        db.get("SELECT id from users WHERE id = ?", [invited], (err, row) => {
+        db.get("SELECT id FROM users WHERE id = ?", [invited], (err, row) => {
           if (err) return reject(err);
           if (!row) return reject(`ユーザー${invited}は存在しません`);
           db.get(
@@ -211,7 +211,7 @@ const invite = (inviter, groupId, invited) => {
             [invited, groupId],
             (err, existing) => {
               if (err) return reject(err);
-              if (existing) return reject("そのユーザーはすでに参加しています");
+              if (existing) return reject(`ユーザー${invited}はすでに参加しています`);
               else {
                 db.run(
                   "INSERT INTO permissions (member,target) VALUES (?,?)",
