@@ -201,26 +201,30 @@ const invite = (inviter, groupId, invited) => {
       (err, row) => {
         if (err) return reject(err);
         if (!row) return reject("権限がありません");
-        if (!(row.role == "owner" || row.role == "admin")) return reject("権限がありません");
-        db.get("SELECT id from users WHERE id = ?",[invited],())
-        db.get(
-          "SELECT id from permissions WHERE member = ? AND target = ?",
-          [invited, groupId],
-          (err, existing) => {
-            if (err) return reject(err);
-            if (existing) return reject("そのユーザーはすでに参加しています");
-            else {
-              db.run(
-                "INSERT INTO permissions (member,target) VALUES (?,?)",
-                [invited, groupId],
-                (err) => {
-                  if (err) return reject(err);
-                  resolve(this.changes);
-                }
-              );
+        if (!(row.role == "owner" || row.role == "admin"))
+          return reject("権限がありません");
+        db.get("SELECT id from users WHERE id = ?", [invited], (err, row) => {
+          if (err) return reject(err);
+          if (!row) return reject(`ユーザー${invited}は存在しません`);
+          db.get(
+            "SELECT id from permissions WHERE member = ? AND target = ?",
+            [invited, groupId],
+            (err, existing) => {
+              if (err) return reject(err);
+              if (existing) return reject("そのユーザーはすでに参加しています");
+              else {
+                db.run(
+                  "INSERT INTO permissions (member,target) VALUES (?,?)",
+                  [invited, groupId],
+                  (err) => {
+                    if (err) return reject(err);
+                    resolve(this.changes);
+                  }
+                );
+              }
             }
-          }
-        );
+          );
+        });
       }
     );
   });

@@ -163,7 +163,7 @@ app.post("/group/:id/invite", (req, res) => {
     db.invite(inviter, groupId, invited)
       .then(() => res.redirect("/user")) // 招待後は /user へリダイレクト
       .catch((err) => {
-        console.error("Failed to downvote post:", err);
+        console.error("招待エラー:", err);
         res.redirect("/?error=" + encodeURIComponent(err.message));
       });
   } else {
