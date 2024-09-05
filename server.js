@@ -84,17 +84,16 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get("/user",(req, res) => {
+app.get("/user", (req, res) => {
   if (req.isAuthenticated()) {
     db.getPermissions(req.user.id)
       .then((permissions) => {
+      console.log(req.user.id,permissions)
         const promises = permissions.map((permission) => {
-          return db
-            .getGroup(permission.group)
-            .then((group) => {
-              permission.group = group;
-              return permission;
-            });
+          return db.getGroup(permission.group).then((group) => {
+            permission.group = group;
+            return permission;
+          });
         });
         return Promise.all(promises);
       })
@@ -103,7 +102,11 @@ app.get("/user",(req, res) => {
       })
       .catch((err) => {
         console.error("Failed to retrieve groups:", err);
-        res.render("user", { user: req.user, permissions: [], error: err.message });
+        res.render("user", {
+          user: req.user,
+          permissions: [],
+          error: err.message,
+        });
       });
   } else {
     res.render("index", { user: req.user, posts: [], error: null });
