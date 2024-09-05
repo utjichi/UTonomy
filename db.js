@@ -193,6 +193,60 @@ const downvotePost = (userId, postId) => {
   });
 };
 
+const invite = (inviter,groupId,invited,role)=>{
+  return new Promise((resolve, reject) => {
+    db.get(
+      "SELECT * FROM permissions WHERE member = ?",
+      [inviter],
+      (err, row) => {
+        if (err) return reject(err);
+
+        if (row) {
+          if (row.role === "owner" || (row.role=="admin"&&req.body)) {
+            // 既存のdownvoteを取り消す
+            db.run(
+              "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
+              [userId, postId],
+              function (err) {
+                if (err) return reject(err);
+                // 投稿のdownvote数を更新
+                db.run(
+                  "UPDATE posts SET downvotes = downvotes - 1 WHERE id = ?",
+                  postId,
+                  function (err) {
+                    if (err) return reject(err);
+                    resolve(this.changes);
+                  }
+                );
+              }
+            );
+          } else {
+            // 既存の投票をdownvoteに更新
+            db.run(
+              "UPDATE votes SET vote_type = 'downvote' WHERE user_id = ? AND post_id = ?",
+              [userId, postId],
+              function (err) {
+                if (err) return reject(err);
+                // 投稿のdownvote数を更新
+                db.run(
+                  "UPDATE posts SET downvotes = downvotes + 1, upvotes = upvotes - 1 WHERE id = ?",
+                  postId,
+                  function (err) {
+                    if (err) return reject(err);
+                    resolve(this.changes);
+                  }
+                );
+              }
+            );
+          }
+        } else {
+          return reject("権限がありません");
+        }
+      }
+    );
+  });
+};
+
 const addGroup = (userId, name) => {
   const groupId = uuidv4();
   db.run("INSERT INTO groups (id,name) VALUES (?,?)", [
@@ -265,6 +319,7 @@ module.exports = {
   getPosts,
   upvotePost,
   downvotePost,
+  invite,
   addGroup,
   getVote,
   getUser,
