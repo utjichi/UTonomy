@@ -22,19 +22,21 @@
         <div style="color: red;"><%= error %></div>
     <% } %>
 
-<ul>
-  <% (posts || []).forEach(post => { %>
-    <li>
-      <strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %>
-        <form action="/post/<%= post.id %>/upvote" method="post" style="display:inline;">
-          <button type="submit">👍 (<%= post.upvotes %>)</button>
-        </form>
-        <form action="/post/<%= post.id %>/downvote" method="post" style="display:inline;">
-          <button type="submit">👎 (<%= post.downvotes %>)</button>
-        </form>
-    </li>
-  <% }) %>
-</ul>
+    <ul>
+      <% (posts || []).forEach(post => { %>
+        <li>
+          <strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %>
+          <form action="/post/<%= post.id %>/upvote" method="post" style="display:inline;">
+            <button type="submit">👍 (<%= post.upvotes %>)</button>
+          </form>
+          <form action="/post/<%= post.id %>/downvote" method="post" style="display:inline;">
+            <button type="submit">👎 (<%= post.downvotes %>)</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+            
+    
 
 </body>
 </html>

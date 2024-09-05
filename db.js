@@ -29,7 +29,7 @@ db.serialize(() => {
   )`);
   
   db.run(`CREATE TABLE IF NOT EXISTS groups (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     member_limit INTEGER,
     UNIQUE(id)
@@ -37,8 +37,8 @@ db.serialize(() => {
   
   db.run(`CREATE TABLE IF NOT EXISTS belongings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    member_limit INTEGER,
+    member TEXT NOT NULL,
+    belonging TEXT NOT NULL,
     UNIQUE(id)
   )`);
 });
