@@ -40,7 +40,7 @@ db.serialize(() => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member TEXT NOT NULL,
     target TEXT NOT NULL,
-    permission TEXT,
+    role TEXT,
     UNIQUE(id)
   )`);
 });
@@ -199,7 +199,7 @@ const addGroup = (userId, name) => {
     groupId,
     name,
   ]);
-  db.run("INSERT INTO permissions (member,target,permission) VALUES (?,?,?)", [
+  db.run("INSERT INTO permissions (member,target,role) VALUES (?,?,?)", [
     userId,
     groupId,
     "owner",

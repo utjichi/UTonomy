@@ -18,20 +18,23 @@
           <tr>
             <td><%= permission.target %></td>
             <td><%= permission.group.name %></td>
-            <td><%= permission.permission %></td>
+            <td><%= permission.role %></td>
             <td><%= permission.group.member_limit||"なし" %></td>
             <td>
-              <% if(permission.permission=="owner"||permission.permission=="admin"){ %>
-                <form>
+              <% if(permission.role=="owner"||permission.role=="admin"){ %>
+                <form action="/group/<%= permission.target %>/invite" method="post">
                   <label>id<input name="id"></label>
                   <select name="role">
                     <option>member</option>
                     <option>admin</option>
                     <option>owner</option>
                   </select>
+                  <button>
+                    招待
+                  </button>
                 </form>
               <% }else{ %>
-                権限が必要です
+                権限がありません
               <% } %>
             </td>
           </tr>

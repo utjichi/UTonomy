@@ -122,6 +122,11 @@ app.post("/post", (req, res) => {
   }
 });
 
+app.post("/group", (req, res) => {
+  db.addGroup(req.user.id, req.body.name);
+  res.redirect("/");
+});
+
 app.post("/post/:id/upvote", (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
@@ -152,9 +157,20 @@ app.post("/post/:id/downvote", (req, res) => {
   }
 });
 
-app.post("/group", (req, res) => {
-  db.addGroup(req.user.id, req.body.name);
-  res.redirect("/");
+app.post("/group/:id/invite", (req, res) => {
+  if (req.isAuthenticated()) {
+    const groupId = req.params.id;
+    const inviter = req.user.id;
+    const invited=req.body.id
+    db.invite(inviter, groupId,invited)
+      .then(() => res.redirect("/")) // 投票後は / へリダイレクト
+      .catch((err) => {
+        console.error("Failed to downvote post:", err);
+        res.redirect("/?error=" + encodeURIComponent(err.message));
+      });
+  } else {
+    res.redirect("/");
+  }
 });
 
 app.get(
