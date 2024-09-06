@@ -277,7 +277,9 @@ const getPosts = (userId) => {
           );
         });
       })
-    ).then((subsets)=>{});
+    ).then((subsets)=>{
+      return subsets.reduce((a,b)=>a.concat(b));
+    });
   });
 };
 
