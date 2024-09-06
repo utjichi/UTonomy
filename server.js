@@ -52,37 +52,37 @@ passport.deserializeUser((obj, done) => {
 
 // Routes
 app.get("/", (req, res) => {
-  if (req.isAuthenticated()) {
-    Promise.all([
-      db.getPosts().then((posts) => {
-        const promises = posts.map((post) => {
-          return db
-            .getVote(req.user.id, post.id)
-            .then((vote) => {
-              post.vote = vote;
-              return post;
-            })
-            .catch((err) => {
-              console.error("Failed to retrieve vote:", err);
-              post.vote = null;
-              return post;
-            });
-        });
-        return Promise.all(promises);
-      }),
-      db.getMyGroups(req.user.id)
-    ])
-      .then((data) => {
-        res.render("index", { user: req.user, data:{posts:data[0],permissions:data[1]}, error: null });
-      })
-      .catch((err) => {
-        console.error("Failed to retrieve posts:", err);
-        res.render("index", { user: req.user, data: {}, error: err.message });
+  const user=req.isAuthenticated()?req.user: { id: null };
+  Promise.all([
+    db.getPosts(user.id).then((posts) => {
+      const promises = posts.map((post) => {
+        return db
+          .getVote(user.id, post.id)
+          .then((vote) => {
+            post.vote = vote;
+            return post;
+          })
+          .catch((err) => {
+            console.error("Failed to retrieve vote:", err);
+            post.vote = null;
+            return post;
+          });
       });
-  } else {
-    console.log(req.user)
-    res.render("index", { user: req.user, data: {}, error: null });
-  }
+      return Promise.all(promises);
+    }),
+    db.getMyGroups(user.id),
+  ])
+    .then((data) => {
+      res.render("index", {
+        user,
+        data: { posts: data[0], permissions: data[1] },
+        error: null,
+      });
+    })
+    .catch((err) => {
+      console.error("Failed to retrieve posts:", err);
+      res.render("index", { user, data: {}, error: err.message });
+    });
 });
 
 app.get("/user", (req, res) => {

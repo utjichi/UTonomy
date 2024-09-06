@@ -250,12 +250,20 @@ const addGroup = (userId, name) => {
   ]);
 };
 
-const getPosts = () => {
+const getPosts = (userId) => {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM posts ORDER BY timestamp DESC", (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
+    db.all(
+      "SELECT target FROM permissions WHERE member = ?",
+      [userId],
+      (err, rows) => {
+        if (err) reject(err);
+        return 
+        db.all("SELECT * from posts WHERE view = ", [], (err, rows) => {
+          if (err) reject(err);
+          resolve(rows);
+        });
+      }
+    );
   });
 };
 
@@ -311,7 +319,7 @@ const getMyGroups = (member) => {
         return permission;
       });
     });
-    return promises?Promise.all(promises):[];
+    return promises ? Promise.all(promises) : [];
   });
 };
 
