@@ -53,8 +53,8 @@ passport.deserializeUser((obj, done) => {
 // Routes
 app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
-    db.getPosts()
-      .then((posts) => {
+    Promise.all([
+      db.getPosts().then((posts) => {
         const promises = posts.map((post) => {
           return db
             .getVote(req.user.id, post.id)
@@ -69,7 +69,9 @@ app.get("/", (req, res) => {
             });
         });
         return Promise.all(promises);
-      })
+      }),
+      db.getMyGroups(req.user.id)
+    ])
       .then((posts) => {
         res.render("index", { user: req.user, posts, error: null });
       })
@@ -84,16 +86,7 @@ app.get("/", (req, res) => {
 
 app.get("/user", (req, res) => {
   if (req.isAuthenticated()) {
-    db.getPermissions(req.user.id)
-      .then((permissions) => {
-        const promises = permissions.map((permission) => {
-          return db.getGroup(permission.target).then((group) => {
-            permission.group = group;
-            return permission;
-          });
-        });
-        return Promise.all(promises);
-      })
+    db.getMyGroups(req.user.id)
       .then((permissions) => {
         res.render("user", { user: req.user, permissions, error: null });
       })

@@ -194,9 +194,9 @@ const downvotePost = (userId, postId) => {
   });
 };
 
-const addUser=(id,user)=>{
-  db.run("INSERT INTO users (id,name) VALUES (?,?)",[id,user])
-}
+const addUser = (id, user) => {
+  db.run("INSERT INTO users (id,name) VALUES (?,?)", [id, user]);
+};
 
 const invite = (inviter, groupId, invited) => {
   return new Promise((resolve, reject) => {
@@ -216,7 +216,8 @@ const invite = (inviter, groupId, invited) => {
             [invited, groupId],
             (err, existing) => {
               if (err) return reject(err);
-              if (existing) return reject(`ユーザー${invited}はすでに参加しています`);
+              if (existing)
+                return reject(`ユーザー${invited}はすでに参加しています`);
               else {
                 db.run(
                   "INSERT INTO permissions (member,target) VALUES (?,?)",
@@ -298,6 +299,18 @@ const getPermissions = (member) => {
   });
 };
 
+const getMyGroups = (member) => {
+  return db.getPermissions(member).then((permissions) => {
+    const promises = permissions.map((permission) => {
+      return getGroup(permission.target).then((group) => {
+        permission.group = group;
+        return permission;
+      });
+    });
+    return Promise.all(promises);
+  });
+};
+
 // 他の関数と一緒にエクスポート
 module.exports = {
   addPost,
@@ -311,4 +324,5 @@ module.exports = {
   getUser,
   getGroup,
   getPermissions,
+  getMyGroups
 };
