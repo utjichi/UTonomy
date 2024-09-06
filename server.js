@@ -55,6 +55,7 @@ app.get("/", (req, res) => {
   const user = req.isAuthenticated() ? req.user : { id: null };
   Promise.all([
     db.getPosts(user.id).then((posts) => {
+      console.log(posts)
       const promises = posts.map((post) => {
         return db
           .getVote(user.id, post.id)
