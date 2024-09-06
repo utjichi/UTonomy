@@ -23,7 +23,7 @@
     <% } %>
 
     <ul>
-      <% (posts || []).forEach(post => { %>
+      <% (data.posts || []).forEach(post => { %>
         <li>
           <strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %>
           <form action="/post/<%= post.id %>/upvote" method="post" style="display:inline;">
@@ -41,7 +41,7 @@
           <select name="viewer">
             <option value="all">全構成員</option>
             <option value="world">全世界</option>
-            <% (permissions || []).forEach(permission => { %>
+            <% (data.permissions || []).forEach(permission => { %>
               <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
             <% }) %>
           </select>
@@ -49,7 +49,7 @@
           <select name="voter">
             <option value="none">無効</option>
             <option value="all">全構成員</option>
-            <% (permissions || []).forEach(permission => { %>
+            <% (data.permissions || []).forEach(permission => { %>
               <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
             <% }) %>
           </select>

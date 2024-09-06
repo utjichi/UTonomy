@@ -73,14 +73,14 @@ app.get("/", (req, res) => {
       db.getMyGroups(req.user.id)
     ])
       .then((data) => {
-        res.render("index", { user: req.user, posts:data[0],permissions:data[1], error: null });
+        res.render("index", { user: req.user, data:{posts:data[0],permissions:data[1]}, error: null });
       })
       .catch((err) => {
         console.error("Failed to retrieve posts:", err);
-        res.render("index", { user: req.user, posts: [], error: err.message });
+        res.render("index", { user: req.user, data: {}, error: err.message });
       });
   } else {
-    res.render("index", { user: req.user, posts: [], error: null });
+    res.render("index", { user: req.user, data: {}, error: null });
   }
 });
 

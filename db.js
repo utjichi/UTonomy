@@ -311,7 +311,7 @@ const getMyGroups = (member) => {
         return permission;
       });
     });
-    return Promise.all(promises);
+    return promises?Promise.all(promises):[];
   });
 };
 
