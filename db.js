@@ -257,11 +257,21 @@ const getPosts = (userId) => {
       [userId],
       (err, rows) => {
         if (err) reject(err);
-        return 
-        db.all("SELECT * from posts WHERE view = ", [], (err, rows) => {
-          if (err) reject(err);
-          resolve(rows);
-        });
+        rows.push({ target: "world" });
+        console.log(userId)
+        if (userId) rows.push({ target: "all" });
+        return Promise.all(
+          rows.map((row) => {
+            db.all(
+              "SELECT * from posts WHERE viewer = ?",
+              [row.target],
+              (err, rows) => {
+                if (err) reject(err);
+                resolve(rows);
+              }
+            );
+          })
+        );
       }
     );
   });

@@ -52,7 +52,7 @@ passport.deserializeUser((obj, done) => {
 
 // Routes
 app.get("/", (req, res) => {
-  const user=req.isAuthenticated()?req.user: { id: null };
+  const user = req.isAuthenticated() ? req.user : { id: null };
   Promise.all([
     db.getPosts(user.id).then((posts) => {
       const promises = posts.map((post) => {
