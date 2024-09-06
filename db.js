@@ -7,6 +7,8 @@ db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
+    view TEXT NOT NULL,
+    vote TEXT DEFAULT "none",
     content TEXT NOT NULL,
     upvotes INTEGER DEFAULT 0,
     downvotes INTEGER DEFAULT 0,
@@ -300,7 +302,7 @@ const getPermissions = (member) => {
 };
 
 const getMyGroups = (member) => {
-  return db.getPermissions(member).then((permissions) => {
+  return getPermissions(member).then((permissions) => {
     const promises = permissions.map((permission) => {
       return getGroup(permission.target).then((group) => {
         permission.group = group;
