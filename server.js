@@ -80,6 +80,7 @@ app.get("/", (req, res) => {
         res.render("index", { user: req.user, data: {}, error: err.message });
       });
   } else {
+    console.log(req.user)
     res.render("index", { user: req.user, data: {}, error: null });
   }
 });
