@@ -105,8 +105,7 @@ app.get("/user", (req, res) => {
 
 app.post("/post", (req, res) => {
   if (req.isAuthenticated()) {
-    const { content } = req.body;
-    db.addPost(req.user.id, content);
+    db.addPost(req.user.id, req.body);
     res.redirect("/"); // 投稿後は / へリダイレクト
   } else {
     res.redirect("/");

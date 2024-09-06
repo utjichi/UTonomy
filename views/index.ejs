@@ -37,16 +37,16 @@
     </ul>
         <form action="/post" method="post">
           <textarea name="content" placeholder="Write your post here..." required></textarea>
-          <label for="view">閲覧</label>
-          <select name="view">
+          <label for="viewer">閲覧</label>
+          <select name="viewer">
             <option value="all">全構成員</option>
             <option value="world">全世界</option>
             <% (permissions || []).forEach(permission => { %>
               <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
             <% }) %>
           </select>
-          <label for="vote">投票</label>
-          <select name="vote">
+          <label for="voter">投票</label>
+          <select name="voter">
             <option value="none">無効</option>
             <option value="all">全構成員</option>
             <% (permissions || []).forEach(permission => { %>

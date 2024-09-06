@@ -7,8 +7,8 @@ db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
-    view TEXT NOT NULL,
-    vote TEXT DEFAULT "none",
+    viewer TEXT NOT NULL,
+    voter TEXT DEFAULT "none",
     content TEXT NOT NULL,
     upvotes INTEGER DEFAULT 0,
     downvotes INTEGER DEFAULT 0,
@@ -48,9 +48,11 @@ db.serialize(() => {
   )`);
 });
 
-const addPost = (userId, content) => {
-  const stmt = db.prepare("INSERT INTO posts (user_id, content) VALUES (?, ?)");
-  stmt.run(userId, content);
+const addPost = (userId, data) => {
+  const stmt = db.prepare(
+    "INSERT INTO posts (user_id, viewer, voter, content) VALUES (?, ?, ?, ?)"
+  );
+  stmt.run(userId, data.viewer, data.voter, data.content);
   stmt.finalize();
 };
 
@@ -326,5 +328,5 @@ module.exports = {
   getUser,
   getGroup,
   getPermissions,
-  getMyGroups
+  getMyGroups,
 };
