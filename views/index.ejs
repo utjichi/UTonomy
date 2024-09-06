@@ -36,8 +36,17 @@
       <% }) %>
     </ul>
         <form action="/post" method="post">
-            <textarea name="content" placeholder="Write your post here..." required></textarea>
-            <button type="submit">Post</button>
+          <textarea name="content" placeholder="Write your post here..." required></textarea>
+          <select name="view">
+            <option value="world">全世界</option>
+            <option value="all">全構成員</option>
+            <% (permissions || []).forEach(permission => { %>
+            <% }) %>
+          </select>
+          <select name="vote">
+            <option value="all">全構成員</option>
+          </select>
+          <button type="submit">Post</button>
         </form>
             
     <div>
