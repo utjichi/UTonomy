@@ -342,9 +342,22 @@ const checkVotable = (userId, postId) => {
   return new Promise((resolve, reject) => {
     db.get("SELECT voter FROM posts WHERE id = ?", [postId], (row, err) => {
       if (err) reject(err);
-      if(!row)reject("投稿が見つかりません");
-      resolve(row);
+      if (row) resolve(row.voter);
+      else reject("投稿が見つかりません");
     });
+  }).then((voter) => {
+    return voter == "all"
+      ? true
+      : new Promise((resolve, reject) => {
+          db.get(
+            "SELECT id FROM permissions WHERE member = ? AND target = ?",
+            [userId,voter],
+            (row, err) => {
+              if (err) reject(err);
+              resolve(row);
+            }
+          );
+        });
   });
 };
 
