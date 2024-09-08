@@ -10,8 +10,7 @@ db.serialize(() => {
     viewer TEXT NOT NULL,
     voter TEXT DEFAULT "none",
     content TEXT NOT NULL,
-    upvotes INTEGER DEFAULT 0,
-    downvotes INTEGER DEFAULT 0,
+    vote_type TEXT DEFAULT "none",
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 
@@ -50,9 +49,9 @@ db.serialize(() => {
 
 const addPost = (userId, data) => {
   const stmt = db.prepare(
-    "INSERT INTO posts (user_id, viewer, voter, content) VALUES (?, ?, ?, ?)"
+    "INSERT INTO posts (user_id, viewer, voter, content, vote_type) VALUES (?, ?, ?, ?, ?)"
   );
-  stmt.run(userId, data.viewer, data.voter, data.content);
+  stmt.run(userId, data.viewer, data.voter, data.content,data.voteType);
   stmt.finalize();
 };
 
