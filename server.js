@@ -124,29 +124,14 @@ app.post("/group", (req, res) => {
   res.redirect("/");
 });
 
-app.post("/post/:id/upvote", (req, res) => {
+app.post("/post/:id/vote", (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
     const userId = req.user.id;
-    db.upvotePost(userId, postId)
+    db.votePost(userId, postId,req.body)
       .then(() => res.redirect("/")) // 投票後は / へリダイレクト
       .catch((err) => {
-        console.error("Failed to upvote post:", err);
-        res.redirect("/?error=" + encodeURIComponent(err.message));
-      });
-  } else {
-    res.redirect("/");
-  }
-});
-
-app.post("/post/:id/downvote", (req, res) => {
-  if (req.isAuthenticated()) {
-    const postId = req.params.id;
-    const userId = req.user.id;
-    db.downvotePost(userId, postId)
-      .then(() => res.redirect("/")) // 投票後は / へリダイレクト
-      .catch((err) => {
-        console.error("Failed to downvote post:", err);
+        console.error("Failed to vote post:", err);
         res.redirect("/?error=" + encodeURIComponent(err.message));
       });
   } else {

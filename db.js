@@ -55,7 +55,7 @@ const addPost = (userId, data) => {
   stmt.finalize();
 };
 
-const upvotePost = (userId, postId) => {
+const votePost = (userId, postId,vote) => {
   return new Promise((resolve, reject) => {
     db.get(
       "SELECT * FROM votes WHERE user_id = ? AND post_id = ?",
@@ -364,8 +364,7 @@ const checkVotable = (userId, postId) => {
 module.exports = {
   addPost,
   getPosts,
-  upvotePost,
-  downvotePost,
+  votePost,
   addUser,
   invite,
   addGroup,
