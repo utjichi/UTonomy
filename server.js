@@ -69,7 +69,11 @@ app.get("/", (req, res) => {
           });
       });
       return Promise.all(promises);
-    }).then((posts)=>{}),
+    }).then((posts)=>{
+      return db.getVotables(user.id).then(votables=>{
+        return Promise.all(votables.map());
+      });
+    }),
     db.getMyGroups(user.id),
   ])
     .then((data) => {
