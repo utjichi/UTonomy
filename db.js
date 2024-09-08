@@ -340,8 +340,8 @@ const getMyGroups = (member) => {
 
 const checkVotable = (userId, postId) => {
   return new Promise((resolve, reject) => {
-    db.get("SELECT voter FROM posts WHERE id = ?", [postId], (row, err) => {
-      if (err) reject(err);
+    db.get("SELECT voter FROM posts WHERE id = ?", [postId], (err,row) => {
+      if (err) reject("投票権者の確認に失敗: "+JSON.stringify(err));
       if (row) resolve(row.voter);
       else reject("投稿が見つかりません");
     });
@@ -352,8 +352,8 @@ const checkVotable = (userId, postId) => {
           db.get(
             "SELECT id FROM permissions WHERE member = ? AND target = ?",
             [userId,voter],
-            (row, err) => {
-              if (err) reject(err);
+            (err,row) => {
+              if (err) reject("権限の確認に失敗: "+JSON.stringify(err));
               resolve(row);
             }
           );

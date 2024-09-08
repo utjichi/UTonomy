@@ -69,7 +69,7 @@ app.get("/", (req, res) => {
             });
           })
           .catch((err) => {
-            console.error("Failed to retrieve vote:", err);
+            console.error("投稿の情報取得に失敗:", err);
             post.vote = null;
             return post;
           });
