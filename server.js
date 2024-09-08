@@ -62,6 +62,12 @@ app.get("/", (req, res) => {
             post.vote = vote;
             return post;
           })
+          .then((post) => {
+            return db.checkVotable(user.id, post.id).then((isVotable) => {
+              post.isVotable = isVotable;
+              return post;
+            });
+          })
           .catch((err) => {
             console.error("Failed to retrieve vote:", err);
             post.vote = null;
@@ -69,11 +75,6 @@ app.get("/", (req, res) => {
           });
       });
       return Promise.all(promises);
-    }).then((posts)=>{
-      return db.getVotablePosts(user.id).then(votablePosts=>{
-        for(const votablePost of votablePosts){}
-        return posts;
-      });
     }),
     db.getMyGroups(user.id),
   ])

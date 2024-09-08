@@ -339,6 +339,10 @@ const getMyGroups = (member) => {
   });
 };
 
+const checkVotable=(userId,postId)=>{
+  return true;
+}
+
 // 他の関数と一緒にエクスポート
 module.exports = {
   addPost,
@@ -353,4 +357,5 @@ module.exports = {
   getGroup,
   getPermissions,
   getMyGroups,
+  checkVotable
 };
