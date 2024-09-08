@@ -70,8 +70,9 @@ app.get("/", (req, res) => {
       });
       return Promise.all(promises);
     }).then((posts)=>{
-      return db.getVotables(user.id).then(votables=>{
-        return Promise.all(votables.map());
+      return db.getVotablePosts(user.id).then(votablePosts=>{
+        for(const votablePost of votablePosts){}
+        return posts;
       });
     }),
     db.getMyGroups(user.id),
