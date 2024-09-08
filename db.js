@@ -263,7 +263,6 @@ const getPosts = (userId) => {
   }).then((rows) => {
     rows.push({ target: "world" });
     if (userId) rows.push({ target: "all" });
-    console.log(rows);
     return Promise.all(
       rows.map((row) => {
         return new Promise((resolve, reject) => {
@@ -277,8 +276,8 @@ const getPosts = (userId) => {
           );
         });
       })
-    ).then((subsets)=>{
-      return subsets.reduce((a,b)=>a.concat(b));
+    ).then((subsets) => {
+      return subsets.reduce((a, b) => a.concat(b));
     });
   });
 };
@@ -299,7 +298,7 @@ const getVote = (userId, postId) => {
 const getUser = (id) => {
   return new Promise((resolve, reject) => {
     db.get("SELECT * FROM users WHERE id = ?", [id], (err, row) => {
-      if (err) return reject(err);
+      if (err) reject(err);
       else resolve(row);
     });
   });
@@ -308,7 +307,7 @@ const getUser = (id) => {
 const getGroup = (id) => {
   return new Promise((resolve, reject) => {
     db.get("SELECT * FROM groups WHERE id = ?", [id], (err, row) => {
-      if (err) return reject(err);
+      if (err) reject(err);
       else resolve(row);
     });
   });
@@ -339,9 +338,15 @@ const getMyGroups = (member) => {
   });
 };
 
-const checkVotable=(userId,postId)=>{
-  return true;
-}
+const checkVotable = (userId, postId) => {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT voter FROM posts WHERE id = ?", [postId], (row, err) => {
+      if (err) reject(err);
+      if(!row)reject("投稿が見つかりません");
+      resolve(row);
+    });
+  });
+};
 
 // 他の関数と一緒にエクスポート
 module.exports = {
@@ -357,5 +362,5 @@ module.exports = {
   getGroup,
   getPermissions,
   getMyGroups,
-  checkVotable
+  checkVotable,
 };
