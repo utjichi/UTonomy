@@ -8,7 +8,7 @@ db.serialize(() => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     viewer TEXT NOT NULL,
-    voter TEXT DEFAULT "none",
+    voter TEXT,
     content TEXT NOT NULL,
     vote_type TEXT DEFAULT "none",
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
