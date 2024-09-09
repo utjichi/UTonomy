@@ -137,15 +137,15 @@ const addGroup = (userId, name) => {
   ]);
 };
 
-const getPost=(id)=>{
-  return new Promise((resolve,reject)=>{
-    db.get("SELECT * from posts WHERE id = ?",[id],(err,row)=>{
-      if(err)reject(err);
-      if(row)resolve(row);
+const getPost = (id) => {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * from posts WHERE id = ?", [id], (err, row) => {
+      if (err) reject(err);
+      if (row) resolve(row);
       reject("投稿が見つかりません");
-    })
-  })
-}
+    });
+  });
+};
 
 const getPosts = (userId) => {
   return new Promise((resolve, reject) => {
@@ -175,22 +175,22 @@ const getPosts = (userId) => {
           Promise.all(
             posts.map((post) => {
               switch (post.vote_type) {
-                case "updown":
+                case "up/down":
                   return new Promise((resolve, reject) => {
                     db.all(
                       "SELECT value, COUNT(*) AS count FROM votes WHERE post_id = ? GROUP BY value",
                       [post.id],
                       (err, rows) => {
                         if (err) reject(err);
-                        post.votes={};
-                        for(const row in rows)
-                          post.votes[row.value]=row.count;
+                        post.votes = {};
+                        for (const row in rows)
+                          post.votes[row.value] = row.count;
                         resolve(post);
                       }
                     );
                   });
                 default:
-                  post.votes={};
+                  post.votes = {};
                   return post;
               }
             })

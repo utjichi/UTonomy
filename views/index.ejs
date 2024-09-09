@@ -26,10 +26,12 @@
       <% (data.posts || []).forEach(post => { %>
         <li>
           <strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %>
-          <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
-            <button type="submit" name="updown" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes[+1] %>)</button>
-            <button type="submit" name="updown" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>
-          </form>
+          <% if(post.vote_type=="up/down"){ %>
+            <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
+              <button type="submit" name="updown" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes[+1] %>)</button>
+              <button type="submit" name="updown" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>
+            </form>
+          <% } %>
         </li>
       <% }) %>
     </ul>
