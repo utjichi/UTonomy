@@ -74,8 +74,8 @@ const votePost = (userId, postId, vote) => {
             db.run(
               "INSERT INTO votes (user_id, post_id, option, value) VALUES (?, ?, ?, ?)",
               [userId, postId, option.name, option.value],
-              (err)=>{
-                if(err)reject(err);
+              (err) => {
+                if (err) reject(err);
                 resolve();
               }
             );
@@ -161,12 +161,25 @@ const getPosts = (userId) => {
               resolve(rows);
             }
           );
-        }).then(posts=>Promise.all(posts.map(post=>{
-          switch(post.vote_type){
-            case "updown":
-              db.get("SELECT COUNT(*) AS count FROM votes WHERE ")
-          }
-        })));
+        }).then((posts) =>
+          Promise.all(
+            posts.map((post) => {
+              switch (post.vote_type) {
+                case "updown":
+                  return new Promise((resolve, reject) => {
+                    db.all(
+                      "SELECT value, COUNT(*) AS count FROM votes WHERE post_id = ? GROUP BY value",
+                      [post.id],
+                      (err, rows) => {
+                        if (err) reject(err);
+                        resolve(rows);
+                      }
+                    );
+                  });
+              }
+            })
+          )
+        );
       })
     ).then((subsets) => {
       return subsets.reduce((a, b) => a.concat(b));
