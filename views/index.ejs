@@ -27,8 +27,8 @@
         <li>
           <strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %>
           <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
-            <button type="submit" name="content" value="up" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes.up %>)</button>
-            <button type="submit" name="content" value="down" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes.down %>)</button>
+            <button type="submit" name="content" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes.up %>)</button>
+            <button type="submit" name="content" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes.down %>)</button>
           </form>
         </li>
       <% }) %>

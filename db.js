@@ -52,24 +52,36 @@ const addPost = (userId, data) => {
   const stmt = db.prepare(
     "INSERT INTO posts (user_id, viewer, voter, content, vote_type) VALUES (?, ?, ?, ?, ?)"
   );
-  stmt.run(userId, data.viewer, data.voter, data.content,data.voteType);
+  stmt.run(userId, data.viewer, data.voter, data.content, data.voteType);
   stmt.finalize();
 };
 
-const votePost = (userId, postId,vote) => {
+const votePost = (userId, postId, vote) => {
   return new Promise((resolve, reject) => {
     db.run(
       "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
       [userId, postId],
       (err) => {
-        if (err) return reject(err);
+        if (err) reject(err);
         resolve();
       }
     );
-  }).then(()=>{
-    return Promise.all(vote.map(option=>new Promise((resolve,reject)=>{
-      db.run("INSERT INTO votes ()")
-    })));
+  }).then(() => {
+    return Promise.all(
+      vote.map(
+        (option) =>
+          new Promise((resolve, reject) => {
+            db.run(
+              "INSERT INTO votes (user_id, post_id, option, value) VALUES (?, ?, ?, ?)",
+              [userId, postId, option.name, option.value],
+              (err)=>{
+                if(err)reject(err);
+                resolve();
+              }
+            );
+          })
+      )
+    );
   });
 };
 
@@ -215,8 +227,8 @@ const getMyGroups = (member) => {
 
 const checkVotable = (userId, postId) => {
   return new Promise((resolve, reject) => {
-    db.get("SELECT voter FROM posts WHERE id = ?", [postId], (err,row) => {
-      if (err) reject("投票権者の確認に失敗: "+JSON.stringify(err));
+    db.get("SELECT voter FROM posts WHERE id = ?", [postId], (err, row) => {
+      if (err) reject("投票権者の確認に失敗: " + JSON.stringify(err));
       if (row) resolve(row.voter);
       else reject("投稿が見つかりません");
     });
@@ -226,9 +238,9 @@ const checkVotable = (userId, postId) => {
       : new Promise((resolve, reject) => {
           db.get(
             "SELECT id FROM permissions WHERE member = ? AND target = ?",
-            [userId,voter],
-            (err,row) => {
-              if (err) reject("権限の確認に失敗: "+JSON.stringify(err));
+            [userId, voter],
+            (err, row) => {
+              if (err) reject("権限の確認に失敗: " + JSON.stringify(err));
               resolve(row);
             }
           );
