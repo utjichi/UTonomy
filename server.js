@@ -134,7 +134,7 @@ app.post("/post/:id/vote", (req, res) => {
           case "none":
             return {};
           case "up/down":
-            return { updown: req.body.updown };
+            return { updown: parseFloat(req.body.updown) };
         }
       })
       .then((vote) => {

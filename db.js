@@ -67,7 +67,6 @@ const votePost = (userId, postId, vote) => {
       }
     );
   }).then(() => {
-    console.log(vote)
     return Promise.all(
       Object.entries(vote).map(
         (entry) =>
@@ -186,6 +185,8 @@ const getPosts = (userId) => {
                         post.votes = {};
                         for (const row in rows)
                           post.votes[row.value] = row.count;
+                        console.log(row)
+                        console.log(post.votes)
                         resolve(post);
                       }
                     );

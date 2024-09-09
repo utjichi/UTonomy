@@ -28,6 +28,7 @@
           <strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %>
           <% if(post.vote_type=="up/down"){ %>
             <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
+              <%= JSON.stringify(post.votes) %>
               <button type="submit" name="updown" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes[+1] %>)</button>
               <button type="submit" name="updown" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>
             </form>
@@ -38,7 +39,7 @@
         <form id="post" action="/post" method="post">
           <textarea name="content" placeholder="Write your post here..." required></textarea>
           <label for="viewer">閲覧</label>
-          <select name="viewer">
+          <select id="viewer" name="viewer">
             <option value="all">全構成員</option>
             <option value="world">全世界</option>
             <% (data.permissions || []).forEach(permission => { %>
@@ -46,7 +47,7 @@
             <% }) %>
           </select>
           <label for="voteType">投票</label>
-          <select name="voteType">
+          <select id="voteType" name="voteType">
             <option value="none">無効</option>
             <option value="up/down">👍/👎</option>
           </select>
