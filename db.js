@@ -67,6 +67,7 @@ const votePost = (userId, postId, vote) => {
       }
     );
   }).then(() => {
+    console.log(vote)
     return Promise.all(
       Object.entries(vote).map(
         (entry) =>
