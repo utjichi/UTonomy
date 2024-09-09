@@ -172,10 +172,16 @@ const getPosts = (userId) => {
                       [post.id],
                       (err, rows) => {
                         if (err) reject(err);
-                        resolve(rows);
+                        post.votes={};
+                        for(const row in rows)
+                          post.votes[row.value]=row.count;
+                        resolve(post);
                       }
                     );
                   });
+                default:
+                  post.votes={};
+                  return post;
               }
             })
           )
