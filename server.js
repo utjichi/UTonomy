@@ -35,13 +35,11 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "https://u-tonomy.glitch.me/auth/google/callback",
-      passReqToCallback: true, // リクエストをコールバックに渡す
+      scope: ["profile", "email"], // スコープを追加
     },
-    (request, accessToken, refreshToken, profile, done) => {
-      // プロフィール情報からメールアドレスを取得
-      const email = profile.emails[0].value; // 最初のメールアドレスを取得
-      // ユーザー情報をデータベースに保存する処理をここに追加
-      return done(null, { id: profile.id, displayName: profile.displayName, email });
+    (accessToken, refreshToken, profile, done) => {
+      // ユーザー情報の処理
+      return done(null, profile);
     }
   )
 );
@@ -183,14 +181,22 @@ app.get(
     failureRedirect: "/",
   }),
   async (req, res) => {
-    // Check if the user is already in the database
     const user = req.user;
+    console.log("User profile:", user); // デバッグ用にユーザー情報を出力
+
+    // メールアドレスを取得
+    const email = user.emails ? user.emails[0].value : null;
+    console.log("User email:", email); // メールアドレスを出力
+
+    // データベースにユーザーが存在するか確認
     db.getUser(user.id)
       .then((existingUser) => {
         if (!existingUser) {
-          db.addUser(user.id, user.displayName);
+          // ユーザーが存在しない場合、新しいユーザーを追加
+          db.addUser(user.id, user.displayName, email); // メールアドレスも保存
           res.redirect("/");
         } else {
+          // ユーザーが既に存在する場合
           res.redirect("/");
         }
       })
