@@ -68,12 +68,12 @@ const votePost = (userId, postId, vote) => {
     );
   }).then(() => {
     return Promise.all(
-      vote.map(
-        (option) =>
+      Object.entries(vote).map(
+        (entry) =>
           new Promise((resolve, reject) => {
             db.run(
               "INSERT INTO votes (user_id, post_id, option, value) VALUES (?, ?, ?, ?)",
-              [userId, postId, option.name, option.value],
+              [userId, postId, entry[0], entry[1]],
               (err) => {
                 if (err) reject(err);
                 resolve();
@@ -138,7 +138,13 @@ const addGroup = (userId, name) => {
 };
 
 const getPost=(id)=>{
-  return new Promise((resolve,re))
+  return new Promise((resolve,reject)=>{
+    db.get("SELECT * from posts WHERE id = ?",[id],(err,row)=>{
+      if(err)reject(err);
+      if(row)resolve(row);
+      reject("投稿が見つかりません");
+    })
+  })
 }
 
 const getPosts = (userId) => {
@@ -254,19 +260,13 @@ const getMyGroups = (member) => {
 };
 
 const checkVotable = (userId, postId) => {
-  return new Promise((resolve, reject) => {
-    db.get("SELECT voter FROM posts WHERE id = ?", [postId], (err, row) => {
-      if (err) reject("投票権者の確認に失敗: " + JSON.stringify(err));
-      if (row) resolve(row.voter);
-      else reject("投稿が見つかりません");
-    });
-  }).then((voter) => {
-    return voter == "all"
+  return getPost(postId).then((row) => {
+    return row.voter == "all"
       ? true
       : new Promise((resolve, reject) => {
           db.get(
             "SELECT id FROM permissions WHERE member = ? AND target = ?",
-            [userId, voter],
+            [userId, row.voter],
             (err, row) => {
               if (err) reject("権限の確認に失敗: " + JSON.stringify(err));
               resolve(row);
@@ -279,6 +279,7 @@ const checkVotable = (userId, postId) => {
 // 他の関数と一緒にエクスポート
 module.exports = {
   addPost,
+  getPost,
   getPosts,
   votePost,
   addUser,

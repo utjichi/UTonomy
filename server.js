@@ -128,13 +128,17 @@ app.post("/post/:id/vote", (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
     const userId = req.user.id;
-    let vote=[];
-    db.votePost(userId, postId,req.body)
+    db.getPost(postId).then(row=>{
+      switch(row.vote_type){
+        case "updown":
+          return {updown:req.body.updown}
+      }
+    }).then((vote)=>{db.votePost(userId, postId,vote)
       .then(() => res.redirect("/")) // 投票後は / へリダイレクト
       .catch((err) => {
         console.error("Failed to vote post:", err);
         res.redirect("/?error=" + encodeURIComponent(err.message));
-      });
+      });})
   } else {
     res.redirect("/");
   }
