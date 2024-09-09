@@ -183,10 +183,9 @@ const getPosts = (userId) => {
                       (err, rows) => {
                         if (err) reject(err);
                         post.votes = {};
-                        for (const row in rows)
+                        for (const row of rows){
                           post.votes[row.value] = row.count;
-                        console.log(row)
-                        console.log(post.votes)
+                        }
                         resolve(post);
                       }
                     );

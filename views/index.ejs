@@ -28,7 +28,6 @@
           <strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %>
           <% if(post.vote_type=="up/down"){ %>
             <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
-              <%= JSON.stringify(post.votes) %>
               <button type="submit" name="updown" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes[+1] %>)</button>
               <button type="submit" name="updown" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>
             </form>
