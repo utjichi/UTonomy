@@ -95,10 +95,10 @@ const addUser = (id, name, email) => {
 };
 
 const updateUser = (id, name, email) => {
-  db.run("INSERT INTO users (id, name, email) VALUES (?, ?, ?)", [
-    id,
+  db.run("UPDATE users SET name = ?, email = ? WHERE id = ?", [
     name,
     email,
+    id
   ]);
 };
 
