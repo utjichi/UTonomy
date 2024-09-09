@@ -14,12 +14,13 @@ db.serialize(() => {
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 
-  // Create the votes_select table if it doesn't exist
-  db.run(`CREATE TABLE IF NOT EXISTS votes_select (
+  // Create the votes table if it doesn't exist
+  db.run(`CREATE TABLE IF NOT EXISTS votes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     post_id INTEGER NOT NULL,
-    content INTEGER NOT NULL,
+    option TEXT,
+    value REAL,
     UNIQUE(user_id, post_id)
   )`);
 
