@@ -35,10 +35,7 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "https://u-tonomy.glitch.me/auth/google/callback",
-      scope: [
-        "https://www.googleapis.com/auth/userinfo.profile",
-        "https://www.googleapis.com/auth/userinfo.email",
-      ],
+      scope: ["profile","email"],
     },
     (accessToken, refreshToken, profile, done) => {
       console.log("User profile:", JSON.stringify(profile, null, 2)); // 詳細なプロファイル情報を出力
@@ -174,7 +171,7 @@ app.post("/group/:id/invite", (req, res) => {
 app.get(
   "/auth/google",
   passport.authenticate("google", {
-    scope: ["profile"],
+    scope: ["profile","email"],
   })
 );
 
