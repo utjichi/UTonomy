@@ -58,70 +58,11 @@ const addPost = (userId, data) => {
 
 const votePost = (userId, postId,vote) => {
   return new Promise((resolve, reject) => {
-    db.all(
-      "SELECT * FROM votes WHERE user_id = ? AND post_id = ?",
+    db.run(
+      "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
       [userId, postId],
-      (err, row) => {
+      (err) => {
         if (err) return reject(err);
-
-        if (row) {
-          // すでに投票している場合
-          if (row.vote_type === "upvote") {
-            // 既存のupvoteを取り消す
-            db.run(
-              "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
-              [userId, postId],
-              function (err) {
-                if (err) return reject(err);
-                // 投稿のupvote数を更新
-                db.run(
-                  "UPDATE posts SET upvotes = upvotes - 1 WHERE id = ?",
-                  postId,
-                  function (err) {
-                    if (err) return reject(err);
-                    resolve(this.changes);
-                  }
-                );
-              }
-            );
-          } else {
-            // 既存の投票をupvoteに更新
-            db.run(
-              "UPDATE votes SET vote_type = 'upvote' WHERE user_id = ? AND post_id = ?",
-              [userId, postId],
-              function (err) {
-                if (err) return reject(err);
-                // 投稿のupvote数を更新
-                db.run(
-                  "UPDATE posts SET upvotes = upvotes + 1, downvotes = downvotes - 1 WHERE id = ?",
-                  postId,
-                  function (err) {
-                    if (err) return reject(err);
-                    resolve(this.changes);
-                  }
-                );
-              }
-            );
-          }
-        } else {
-          // 投票を追加
-          db.run(
-            "INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, 'upvote')",
-            [userId, postId],
-            function (err) {
-              if (err) return reject(err);
-              // 投稿のupvote数を更新
-              db.run(
-                "UPDATE posts SET upvotes = upvotes + 1 WHERE id = ?",
-                postId,
-                function (err) {
-                  if (err) return reject(err);
-                  resolve(this.changes);
-                }
-              );
-            }
-          );
-        }
       }
     );
   });
