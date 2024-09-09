@@ -87,7 +87,11 @@ const votePost = (userId, postId, vote) => {
 };
 
 const addUser = (id, name, email) => {
-  db.run("INSERT INTO users (id, name, email) VALUES (?, ?, ?)", [id, name, email]);
+  db.run("INSERT INTO users (id, name, email) VALUES (?, ?, ?)", [
+    id,
+    name,
+    email,
+  ]);
 };
 
 const invite = (inviter, groupId, invited) => {
@@ -184,7 +188,7 @@ const getPosts = (userId) => {
                       (err, rows) => {
                         if (err) reject(err);
                         post.votes = {};
-                        for (const row of rows){
+                        for (const row of rows) {
                           post.votes[row.value] = row.count;
                         }
                         resolve(post);
