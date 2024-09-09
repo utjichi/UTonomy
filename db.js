@@ -21,7 +21,7 @@ db.serialize(() => {
     post_id INTEGER NOT NULL,
     option TEXT,
     value REAL,
-    UNIQUE(user_id, post_id)
+    UNIQUE(user_id, post_id, option)
   )`);
 
   // Create the users table if it doesn't exist
@@ -63,8 +63,13 @@ const votePost = (userId, postId,vote) => {
       [userId, postId],
       (err) => {
         if (err) return reject(err);
+        resolve();
       }
     );
+  }).then(()=>{
+    return Promise.all(vote.map(option=>new Promise((resolve,reject)=>{
+      db.run("INSERT INTO votes ()")
+    })));
   });
 };
 
