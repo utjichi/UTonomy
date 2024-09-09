@@ -35,9 +35,13 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "https://u-tonomy.glitch.me/auth/google/callback",
+      passReqToCallback: true, // リクエストをコールバックに渡す
     },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+    (request, accessToken, refreshToken, profile, done) => {
+      // プロフィール情報からメールアドレスを取得
+      const email = profile.emails[0].value; // 最初のメールアドレスを取得
+      // ユーザー情報をデータベースに保存する処理をここに追加
+      return done(null, { id: profile.id, displayName: profile.displayName, email });
     }
   )
 );

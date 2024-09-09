@@ -28,6 +28,7 @@ db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
+    email TEXT NOT NULL,
     UNIQUE(id)
   )`);
 
@@ -85,8 +86,8 @@ const votePost = (userId, postId, vote) => {
   });
 };
 
-const addUser = (id, user) => {
-  db.run("INSERT INTO users (id,name) VALUES (?,?)", [id, user]);
+const addUser = (id, name, email) => {
+  db.run("INSERT INTO users (id, name, email) VALUES (?, ?, ?)", [id, name, email]);
 };
 
 const invite = (inviter, groupId, invited) => {
