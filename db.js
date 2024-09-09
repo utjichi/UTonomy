@@ -137,6 +137,10 @@ const addGroup = (userId, name) => {
   ]);
 };
 
+const getPost=(id)=>{
+  return new Promise((resolve,re))
+}
+
 const getPosts = (userId) => {
   return new Promise((resolve, reject) => {
     db.all(
