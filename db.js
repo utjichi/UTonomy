@@ -161,7 +161,12 @@ const getPosts = (userId) => {
               resolve(rows);
             }
           );
-        });
+        }).then(posts=>Promise.all(posts.map(post=>{
+          switch(post.vote_type){
+            case "updown":
+              db.get("SELECT COUNT(*) AS count FROM votes WHERE ")
+          }
+        })));
       })
     ).then((subsets) => {
       return subsets.reduce((a, b) => a.concat(b));
@@ -169,7 +174,7 @@ const getPosts = (userId) => {
   });
 };
 
-const getVote = (userId, postId) => {
+const getMyVote = (userId, postId) => {
   return new Promise((resolve, reject) => {
     db.get(
       "SELECT * FROM votes WHERE user_id = ? AND post_id = ?",
@@ -256,7 +261,7 @@ module.exports = {
   addUser,
   invite,
   addGroup,
-  getVote,
+  getMyVote,
   getUser,
   getGroup,
   getPermissions,

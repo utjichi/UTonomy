@@ -57,12 +57,12 @@ app.get("/", (req, res) => {
     db.getPosts(user.id).then((posts) => {
       const promises = posts.map((post) => {
         return db
-          .getVote(user.id, post.id)
-          .then((vote) => {
-            post.vote = vote;
-            return post;
+          .getMyVote(user.id, post.id)
+          .then((myVote) => {
+            post.myVote = myVote;
+            return;
           })
-          .then((post) => {
+          .then(() => {
             return db.checkVotable(user.id, post.id).then((isVotable) => {
               post.isVotable = isVotable;
               return post;
