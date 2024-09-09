@@ -8,10 +8,9 @@
   <main>
     <h1><%= user.displayName %></h1>
     <p>
-      <%= user.id %>
+      <%= user.emails[0].value %>
     </p>
     <img src="<%= user.photos[0].value %>">
-    <%= JSON.stringify(user) %>
     <div>
     <table>
       <caption>所属しているグループ</caption>
@@ -26,7 +25,7 @@
             <td>
               <% if(permission.role=="owner"||permission.role=="admin"){ %>
                 <form action="/group/<%= permission.target %>/invite" method="post">
-                  <label>ID<input name="id"></label>
+                  <label><input name="email">@g.ecc.u-tokyo.ac.jp</label>
                   <button>
                     招待
                   </button>

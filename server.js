@@ -38,7 +38,6 @@ passport.use(
       scope: ["profile","email"],
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log("User profile:", JSON.stringify(profile, null, 2)); // 詳細なプロファイル情報を出力
       return done(null, profile);
     }
   )
@@ -156,7 +155,7 @@ app.post("/group/:id/invite", (req, res) => {
   if (req.isAuthenticated()) {
     const groupId = req.params.id;
     const inviter = req.user.id;
-    const invited = req.body.id;
+    const invited = req.body.email+"@g.ecc.u-tokyo.ac.jp";
     db.invite(inviter, groupId, invited)
       .then(() => res.redirect("/user")) // 招待後は /user へリダイレクト
       .catch((err) => {
@@ -182,11 +181,9 @@ app.get(
   }),
   async (req, res) => {
     const user = req.user;
-    console.log("User profile:", user); // デバッグ用にユーザー情報を出力
 
     // メールアドレスを取得
     const email = user.emails ? user.emails[0].value : null;
-    console.log("User email:", email); // メールアドレスを出力
 
     // データベースにユーザーが存在するか確認
     db.getUser(user.id)
@@ -197,6 +194,7 @@ app.get(
           res.redirect("/");
         } else {
           // ユーザーが既に存在する場合
+          db.updateUser(user.id, user.displayName, email);
           res.redirect("/");
         }
       })

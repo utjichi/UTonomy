@@ -94,6 +94,14 @@ const addUser = (id, name, email) => {
   ]);
 };
 
+const updateUser = (id, name, email) => {
+  db.run("INSERT INTO users (id, name, email) VALUES (?, ?, ?)", [
+    id,
+    name,
+    email,
+  ]);
+};
+
 const invite = (inviter, groupId, invited) => {
   return new Promise((resolve, reject) => {
     db.get(
@@ -104,12 +112,12 @@ const invite = (inviter, groupId, invited) => {
         if (!row) return reject("権限がありません");
         if (!(row.role == "owner" || row.role == "admin"))
           return reject("権限がありません");
-        db.get("SELECT id FROM users WHERE id = ?", [invited], (err, row) => {
+        db.get("SELECT id FROM users WHERE email = ?", [invited], (err, row) => {
           if (err) return reject(err);
           if (!row) return reject(`ユーザー${invited}は存在しません`);
           db.get(
             "SELECT id from permissions WHERE member = ? AND target = ?",
-            [invited, groupId],
+            [row.id, groupId],
             (err, existing) => {
               if (err) return reject(err);
               if (existing)
@@ -117,7 +125,7 @@ const invite = (inviter, groupId, invited) => {
               else {
                 db.run(
                   "INSERT INTO permissions (member,target) VALUES (?,?)",
-                  [invited, groupId],
+                  [row.id, groupId],
                   (err) => {
                     if (err) return reject(err);
                     resolve(this.changes);
@@ -289,6 +297,7 @@ module.exports = {
   getPosts,
   votePost,
   addUser,
+  updateUser,
   invite,
   addGroup,
   getMyVote,
