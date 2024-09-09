@@ -58,7 +58,7 @@ const addPost = (userId, data) => {
 
 const votePost = (userId, postId,vote) => {
   return new Promise((resolve, reject) => {
-    db.get(
+    db.all(
       "SELECT * FROM votes WHERE user_id = ? AND post_id = ?",
       [userId, postId],
       (err, row) => {
