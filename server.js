@@ -128,6 +128,7 @@ app.post("/post/:id/vote", (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
     const userId = req.user.id;
+    let vote=[];
     db.votePost(userId, postId,req.body)
       .then(() => res.redirect("/")) // 投票後は / へリダイレクト
       .catch((err) => {
