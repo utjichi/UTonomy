@@ -120,7 +120,7 @@ app.post("/post", (req, res) => {
   }
 });
 
-app.post("/group", (req, res) => {
+app.post("/group/new", (req, res) => {
   db.addGroup(req.user.id, req.body.name);
   res.redirect("/");
 });

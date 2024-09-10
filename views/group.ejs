@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>U-tonomy</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/group.js"></script>
+</head>
+<body>
+  <header>
+    <h1>U-tonomy</h1>
+    <% if (user.id) { %>
+      <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+        <a href="/auth/google">Login with Google</a>
+    <% } %>
+    <nav>
+      <ul>
+        <li>HOME</li>
+        <li><a href="/group">GROUP</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <div>
+      <button type="button" id="newGroup">+</button>
+      <form id="newGroupConfig" method="post" action="/group/new" hidden>
+        <label>グループ名<input name="name" required></label>
+        <button>
+          作成
+        </button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

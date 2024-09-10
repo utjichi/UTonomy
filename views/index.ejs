@@ -16,8 +16,8 @@
     <% } %>
     <nav>
       <ul>
-        <li><a href="">HOME</a></li>
-        <li><a>GROUP</a></li>
+        <li>HOME</li>
+        <li><a href="/group">GROUP</a></li>
       </ul>
     </nav>
   </header>
@@ -68,7 +68,7 @@
             
     <div>
       <button type="button" id="newGroup">+</button>
-      <form id="newGroupConfig" method="post" action="/group" hidden>
+      <form id="newGroupConfig" method="post" action="/group/new" hidden>
         <label>グループ名<input name="name" required></label>
         <button>
           作成
