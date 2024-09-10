@@ -17,10 +17,10 @@
     "uuid": "^10.0.0"
   },
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/glitch-mvp-node"
+    "url": "https://glitch.com/edit/#!/u-tonomy"
   },
   "license": "MIT",
   "keywords": [

@@ -8,6 +8,7 @@ const db = require("./models/db");
 const authRoutes = require("./routes/authRoutes");
 const postRoutes = require("./routes/postRoutes");
 const groupRoutes = require("./routes/groupRoutes");
+const passportConfig = require("./config/passportConfig");
 
 const app = express();
 const port = 3000;
@@ -31,7 +32,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Passportの設定（省略）
+// Passportの設定を初期化
+passportConfig();
 
 // ルートの使用
 app.use("/", postRoutes);
