@@ -24,6 +24,10 @@ video {
   max-width: 100%;
 }
 
+header>.account{
+  float:right;
+}
+
 nav>ul>li{
   display:inline;
   list-style:none;

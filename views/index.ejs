@@ -9,8 +9,10 @@
   <header>
     <h1>U-tonomy</h1>
     <% if (user.id) { %>
-      <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
-      <a href="/logout">Logout</a>
+      <div class="account">
+        <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
+        <a href="/logout">Logout</a>
+      </div>
     <% } else { %>
         <a href="/auth/google">Login with Google</a>
     <% } %>
@@ -25,7 +27,7 @@
     <h2>Posts</h2>
 
     <!-- エラーメッセージの表示 -->
-    <% if (error) { %>id INTEGER PRIMARY KEY AUTOINCREMENT,
+    <% if (error) { %>
         <div style="color: red;"><%= error %></div>
     <% } %>
 

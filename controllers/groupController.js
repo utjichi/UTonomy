@@ -13,7 +13,7 @@ exports.group=async (req,res)=>{
   if (req.isAuthenticated()) {
     try {
       const permissions = await db.getMyGroups(req.user.id);
-      res.render("group", { user: req.user, permissions, error: null });
+      res.render("group", { user: req.user, permissions, error: req.query.error });
     } catch (err) {
       console.error("Failed to retrieve groups:", err);
       res.render("group", {
@@ -31,7 +31,7 @@ exports.addGroup = (req, res) => {
       .then(() => res.redirect("/")) // グループ作成後は / へリダイレクト
       .catch((err) => {
         console.error("Failed to add group:", err);
-        res.redirect("/?error=" + encodeURIComponent(err.message));
+        res.redirect("/?error=" + encodeURIComponent(err));
       });
   } else {
     res.redirect("/");
@@ -47,7 +47,7 @@ exports.inviteUser = (req, res) => {
       .then(() => res.redirect("/user")) // 招待後は /user へリダイレクト
       .catch((err) => {
         console.error("招待エラー:", err);
-        res.redirect("/?error=" + encodeURIComponent(err.message));
+        res.redirect("/group?error=" + encodeURIComponent(err));
       });
   } else {
     res.redirect("/");
