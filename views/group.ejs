@@ -7,15 +7,13 @@
 </head>
 <body>
   <header>
-    <h1>U-tonomy</h1>
     <% if (user.id) { %>
       <div class="account">
         <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
         <a href="/logout">Logout</a>
       </div>
-    <% } else { %>
-        <a href="/auth/google">Login with Google</a>
     <% } %>
+    <h1>U-tonomy</h1>
     <nav>
       <ul>
         <li><a href="/">HOME</a></li>

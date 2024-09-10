@@ -22,6 +22,8 @@ exports.group=async (req,res)=>{
         error: err.message,
       });
     }
+  } else {
+    res.redirect("/");
   }
 }
 

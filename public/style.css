@@ -24,8 +24,12 @@ video {
   max-width: 100%;
 }
 
-header>.account{
+.account{
   float:right;
+}
+
+.account img{
+  height:2em;
 }
 
 nav>ul>li{
