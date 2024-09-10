@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User</title>
+  <title><%= user.displayName %></title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <header>
@@ -19,34 +20,6 @@
       <%= user.emails[0].value %>
     </p>
     <img src="<%= user.photos[0].value %>">
-    <div>
-    <table>
-      <caption>所属しているグループ</caption>
-      <thead><tr><th>ID</th><th>グループ名</th><th>権限</th><th>人数制限</th><th>招待</th></tr></thead>
-      <tbody>
-        <% (permissions || []).forEach(permission => { %>
-          <tr>
-            <td><%= permission.target %></td>
-            <td><%= permission.group.name %></td>
-            <td><%= permission.role %></td>
-            <td><%= permission.group.member_limit||"なし" %></td>
-            <td>
-              <% if(permission.role=="owner"||permission.role=="admin"){ %>
-                <form action="/group/<%= permission.target %>/invite" method="post">
-                  <label><input name="email">@g.ecc.u-tokyo.ac.jp</label>
-                  <button>
-                    招待
-                  </button>
-                </form>
-              <% }else{ %>
-                権限がありません
-              <% } %>
-            </td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-    </div>
   </main>
 </body>
 </html>

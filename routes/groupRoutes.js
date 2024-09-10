@@ -5,7 +5,7 @@ const groupController = require("../controllers/groupController");
 
 // ユーザーのグループを取得
 router.get("/user", groupController.getMyGroups);
-router.get("/g", groupController.getMyGroups);
+router.get("/group", groupController.group);
 
 // 新しいグループの作成
 router.post("/group/new", groupController.addGroup);

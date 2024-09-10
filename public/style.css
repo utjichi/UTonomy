@@ -23,3 +23,8 @@ video {
   height: auto;
   max-width: 100%;
 }
+
+nav>ul>li{
+  display:inline;
+  list-style:none;
+}

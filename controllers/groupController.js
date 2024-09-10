@@ -3,21 +3,27 @@ const db = require("../models/db");
 
 exports.getMyGroups = async (req, res) => {
   if (req.isAuthenticated()) {
+    res.render("user", { user: req.user, error: null });
+  } else {
+    res.render("index", { user: req.user, posts: [], error: null });
+  }
+};
+
+exports.group=async (req,res)=>{
+  if (req.isAuthenticated()) {
     try {
       const permissions = await db.getMyGroups(req.user.id);
-      res.render("user", { user: req.user, permissions, error: null });
+      res.render("group", { user: req.user, permissions, error: null });
     } catch (err) {
       console.error("Failed to retrieve groups:", err);
-      res.render("user", {
+      res.render("group", {
         user: req.user,
         permissions: [],
         error: err.message,
       });
     }
-  } else {
-    res.render("index", { user: req.user, posts: [], error: null });
   }
-};
+}
 
 exports.addGroup = (req, res) => {
   if (req.isAuthenticated()) {
