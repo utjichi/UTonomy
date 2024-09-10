@@ -2,12 +2,12 @@
   "name": "glitch-mvp-node",
   "version": "0.1.0",
   "description": "A simple Node app built on fastify, instantly up and running.",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "dependencies": {
-    "express": "^4.19.2",
+    "express": "^5.0.0",
     "sqlite3": "^5.1.7",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
