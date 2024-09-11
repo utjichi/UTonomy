@@ -31,14 +31,8 @@ exports.getPosts = async (req, res) => {
 exports.addPost = (req, res) => {
   if (req.isAuthenticated()) {
     db.addPost(req.user.id, req.body)
-      .then(() => res.redirect("/")) // 投稿後は / へリダイレクト
-      .catch((err) => {
-        console.error("Failed to add post:", err);
-        res.redirect("/?error=" + encodeURIComponent(err.message));
-      });
-  } else {
-    res.redirect("/");
   }
+  res.redirect("/");
 };
 
 exports.votePost = (req, res) => {

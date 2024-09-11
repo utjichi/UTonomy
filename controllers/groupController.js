@@ -30,14 +30,8 @@ exports.group=async (req,res)=>{
 exports.addGroup = (req, res) => {
   if (req.isAuthenticated()) {
     db.addGroup(req.user.id, req.body.name)
-      .then(() => res.redirect("/")) // グループ作成後は / へリダイレクト
-      .catch((err) => {
-        console.error("Failed to add group:", err);
-        res.redirect("/?error=" + encodeURIComponent(err));
-      });
-  } else {
-    res.redirect("/");
   }
+  res.redirect("/group") // グループ作成後は / へリダイレクト
 };
 
 exports.inviteUser = (req, res) => {

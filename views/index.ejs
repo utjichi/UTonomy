@@ -10,9 +10,9 @@
     <div class="account">
       <% if (user.id) { %>
         <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
-        <a href="/logout">Logout</a>
+        <a href="/logout">ログアウト</a>
       <% } else { %>
-        <a href="/auth/google">Login with Google</a>
+        <a href="/auth/google">ログイン</a>
       <% } %>
     </div>
     <h1>U-tonomy</h1>
@@ -46,6 +46,7 @@
         </li>
       <% }) %>
     </ul>
+      <% if (user.id) { %>
         <form id="post" action="/post" method="post">
           <textarea name="content" placeholder="Write your post here..." required></textarea>
           <label for="viewer">閲覧</label>
@@ -69,6 +70,10 @@
           </select>
           <button type="submit">Post</button>
         </form>
-
+      <% } else{ %>
+        <p>
+          投稿するには<a href="/auth/google">ログイン</a>
+        </p>
+      <% } %>
 </body>
 </html>
