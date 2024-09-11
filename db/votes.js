@@ -1,6 +1,16 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
 
+// Create the votes table if it doesn't exist
+  db.run(`CREATE TABLE IF NOT EXISTS votes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    post_id INTEGER NOT NULL,
+    option TEXT,
+    value REAL,
+    UNIQUE(user_id, post_id, option)
+  )`);
+
 const votePost = (userId, postId, vote) => {
   return new Promise((resolve, reject) => {
     db.run(

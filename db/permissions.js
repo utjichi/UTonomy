@@ -1,6 +1,14 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
 
+db.run(`CREATE TABLE IF NOT EXISTS permissions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member TEXT NOT NULL,
+    target TEXT NOT NULL,
+    role TEXT DEFAULT 'member',
+    UNIQUE(id)
+  )`);
+
 const invite = (inviter, groupId, invited) => {
   return new Promise((resolve, reject) => {
     db.get(
