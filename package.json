@@ -1,5 +1,5 @@
 {
-  "name": "glitch-mvp-node",
+  "name": "u-tonomy",
   "version": "0.1.0",
   "description": "A simple Node app built on fastify, instantly up and running.",
   "main": "app.js",
