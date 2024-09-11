@@ -2,9 +2,10 @@ const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
 
 // Create the posts table if it doesn't exist
-  db.run(`CREATE TABLE IF NOT EXISTS posts (
+db.run(`CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
+    nickname TEXT DEFAULT "東大構成員",
     viewer TEXT NOT NULL,
     voter TEXT,
     content TEXT NOT NULL,
@@ -14,9 +15,16 @@ const db = new sqlite3.Database(process.env.DATABASE_URL);
 
 const addPost = (userId, data) => {
   const stmt = db.prepare(
-    "INSERT INTO posts (user_id, viewer, voter, content, vote_type) VALUES (?, ?, ?, ?, ?)"
+    "INSERT INTO posts (user_id, nickname, viewer, voter, content, vote_type) VALUES (?, ?, ?, ?, ?, ?)"
   );
-  stmt.run(userId, data.viewer, data.voter, data.content, data.voteType);
+  stmt.run(
+    userId,
+    data.nickname,
+    data.viewer,
+    data.voter,
+    data.content,
+    data.voteType
+  );
   stmt.finalize();
 };
 
@@ -92,5 +100,5 @@ const getPosts = (userId) => {
 module.exports = {
   addPost,
   getPost,
-  getPosts
+  getPosts,
 };

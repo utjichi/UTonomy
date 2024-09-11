@@ -36,7 +36,7 @@
     <ul>
       <% (data.posts || []).forEach(post => { %>
         <li>
-          <strong><%= post.user_id %></strong>: <%= post.content %> - <%= post.timestamp %>
+          <strong><%= post.nickname %></strong>: <%= post.content %> - <%= post.timestamp %>
           <% if(post.vote_type=="up/down"){ %>
             <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
               <button type="submit" name="updown" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes[+1] %>)</button>
@@ -48,6 +48,7 @@
     </ul>
       <% if (user.id) { %>
         <form id="post" action="/post" method="post">
+          <input name="nickname" value="<%= user.displayName %>" placeholder="藤井輝夫">
           <textarea name="content" placeholder="総長万歳" required></textarea>
           <label for="viewer">閲覧</label>
           <select id="viewer" name="viewer">
