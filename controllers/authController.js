@@ -8,21 +8,27 @@ exports.googleAuth = passport.authenticate("google", {
 
 exports.googleAuthCallback = async (req, res) => {
   const user = req.user;
-  console.log("User profile:", user); // Log the user profile
+
+  // メールアドレスを取得
   const email = user.emails ? user.emails[0].value : null;
 
-  try {
-    const existingUser = await db.getUser(user.id);
-    if (!existingUser) {
-      await db.addUser(user.id, user.displayName, email);
-    } else {
-      await db.updateUser(user.id, user.displayName, email);
-    }
-    res.redirect("/");
-  } catch (err) {
-    console.error("Error fetching user:", err);
-    res.redirect("/");
-  }
+  // データベースにユーザーが存在するか確認
+  db.getUser(user.id)
+    .then((existingUser) => {
+      if (!existingUser) {
+        // ユーザーが存在しない場合、新しいユーザーを追加
+        db.addUser(user.id, user.displayName, email); // メールアドレスも保存
+        res.redirect("/");
+      } else {
+        // ユーザーが既に存在する場合
+        db.updateUser(user.id, user.displayName, email);
+        res.redirect("/");
+      }
+    })
+    .catch((err) => {
+      console.error("Error fetching user:", err);
+      res.redirect("/"); // エラーが発生した場合はログインページにリダイレクト
+    });
 };
 
 exports.logout = (req, res) => {
