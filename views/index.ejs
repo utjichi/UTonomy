@@ -51,7 +51,7 @@
           <textarea name="content" placeholder="総長万歳" required></textarea>
           <label for="viewer">閲覧</label>
           <select id="viewer" name="viewer">
-            <option value="all">全構成員</option>
+            <option value="all">🎓全構成員</option>
             <option value="world">🌏全世界</option>
             <% (data.permissions || []).forEach(permission => { %>
               <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
@@ -63,7 +63,7 @@
             <option value="up/down">👍/👎</option>
           </select>
           <select name="voter" hidden>
-            <option value="all">全構成員</option>
+            <option value="all">🎓全構成員</option>
             <% (data.permissions || []).forEach(permission => { %>
               <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
             <% }) %>

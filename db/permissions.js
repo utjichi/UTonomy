@@ -82,5 +82,6 @@ const checkVotable = (userId, postId) => {
 
 module.exports = {
   invite,
-  getPermissions
+  getPermissions,
+  checkVotable
 };
