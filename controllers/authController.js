@@ -8,7 +8,6 @@ exports.googleAuth = passport.authenticate("google", {
 
 exports.googleAuthCallback = async (req, res) => {
   const user = req.user;
-  console.log(req)
   const email = user.emails ? user.emails[0].value : null;
 
   try {

@@ -47,15 +47,13 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
+  console.log(user)
   done(null, user);
 });
 
 passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
-
-// Passportの設定を初期化
-passportConfig();
 
 // ルートの使用
 app.use("/", postRoutes);

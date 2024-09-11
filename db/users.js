@@ -2,7 +2,7 @@ const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
 
 // Create the users table if it doesn't exist
-  db.run(`CREATE TABLE IF NOT EXISTS users (
+db.run(`CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT NOT NULL,
@@ -21,7 +21,7 @@ const updateUser = (id, name, email) => {
   db.run("UPDATE users SET name = ?, email = ? WHERE id = ?", [
     name,
     email,
-    id
+    id,
   ]);
 };
 
