@@ -40,9 +40,22 @@ const votePost = (userId, postId, vote) => {
   });
 };
 
+const getMyVote = (userId, postId) => {
+  return new Promise((resolve, reject) => {
+    db.get(
+      "SELECT * FROM votes WHERE user_id = ? AND post_id = ?",
+      [userId, postId],
+      (err, row) => {
+        if (err) reject(err);
+        else resolve(row);
+      }
+    );
+  });
+};
+
 // 他の投票関連の関数もここに追加
 
 module.exports = {
   votePost,
-  // 他の関数をエクスポート
+  getMyVote
 };

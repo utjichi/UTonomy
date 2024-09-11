@@ -1,5 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
+const posts = require('./posts');
 
 db.run(`CREATE TABLE IF NOT EXISTS permissions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,9 +48,39 @@ const invite = (inviter, groupId, invited) => {
   });
 };
 
+const getPermissions = (member) => {
+  return new Promise((resolve, reject) => {
+    db.all(
+      "SELECT * FROM permissions WHERE member = ?",
+      [member],
+      (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      }
+    );
+  });
+};
+
+const checkVotable = (userId, postId) => {
+  return posts.getPost(postId).then((row) => {
+    return row.voter == "all"
+      ? true
+      : new Promise((resolve, reject) => {
+          db.get(
+            "SELECT id FROM permissions WHERE member = ? AND target = ?",
+            [userId, row.voter],
+            (err, row) => {
+              if (err) reject("権限の確認に失敗: " + JSON.stringify(err));
+              resolve(row);
+            }
+          );
+        });
+  });
+};
+
 // 他の権限関連の関数もここに追加
 
 module.exports = {
   invite,
-  // 他の関数をエクスポート
+  getPermissions
 };

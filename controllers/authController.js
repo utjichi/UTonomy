@@ -1,6 +1,6 @@
 // controllers/authController.js
 const passport = require("passport");
-const db = require("../models/db");
+const db = require("../db/index");
 
 exports.googleAuth = passport.authenticate("google", {
   scope: ["profile", "email"],
@@ -8,6 +8,7 @@ exports.googleAuth = passport.authenticate("google", {
 
 exports.googleAuthCallback = async (req, res) => {
   const user = req.user;
+  console.log(req.user)
   const email = user.emails ? user.emails[0].value : null;
 
   try {

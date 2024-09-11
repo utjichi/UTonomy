@@ -17,6 +17,14 @@ const addUser = (id, name, email) => {
   ]);
 };
 
+const updateUser = (id, name, email) => {
+  db.run("UPDATE users SET name = ?, email = ? WHERE id = ?", [
+    name,
+    email,
+    id
+  ]);
+};
+
 const getUser = (id) => {
   return new Promise((resolve, reject) => {
     db.get("SELECT * FROM users WHERE id = ?", [id], (err, row) => {
@@ -30,6 +38,7 @@ const getUser = (id) => {
 
 module.exports = {
   addUser,
+  updateUser,
   getUser,
   // 他の関数をエクスポート
 };

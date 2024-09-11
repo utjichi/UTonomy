@@ -19,7 +19,9 @@
     <nav>
       <ul>
         <li>HOME</li>
-        <li><a href="/group">GROUP</a></li>
+        <% if (user.id) { %>
+          <li><a href="/group">GROUP</a></li>
+        <% } %>
       </ul>
     </nav>
   </header>

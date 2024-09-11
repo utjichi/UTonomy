@@ -30,10 +30,67 @@ const getPost = (id) => {
   });
 };
 
+const getPosts = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.all(
+      "SELECT target FROM permissions WHERE member = ?",
+      [userId],
+      (err, rows) => {
+        if (err) reject(err);
+        resolve(rows);
+      }
+    );
+  }).then((rows) => {
+    rows.push({ target: "world" });
+    if (userId) rows.push({ target: "all" });
+    return Promise.all(
+      rows.map((row) => {
+        return new Promise((resolve, reject) => {
+          db.all(
+            "SELECT * from posts WHERE viewer = ?",
+            [row.target],
+            (err, rows) => {
+              if (err) reject(err);
+              resolve(rows);
+            }
+          );
+        }).then((posts) =>
+          Promise.all(
+            posts.map((post) => {
+              switch (post.vote_type) {
+                case "up/down":
+                  return new Promise((resolve, reject) => {
+                    db.all(
+                      "SELECT value, COUNT(*) AS count FROM votes WHERE post_id = ? GROUP BY value",
+                      [post.id],
+                      (err, rows) => {
+                        if (err) reject(err);
+                        post.votes = {};
+                        for (const row of rows) {
+                          post.votes[row.value] = row.count;
+                        }
+                        resolve(post);
+                      }
+                    );
+                  });
+                default:
+                  post.votes = {};
+                  return post;
+              }
+            })
+          )
+        );
+      })
+    ).then((subsets) => {
+      return subsets.reduce((a, b) => a.concat(b));
+    });
+  });
+};
+
 // 他の投稿関連の関数もここに追加
 
 module.exports = {
   addPost,
   getPost,
-  // 他の関数をエクスポート
+  getPosts
 };

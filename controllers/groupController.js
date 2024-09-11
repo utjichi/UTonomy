@@ -1,5 +1,5 @@
 // controllers/groupController.js
-const db = require("../models/db");
+const db = require("../db/index");
 
 exports.getMyGroups = async (req, res) => {
   if (req.isAuthenticated()) {

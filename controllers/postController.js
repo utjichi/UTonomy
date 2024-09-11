@@ -1,5 +1,5 @@
 // controllers/postController.js
-const db = require("../models/db");
+const db = require("../db/index");
 
 exports.getPosts = async (req, res) => {
   const user = req.isAuthenticated() ? req.user : { id: null };

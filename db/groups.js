@@ -1,5 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
+const permissions = require('./permissions');
 const { v4: uuidv4 } = require("uuid");
 
 // Create the groups table if it doesn't exist
@@ -29,10 +30,22 @@ const getGroup = (id) => {
   });
 };
 
+const getMyGroups = (member) => {
+  return permissions.getPermissions(member).then((permissions) => {
+    const promises = permissions.map((permission) => {
+      return getGroup(permission.target).then((group) => {
+        permission.group = group;
+        return permission;
+      });
+    });
+    return promises ? Promise.all(promises) : [];
+  });
+};
+
 // 他のグループ関連の関数もここに追加
 
 module.exports = {
   addGroup,
   getGroup,
-  // 他の関数をエクスポート
+  getMyGroups
 };
