@@ -40,7 +40,7 @@
             <td>
               <% if(permission.role=="owner"||permission.role=="admin"){ %>
                 <form action="/group/<%= permission.target %>/invite" method="post">
-                  <label><input name="email">@g.ecc.u-tokyo.ac.jp</label>
+                  <label><input name="email" placeholder="great-president031">@g.ecc.u-tokyo.ac.jp</label>
                   <button>
                     招待
                   </button>
@@ -57,7 +57,7 @@
     <div>
       <button type="button" id="newGroup">新規グループ</button>
       <form id="newGroupConfig" method="post" action="/group/new" hidden>
-        <label>グループ名<input name="name" required></label>
+        <label>グループ名<input name="name" placeholder="学生全員ぶん殴る委員会" required></label>
         <button>
           作成
         </button>

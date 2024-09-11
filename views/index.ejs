@@ -48,11 +48,11 @@
     </ul>
       <% if (user.id) { %>
         <form id="post" action="/post" method="post">
-          <textarea name="content" placeholder="Write your post here..." required></textarea>
+          <textarea name="content" placeholder="総長万歳" required></textarea>
           <label for="viewer">閲覧</label>
           <select id="viewer" name="viewer">
             <option value="all">全構成員</option>
-            <option value="world">全世界</option>
+            <option value="world">🌏全世界</option>
             <% (data.permissions || []).forEach(permission => { %>
               <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
             <% }) %>
