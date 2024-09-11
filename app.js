@@ -41,6 +41,8 @@ passport.use(
       scope: ["profile", "email"],
     },
     (accessToken, refreshToken, profile, done) => {
+      // Log the profile to see what is being returned
+      console.log("Google profile:", profile);
       return done(null, profile);
     }
   )
