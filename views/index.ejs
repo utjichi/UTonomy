@@ -36,7 +36,7 @@
     <ul>
       <% (data.posts || []).forEach(post => { %>
         <li>
-          <strong><%= post.nickname %></strong>: <%= post.content %> - <%= post.timestamp %>
+          <strong><%= post.nickname %></strong>: <%= post.content %> - <%= new Date(post.timestamp).toLocaleString() %>
           <% if(post.vote_type=="up/down"){ %>
             <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
               <button type="submit" name="updown" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes[+1] %>)</button>
