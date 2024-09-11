@@ -10,12 +10,12 @@ db.run(`CREATE TABLE IF NOT EXISTS posts (
     voter TEXT,
     content TEXT NOT NULL,
     vote_type TEXT DEFAULT "none",
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    timestamp INTEGER NOT NULL
   )`);
 
 const addPost = (userId, data) => {
   const stmt = db.prepare(
-    "INSERT INTO posts (user_id, nickname, viewer, voter, content, vote_type) VALUES (?, ?, ?, ?, ?, ?)"
+    "INSERT INTO posts (user_id, nickname, viewer, voter, content, vote_type, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)"
   );
   stmt.run(
     userId,
@@ -23,7 +23,8 @@ const addPost = (userId, data) => {
     data.viewer,
     data.voter,
     data.content,
-    data.voteType
+    data.voteType,
+    Date.now()
   );
   stmt.finalize();
 };
