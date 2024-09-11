@@ -1,10 +1,10 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
-const permissions = require('./permissions');
+const permissions = require("./permissions");
 const { v4: uuidv4 } = require("uuid");
 
 // Create the groups table if it doesn't exist
-  db.run(`CREATE TABLE IF NOT EXISTS groups (
+db.run(`CREATE TABLE IF NOT EXISTS groups (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     member_limit INTEGER,
@@ -47,5 +47,5 @@ const getMyGroups = (member) => {
 module.exports = {
   addGroup,
   getGroup,
-  getMyGroups
+  getMyGroups,
 };
