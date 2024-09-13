@@ -37,7 +37,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://u-tonomy.glitch.me/auth/google/callback",
+      callbackURL: process.env.CALLBACK_URL,
       scope: ["profile", "email"],
     },
     (accessToken, refreshToken, profile, done) => {
@@ -61,5 +61,5 @@ app.use("/", authRoutes);
 
 // サーバーの起動
 app.listen(port, () => {
-  console.log(`Server is running on https://u-tonomy.glitch.me:${port}`);
+  console.log(`Server is running on :${port}`);
 });
