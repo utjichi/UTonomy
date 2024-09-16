@@ -37,7 +37,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.CALLBACK_URL,
+      callbackURL: `https://${process.env.HOST}/auth/google/callback`,
       scope: ["profile", "email"],
     },
     (accessToken, refreshToken, profile, done) => {
@@ -61,5 +61,13 @@ app.use("/", authRoutes);
 
 // サーバーの起動
 app.listen(port, () => {
-  console.log(`Server is running on :${port}`);
+  console.log(`Server is running on https://${process.env.HOST}:${port}`);
 });
+
+// 5分（300000ミリ秒）ごとにログを出力する
+const interval = 5 * 60 * 1000; // 5分をミリ秒に変換
+
+setInterval(() => {
+    const currentTime = new Date().toLocaleString(); // 現在の日時を取得
+    console.log(`ログ: ${currentTime}`); // ログを出力
+}, interval);
