@@ -70,7 +70,7 @@
             <% }) %>
           </select>
           <label for="voteType">投票</label>
-          <select id="voteType" name="voteType">
+          <select id="voteType" name="voteType" onchange="showInputBox()">
             <option value="none">無効</option>
             <option value="up/down">👍/👎</option>
             <option value="button" class="customOptions">⬜択一（ワンクリック）</option>
@@ -79,10 +79,11 @@
             <option value="select" class="customOptions">択一（ドロップダウン）⌄</option>
             <option value="select-multuple" class="customOptions">複数選択（リスト形式）▲▼</option>
           </select>
+
           <div id="inputContainer" class="input-container" style="display: none;">
             <label for="customOption">任意の選択肢を入力:</label>
             <input type="text" id="customOption" placeholder="選択肢を入力">
-            <button type="button" id="addOption">追加</button>
+            <button onclick="addOption()">追加</button>
             <ul id="optionList"></ul>
           </div>
           <select name="voter" hidden>
