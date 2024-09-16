@@ -46,6 +46,10 @@ exports.votePost = (req, res) => {
             return {};
           case "up/down":
             return { updown: parseFloat(req.body.updown) };
+          case "radio":
+            return {};
+          case "checkbox":
+            return {};
         }
       })
       .then((vote) => {

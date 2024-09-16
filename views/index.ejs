@@ -39,7 +39,8 @@
           <strong><%= post.nickname %></strong>:
           <%= post.content %>
           - <%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %>
-          <% if(post.vote_type=="up/down"){ %>
+          <% switch(post.vote_type){
+               case "up/down": %>
             <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
               <button type="submit" name="updown" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes[+1] %>)</button>
               <button type="submit" name="updown" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>
@@ -64,6 +65,8 @@
           <select id="voteType" name="voteType">
             <option value="none">無効</option>
             <option value="up/down">👍/👎</option>
+            <option value="radio">択一（卓越ではない）</option>
+            <option value="checkbox">複数選択</option>
           </select>
           <select name="voter" hidden>
             <option value="all">🎓全構成員</option>
