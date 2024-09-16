@@ -42,9 +42,16 @@ nav > ul > li {
 .input-container {
   margin-top: 10px;
 }
-.draggable {
-  cursor: move;
-}
 .draggable:hover {
   background-color: #f0f0f0;
+}
+.draggable {
+  margin: 5px 0;
+  padding: 5px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+}
+.dragging {
+  opacity: 0.5;
 }

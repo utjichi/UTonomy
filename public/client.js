@@ -25,20 +25,39 @@ const addOption = () => {
     const newOption = document.createElement("li");
     newOption.className = "draggable";
     newOption.setAttribute("draggable", "true");
-    newOption.innerHTML = `
-            <span>${inputField.value}</span>
-            <button onclick="editOption(this)">編集</button>
-            <button onclick="removeOption(this)">削除</button>
-        `;
-    optionList.appendChild(newOption);
-    inputField.value = ""; // 入力フィールドをクリア
 
-    // ドラッグイベントのリスナーを追加
+    // Create an input field for the option
+    const optionInput = document.createElement("input");
+    optionInput.type = "text";
+    optionInput.value = inputField.value;
+    optionInput.className = "option-input";
+
+    // Create a delete button
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "delete-button";
+    deleteButton.textContent = "削除";
+    deleteButton.onclick = () => removeOption(deleteButton);
+
+    newOption.appendChild(optionInput);
+    newOption.appendChild(deleteButton);
+    optionList.appendChild(newOption);
+    inputField.value = ""; // Clear the input field
+
+    // Drag event listeners
     newOption.ondragstart = dragStart;
     newOption.ondragover = dragOver;
     newOption.ondrop = drop;
   }
 };
+
+const removeOption = (button) => {
+  const listItem = button.parentElement;
+  listItem.remove();
+};
+
+// 追加ボタンのonclickイベントを設定
+document.getElementById("addOptionButton").onclick = addOption;
 
 const editOption = (button) => {
   const listItem = button.parentElement;
@@ -47,11 +66,6 @@ const editOption = (button) => {
   if (newValue !== null && newValue.trim() !== "") {
     span.textContent = newValue;
   }
-};
-
-const removeOption = (button) => {
-  const listItem = button.parentElement;
-  listItem.remove();
 };
 
 const dragStart = (event) => {
@@ -82,6 +96,3 @@ const drop = (event) => {
 
   draggingElement.classList.remove("dragging");
 };
-
-// 追加ボタンのonclickイベントを設定
-document.getElementById("addOptionButton").onclick = addOption;
