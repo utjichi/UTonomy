@@ -6,7 +6,9 @@ html {
   font-size: 16px;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -24,15 +26,25 @@ video {
   max-width: 100%;
 }
 
-.account{
-  float:right;
+.account {
+  float: right;
 }
 
-.account img{
-  height:2em;
+.account img {
+  height: 2em;
 }
 
-nav>ul>li{
-  display:inline;
-  list-style:none;
+nav > ul > li {
+  display: inline;
+  list-style: none;
+}
+
+.input-container {
+  margin-top: 10px;
+}
+.draggable {
+  cursor: move;
+}
+.draggable:hover {
+  background-color: #f0f0f0;
 }
