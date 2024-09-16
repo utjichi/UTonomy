@@ -18,37 +18,34 @@ voteType.onchange = () => {
 };
 
 const addOption = () => {
-  const inputField = document.getElementById("customOption");
   const optionList = document.getElementById("optionList");
 
-  if (inputField.value.trim() !== "") {
-    const newOption = document.createElement("li");
-    newOption.className = "draggable";
-    newOption.setAttribute("draggable", "true");
+  // 新しい選択肢を作成
+  const newOption = document.createElement("li");
+  newOption.className = "draggable";
+  newOption.setAttribute("draggable", "true");
 
-    // Create an input field for the option
-    const optionInput = document.createElement("input");
-    optionInput.type = "text";
-    optionInput.value = inputField.value;
-    optionInput.className = "option-input";
+  // 空の入力フィールドを作成
+  const optionInput = document.createElement("input");
+  optionInput.type = "text";
+  optionInput.value = ""; // 空欄の選択肢
+  optionInput.className = "option-input";
 
-    // Create a delete button
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.className = "delete-button";
-    deleteButton.textContent = "削除";
-    deleteButton.onclick = () => removeOption(deleteButton);
+  // 削除ボタンを作成
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.className = "delete-button";
+  deleteButton.textContent = "削除";
+  deleteButton.onclick = () => removeOption(deleteButton);
 
-    newOption.appendChild(optionInput);
-    newOption.appendChild(deleteButton);
-    optionList.appendChild(newOption);
-    inputField.value = ""; // Clear the input field
+  newOption.appendChild(optionInput);
+  newOption.appendChild(deleteButton);
+  optionList.appendChild(newOption);
 
-    // Drag event listeners
-    newOption.ondragstart = dragStart;
-    newOption.ondragover = dragOver;
-    newOption.ondrop = drop;
-  }
+  // ドラッグイベントリスナーを設定
+  newOption.ondragstart = dragStart;
+  newOption.ondragover = dragOver;
+  newOption.ondrop = drop;
 };
 
 const removeOption = (button) => {
@@ -83,15 +80,16 @@ const drop = (event) => {
   const dropzone = event.target.closest("li");
 
   if (dropzone && draggingElement !== dropzone) {
-    const draggingHTML = draggingElement.outerHTML;
-    draggingElement.outerHTML = dropzone.outerHTML;
-    dropzone.outerHTML = draggingHTML;
+    // ドラッグしている要素の入力値を取得
+    const draggingInputValue = draggingElement.querySelector("input").value;
+    const dropzoneInputValue = dropzone.querySelector("input").value;
 
-    // ドラッグイベントのリスナーを再追加
-    const newDraggingElement = document.querySelector(".dragging");
-    newDraggingElement.ondragstart = dragStart;
-    newDraggingElement.ondragover = dragOver;
-    newDraggingElement.ondrop = drop;
+    // ドラッグしている要素の入力値をドロップ先に設定
+    draggingElement.querySelector("input").value = dropzoneInputValue;
+    dropzone.querySelector("input").value = draggingInputValue;
+
+    // HTMLを入れ替えるのではなく、値を入れ替える
+    // これにより、両方の要素が空欄になる問題を回避
   }
 
   draggingElement.classList.remove("dragging");
