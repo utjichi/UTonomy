@@ -58,10 +58,13 @@
               <% break;
                  case "select": %>
                   <select name="vote">
-                    <option value=></option>
+                    <option><%= option %></option>
                   </select>
               <% break;
                  case "select-multiple": %>
+                  <select name="vote" multiple>
+                    <option><%= option %></option>
+                  </select>
             <% } %>
           </form>
         </li>
