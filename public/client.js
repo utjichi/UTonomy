@@ -56,15 +56,6 @@ const removeOption = (button) => {
 // 追加ボタンのonclickイベントを設定
 document.getElementById("addOptionButton").onclick = addOption;
 
-const editOption = (button) => {
-  const listItem = button.parentElement;
-  const span = listItem.querySelector("span");
-  const newValue = prompt("新しい選択肢を入力:", span.textContent);
-  if (newValue !== null && newValue.trim() !== "") {
-    span.textContent = newValue;
-  }
-};
-
 const dragStart = (event) => {
   event.dataTransfer.setData("text/plain", event.target.innerHTML);
   event.target.classList.add("dragging");

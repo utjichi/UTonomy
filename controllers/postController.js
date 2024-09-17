@@ -35,15 +35,15 @@ exports.addPost = (req, res) => {
   if (!req.isAuthenticated()) res.redirect("/");
   const userId = req.user.id;
   const data=req.body
-  let nullVote;
+  let nullVote={};
   switch(data.voteType){
-    case "none":
-      nullVote={};
-      break;
     case "up/down":
-      nullVote={updown:0}
+      nullVote.updown=0
       break
     case "radio":
+    case "checkbox":
+    case "select":
+    case "select-multiple":
   }
   db.addPost(userId, data).then((id) => {
     db.votePost(userId, id, nullVote);
