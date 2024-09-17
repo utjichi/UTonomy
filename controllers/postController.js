@@ -30,7 +30,9 @@ exports.getPosts = async (req, res) => {
 
 exports.addPost = (req, res) => {
   if (req.isAuthenticated()) {
-    db.addPost(req.user.id, req.body)
+    db.addPost(req.user.id, req.body).then((id)=>{
+      db.votePost(userId,id,nullVote)
+    })
   }
   res.redirect("/");
 };

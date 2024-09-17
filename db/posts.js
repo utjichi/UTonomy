@@ -1,6 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
-const votes = require("./votes");
 
 // Create the posts table if it doesn't exist
 db.run(`CREATE TABLE IF NOT EXISTS posts (
@@ -15,20 +14,24 @@ db.run(`CREATE TABLE IF NOT EXISTS posts (
   )`);
 
 const addPost = (userId, data) => {
-  const stmt = db.prepare(
-    "INSERT INTO posts (user_id, nickname, viewer, voter, content, vote_type, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)"
-  );
-  stmt.run(
-    userId,
-    data.nickname,
-    data.viewer,
-    data.voter,
-    data.content,
-    data.voteType,
-    Date.now()
-  );
-  stmt.finalize();
-  votes.votePost(userId,)
+  return new Promise((resolve, reject) => {
+    db.get(
+      "INSERT INTO posts (user_id, nickname, viewer, voter, content, vote_type, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [
+        userId,
+        data.nickname,
+        data.viewer,
+        data.voter,
+        data.content,
+        data.voteType,
+        Date.now(),
+      ],
+      (err) => {
+        if (err) reject(err);
+        resolve(this.lastID)
+      }
+    );
+  });
 };
 
 const getPost = (id) => {
