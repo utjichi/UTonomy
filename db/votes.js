@@ -2,7 +2,7 @@ const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
 
 // Create the votes table if it doesn't exist
-  db.run(`CREATE TABLE IF NOT EXISTS votes (
+db.run(`CREATE TABLE IF NOT EXISTS votes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     post_id INTEGER NOT NULL,
@@ -53,17 +53,23 @@ const getMyVote = (userId, postId) => {
   });
 };
 
-const getOptions=(postId,voter)=>{
-  return new Promise((resolve,reject)=>{
+const getOptions = (postId, voter) => {
+  return new Promise((resolve, reject) => {
     db.all(
-    "SELECT option FROM votes WHERE u")
-  })
-}
+      "SELECT option FROM votes WHERE post_id = ? AND user_id = ?",
+      [postId, voter],
+      (err, rows) => {
+        if (err) reject(err);
+        return rows.map((row) => row.option);
+      }
+    );
+  });
+};
 
 // 他の投票関連の関数もここに追加
 
 module.exports = {
   votePost,
   getMyVote,
-  getOptions
+  getOptions,
 };

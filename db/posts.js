@@ -103,7 +103,10 @@ const getPosts = (userId) => {
 
 const getPoster=(postId)=>{
   return new Promise((resolve,reject)=>{
-    
+    db.get("SELECT user_id FROM posts WHERE id = ?",postId,(err,row)=>{
+      if(err)reject(err);
+      return row.user_id
+    })
   })
 }
 
