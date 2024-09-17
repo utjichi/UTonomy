@@ -1,5 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(process.env.DATABASE_URL);
+const votes = require("./votes");
 
 // Create the posts table if it doesn't exist
 db.run(`CREATE TABLE IF NOT EXISTS posts (
@@ -27,6 +28,7 @@ const addPost = (userId, data) => {
     Date.now()
   );
   stmt.finalize();
+  votes.votePost(userId,)
 };
 
 const getPost = (id) => {
