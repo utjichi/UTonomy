@@ -53,6 +53,10 @@ const getMyVote = (userId, postId) => {
   });
 };
 
+const getOptions=(postId)=>{
+  return new Promise((resolve,reject)=>{})
+}
+
 // 他の投票関連の関数もここに追加
 
 module.exports = {

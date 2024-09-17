@@ -9,7 +9,13 @@ exports.getPosts = async (req, res) => {
       try {
         post.myVote = await db.getMyVote(user.id, post.id);
         post.isVotable = await db.checkVotable(user.id, post.id);
-        
+        switch (post.vote_type) {
+          case "radio":
+          case "checkbox":
+          case "select":
+          case "select-multiple":
+            post.options=await db.getOptions(post.id)
+        }
       } catch (err) {
         console.error("投稿の情報取得に失敗:", err);
         post.myVote = null;
@@ -35,18 +41,18 @@ exports.getPosts = async (req, res) => {
 exports.addPost = (req, res) => {
   if (!req.isAuthenticated()) res.redirect("/");
   const userId = req.user.id;
-  const data=req.body
-  let nullVote={};
-  switch(data.voteType){
+  const data = req.body;
+  let nullVote = {};
+  switch (data.voteType) {
     case "up/down":
-      nullVote.updown=0
-      break
+      nullVote.updown = 0;
+      break;
     case "radio":
     case "checkbox":
     case "select":
     case "select-multiple":
-      for(const option of data.options){
-        nullVote[option]=0
+      for (const option of data.options) {
+        nullVote[option] = 0;
       }
   }
   db.addPost(userId, data).then((id) => {
