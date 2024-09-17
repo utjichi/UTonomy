@@ -19,7 +19,10 @@ exports.getPosts = async (req, res) => {
     const resolvedPosts = await Promise.all(promises);
     res.render("index", {
       user,
-      data: { posts: resolvedPosts, permissions: await db.getMyGroups(user.id) },
+      data: {
+        posts: resolvedPosts,
+        permissions: await db.getMyGroups(user.id),
+      },
       error: null,
     });
   } catch (err) {
@@ -29,11 +32,22 @@ exports.getPosts = async (req, res) => {
 };
 
 exports.addPost = (req, res) => {
-  if (req.isAuthenticated()) {
-    db.addPost(req.user.id, req.body).then((id)=>{
-      db.votePost(userId,id,nullVote)
-    })
+  if (!req.isAuthenticated()) res.redirect("/");
+  const userId = req.user.id;
+  const data=req.body
+  let nullVote;
+  switch(data.voteType){
+    case "none":
+      nullVote={};
+      break;
+    case "up/down":
+      nullVote={updown:0}
+      break
+    case "radio":
   }
+  db.addPost(userId, data).then((id) => {
+    db.votePost(userId, id, nullVote);
+  });
   res.redirect("/");
 };
 
