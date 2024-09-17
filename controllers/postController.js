@@ -9,6 +9,7 @@ exports.getPosts = async (req, res) => {
       try {
         post.myVote = await db.getMyVote(user.id, post.id);
         post.isVotable = await db.checkVotable(user.id, post.id);
+        
       } catch (err) {
         console.error("投稿の情報取得に失敗:", err);
         post.myVote = null;

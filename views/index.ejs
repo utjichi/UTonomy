@@ -46,12 +46,10 @@
                   <button type="submit" name="updown" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>  
               <% break;
                  case "radio": %>
-                  <button type="submit" name="updown" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes[+1] %>)</button>
-                  <button type="submit" name="updown" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>
+                  <label><input type="radio" name="radio" value="none"a<% if(!post.isVotable){ %>disabled<% } %>>未選択</label>
+                  
               <% break;
                  case "checkbox": %>
-                  <button type="submit" name="updown" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes[+1] %>)</button>
-                  <button type="submit" name="updown" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>
             <% } %>
           </form>
         </li>
