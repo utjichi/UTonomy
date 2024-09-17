@@ -14,7 +14,7 @@ exports.getPosts = async (req, res) => {
           case "checkbox":
           case "select":
           case "select-multiple":
-            post.options=await db.getOptions(post.id)
+            post.options=await db.getOptions(post.id,await db.getPoster(post.id))
         }
       } catch (err) {
         console.error("投稿の情報取得に失敗:", err);

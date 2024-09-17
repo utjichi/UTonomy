@@ -101,10 +101,13 @@ const getPosts = (userId) => {
   });
 };
 
+const getPoster=()
+
 // 他の投稿関連の関数もここに追加
 
 module.exports = {
   addPost,
   getPost,
   getPosts,
+  getPoster
 };

@@ -53,13 +53,17 @@ const getMyVote = (userId, postId) => {
   });
 };
 
-const getOptions=(postId)=>{
-  return new Promise((resolve,reject)=>{})
+const getOptions=(postId,poster)=>{
+  return new Promise((resolve,reject)=>{
+    db.all(
+    "SELECT option FROM votes WHERE u")
+  })
 }
 
 // 他の投票関連の関数もここに追加
 
 module.exports = {
   votePost,
-  getMyVote
+  getMyVote,
+  getOptions
 };
