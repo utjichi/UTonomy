@@ -74,7 +74,7 @@ exports.votePost = (req, res) => {
           case "none":
             return {};
           case "up/down":
-            return { updown: parseFloat(req.body.updown) };
+            return { updown: parseFloat(req.body.vote) };
           case "radio":
             return {};
           case "checkbox":
