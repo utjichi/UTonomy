@@ -1,4 +1,7 @@
-const showInputBox = () => {
+const postForm = document.getElementById("post");
+const voteType = postForm.voteType;
+voteType.onchange = () => {
+  postForm.voter.style.display = voteType.value == "none" ? "none" : "inline";
   const selectElement = document.getElementById("voteType");
   const inputContainer = document.getElementById("inputContainer");
   const selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -9,12 +12,6 @@ const showInputBox = () => {
     inputContainer.style.display = "none";
     document.getElementById("optionList").innerHTML = ""; // リストをクリア
   }
-};
-const postForm = document.getElementById("post");
-const voteType = postForm.voteType;
-voteType.onchange = () => {
-  postForm.voter.style.display = voteType.value == "none" ? "none" : "inline";
-  showInputBox();
 };
 
 const addOption = () => {
@@ -84,4 +81,33 @@ const drop = (event) => {
   }
 
   draggingElement.classList.remove("dragging");
+};
+
+postForm.onsubmit = (event) => {
+  event.preventDefault(); // デフォルトの送信を防ぐ
+
+  const formData = new FormData(postForm); // フォームデータを作成
+  const optionList = document.getElementById("optionList");
+  
+  // 選択肢を収集してフォームデータに追加
+  const options = Array.from(optionList.children).map(li => {
+    return li.querySelector("input").value; // 各選択肢の入力値を取得
+  });
+
+  // 選択肢をフォームデータに追加
+  options.forEach((option, index) => {
+    formData.append(`options[${index}]`, option); // optionsという名前で追加
+  });
+
+  // フォームデータを送信する（例: fetch APIを使用）
+  fetch(postForm.action, {
+    method: postForm.method,
+    body: formData
+  })
+  .then(response => {
+    // 成功時の処理
+  })
+  .catch(error => {
+    // エラー時の処理
+  });
 };
