@@ -44,6 +44,9 @@ exports.addPost = (req, res) => {
     case "checkbox":
     case "select":
     case "select-multiple":
+      for(const option of data.options){
+        nullVote[option]=0
+      }
   }
   db.addPost(userId, data).then((id) => {
     db.votePost(userId, id, nullVote);
