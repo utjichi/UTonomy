@@ -101,7 +101,11 @@ const getPosts = (userId) => {
   });
 };
 
-const getPoster=()
+const getPoster=(postId)=>{
+  return new Promise((resolve,reject)=>{
+    
+  })
+}
 
 // 他の投稿関連の関数もここに追加
 

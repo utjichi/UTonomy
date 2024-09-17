@@ -53,7 +53,7 @@ const getMyVote = (userId, postId) => {
   });
 };
 
-const getOptions=(postId,poster)=>{
+const getOptions=(postId,voter)=>{
   return new Promise((resolve,reject)=>{
     db.all(
     "SELECT option FROM votes WHERE u")
