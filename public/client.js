@@ -100,8 +100,8 @@ postForm.onsubmit = (event) => {
   });
 
   // フォームデータを送信する（例: fetch APIを使用）
-  fetch(postForm.action, {
-    method: postForm.method,
+  fetch("/post", {
+    method: "POST",
     body: formData
   })
   .then(response => {

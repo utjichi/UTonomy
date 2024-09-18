@@ -68,13 +68,14 @@ exports.votePost = (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
     const userId = req.user.id;
+    const vote=req.body.vote
     db.getPost(postId)
       .then((row) => {
         switch (row.vote_type) {
           case "none":
             return {};
           case "up/down":
-            return { updown: parseFloat(req.body.vote) };
+            return { updown: parseFloat(vote) };
           case "radio":
             return {};
           case "checkbox":
