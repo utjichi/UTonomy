@@ -1,7 +1,8 @@
 // controllers/postController.js
 const db = require("../db/index");
 
-const toArray=(value)=>value?Array.isArray(value)?value:[value]:[]
+const toArray = (value) =>
+  value ? (Array.isArray(value) ? value : [value]) : [];
 
 exports.getPosts = async (req, res) => {
   console.log("getPosts");
@@ -54,8 +55,7 @@ exports.addPost = (req, res) => {
       break;
     case "radio":
     case "checkbox":
-      const options = Array.isArray(data.option) ? data.option : [data.option];
-      for (const option of options) {
+      for (const option of toArray(data.option)) {
         nullVote[option] = 0;
       }
   }
@@ -74,15 +74,16 @@ const nullVote = async (postId) => {
   return vote;
 };
 
-exports.votePost = async(req, res) => {
+exports.votePost = async (req, res) => {
   if (!req.isAuthenticated()) {
     res.redirect("/");
   }
   const postId = req.params.id;
   const userId = req.user.id;
-  const value = req.body.vote;
+  const data = req.body;
+  const value = data.vote;
   const isVotable = await db.checkVotable(userId, postId);
-  if(!isVotable)res.redirect("/");
+  if (!isVotable) res.redirect("/");
   db.getPost(postId)
     .then(async (row) => {
       let vote;
@@ -94,19 +95,15 @@ exports.votePost = async(req, res) => {
           vote = { updown: parseFloat(value) };
           break;
         case "radio":
-          vote = await nullVote(postId);
-          if (value == "none") break;
-          vote[value] = 1;
-          break;
+          if (Array.isArray(value))
+            throw new Error("択一式なのに複数選択された");
         case "checkbox":
           vote = await nullVote(postId);
-          if (!value) break;
-          if (Array.isArray(value)) {
-            for (const checked of value) {
-              vote[checked] = 1;
-            }
-          } else {
-            vote[value] = 1;
+          for (const newOption of toArray(data.newOption)) {
+            vote[newOption] = 0;
+          }
+          for (const checked of toArray(value)) {
+            vote[checked] = 1;
           }
       }
       console.log("vote", vote);

@@ -43,8 +43,8 @@
           <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
             <% switch(post.vote_type){
                  case "up/down": %>
-                  <button type="submit" name="vote" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 (<%= post.votes[+1] %>)</button>
-                  <button type="submit" name="vote" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>  
+                  <button type="submit" name="vote" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 <%= post.votes[+1] || 0 %></button>
+                  <button type="submit" name="vote" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 <%= post.votes[-1] || 0 %></button>  
               <% break;
                  case "radio": %>
                    <div id="options<%= post.id %>" class="radio">
@@ -74,7 +74,7 @@
                        選択肢を追加
                      </button>
                      <button>
-                       送信
+                       投票
                      </button>
                 <% } %>
               <% break;
@@ -99,7 +99,7 @@
                        選択肢を追加
                      </button>
                      <button>
-                       送信
+                       投票
                      </button>
                 <% } %>
             <% } %>
@@ -137,7 +137,7 @@
               <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
             <% }) %>
           </select>
-          <button type="submit">Post</button>
+          <button type="submit">投稿</button>
         </form>
       <% } else{ %>
         <p>
