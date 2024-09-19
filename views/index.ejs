@@ -4,6 +4,7 @@
   <title>UTonomy</title>
   <link rel="stylesheet" href="/style.css">
   <script type="module" src="/post.js"></script>
+  <script type="module" src="/vote.js"></script>
 </head>
 <body>
   <header>
@@ -46,7 +47,7 @@
                   <button type="submit" name="vote" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>  
               <% break;
                  case "radio": %>
-                   <div id="options<%= post.id %>"
+                   <div id="options<%= post.id %>">
                 <%   if(post.isVotable){ %>
                      <label>
                        <input type="radio" name="vote" value="none"
@@ -55,39 +56,48 @@
                      </label>
                 <%   } %>
                 <%   (post.options || []).forEach(option => { %>
-                     <label>
-                       <input type="radio" name="vote" value="<%= option %>"
-                <%     if(post.isVotable){
-                         if(post.myVote.find(row=>row.option==option).value){ %>
-                           checked
-                <%       }
-                       }else{ %>
-                         disabled
-                <%     } %>>
-                       <%= option %> (<%= post.votes[option] %>)
-                     </label>
-                <% }) %>
-                  <button>
-                    送信
-                  </button>
+                       <label>
+                         <input type="radio" name="vote" value="<%= option %>"
+                <%       if(post.isVotable){
+                           if(post.myVote.find(row=>row.option==option).value){ %>
+                             checked
+                <%         }
+                         }else{ %>
+                           disabled
+                <%       } %>>
+                         <%= option %> (<%= post.votes[option] %>)
+                       </label>
+                <%   }) %>
+                   </div>
+                   <button type="button" id="addOption<%= post.id %>" class="addOption">
+                     選択肢を追加
+                   </button>
+                   <button>
+                     送信
+                   </button>
               <% break;
                  case "checkbox": %>
-                  <% (post.options || []).forEach(option => { %>
-                    <label>
-                      <input type="checkbox" name="vote" value="<%= option %>"
-                        <% if(post.isVotable){
-                             if(post.myVote.find(row=>row.option==option).value){ %>
-                               checked
-                        <%   }
-                           }else{ %>
-                             disabled
-                        <% } %>>
-                      <%= option %> (<%= post.votes[option] %>)
-                    </label>
-                  <% }) %>
-                  <button>
-                    送信
-                  </button>
+                   <div id="options<%= post.id %>">
+                <%   (post.options || []).forEach(option => { %>
+                       <label>
+                         <input type="checkbox" name="vote" value="<%= option %>"
+                <%       if(post.isVotable){
+                           if(post.myVote.find(row=>row.option==option).value){ %>
+                             checked
+                <%         }
+                         }else{ %>
+                           disabled
+                <%       } %>>
+                         <%= option %> (<%= post.votes[option] %>)
+                       </label>
+                <%   }) %>
+                   </div>
+                   <button type="button" id="addOption<%= post.id %>" class="addOption">
+                     選択肢を追加
+                   </button>
+                   <button>
+                     送信
+                   </button>
             <% } %>
           </form>
         </li>
