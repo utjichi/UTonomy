@@ -71,7 +71,7 @@
       <% }) %>
     </ul>
       <% if (user.id) { %>
-        <form id="post">
+        <form id="post" action="/post" method="post">
           <input name="nickname" value="<%= user.displayName %>" placeholder="藤井輝夫">
           <textarea name="content" placeholder="総長万歳" required></textarea>
           <label for="viewer">閲覧</label>

@@ -24,7 +24,7 @@ const addOption = () => {
 
   // 空の入力フィールドを作成
   const optionInput = document.createElement("input");
-  optionInput.type = "text";
+  optionInput.name = "option";
   optionInput.value = ""; // 空欄の選択肢
   optionInput.className = "option-input";
 

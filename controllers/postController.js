@@ -42,9 +42,9 @@ exports.getPosts = async (req, res) => {
 };
 
 exports.addPost = (req, res) => {
+  console.log("addPost");
   if (!req.isAuthenticated()) res.redirect("/");
   const userId = req.user.id;
-  console.log(req.body)
   const data = req.body;
   let nullVote = {};
   switch (data.voteType) {
@@ -55,11 +55,13 @@ exports.addPost = (req, res) => {
     case "checkbox":
     case "select":
     case "select-multiple":
-      for (const option of data.options) {
+      const options = Array.isArray(data.option) ? data.option : [data.option];
+      for (const option of options) {
         nullVote[option] = 0;
       }
   }
   db.addPost(userId, data).then((id) => {
+    console.log(nullVote);
     db.votePost(userId, id, nullVote);
   });
   res.redirect("/");
@@ -69,7 +71,7 @@ exports.votePost = (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
     const userId = req.user.id;
-    const vote=req.body.vote
+    const vote = req.body.vote;
     db.getPost(postId)
       .then((row) => {
         switch (row.vote_type) {
