@@ -37,7 +37,7 @@
     <ul>
       <% (data.posts || []).forEach(post => { %>
         <li>
-          <strong><%= post.nickname %></strong>:
+          <strong><%= post.nickname %></strong>
           <%= post.content %>
           - <%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %>
           <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">

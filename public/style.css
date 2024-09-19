@@ -76,99 +76,29 @@ strong {
 }
 
 form {
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
+    max-width: 600px; /* フォームの最大幅を設定 */
+    margin: 20px auto; /* 上下にマージンを追加し、中央に配置 */
+    padding: 20px; /* 内側のパディングを追加 */
+    background: white; /* 背景色を白に設定 */
+    border-radius: 5px; /* 角を丸くする */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 影を追加 */
 }
 
 input[type="text"],
 textarea,
 select {
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: 100%; /* 幅を100%に設定して親要素に合わせる */
+    padding: 10px; /* パディングを追加 */
+    margin: 5px 0; /* 上下のマージンを追加 */
+    border: 1px solid #ccc; /* ボーダーを設定 */
+    border-radius: 4px; /* 角を丸くする */
 }
 
 button {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button:hover {
-    background: #45a049;
-}
-
-.error-message {
-    color: red;
-    text-align: center;
-}
-
-.radio, .checkbox {
-    margin: 10px 0;
-}
-
-.addOption {
-    background: #2196F3;
-}
-
-.addOption:hover {
-    background: #1976D2;
-}
-
-h2 {
-    margin: 20px 0;
-    text-align: center;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-li {
-    background: white;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-strong {
-    display: block;
-    margin-bottom: 5px;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-}
-
-input[type="text"],
-textarea,
-select {
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-button {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
+    width: auto; /* ボタンの幅を自動に設定 */
+    padding: 10px; /* パディングを追加 */
+    border-radius: 4px; /* 角を丸くする */
+    cursor: pointer; /* カーソルをポインターに変更 */
 }
 
 button:hover {
