@@ -47,7 +47,7 @@
                   <button type="submit" name="vote" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>  
               <% break;
                  case "radio": %>
-                   <div id="options<%= post.id %>">
+                   <div id="options<%= post.id %>" class="radio">
                 <%   if(post.isVotable){ %>
                      <label>
                        <input type="radio" name="vote" value="none"
@@ -79,7 +79,7 @@
                 <% } %>
               <% break;
                  case "checkbox": %>
-                   <div id="options<%= post.id %>">
+                   <div id="options<%= post.id %>" class="checkbox">
                 <%   (post.options || []).forEach(option => { %>
                        <label>
                          <input type="checkbox" name="vote" value="<%= option %>"
