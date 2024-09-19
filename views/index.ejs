@@ -46,26 +46,27 @@
                   <button type="submit" name="vote" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 (<%= post.votes[-1] %>)</button>  
               <% break;
                  case "radio": %>
-                  <% if(post.isVotable){ %>
-                    <label>
-                      <input type="radio" name="vote" value="none"
-                             <% if(post.myVote.every(row=>row.value==0)){ %>checked<% } %>>
-                      未選択
-                    </label>
-                  <% } %>
-                  <% (post.options || []).forEach(option => { %>
-                    <label>
-                      <input type="radio" name="vote" value="<%= option %>"
-                        <% if(post.isVotable){
-                             if(post.myVote.find(row=>row.option==option).value){ %>
-                               checked
-                        <%   }
-                           }else{ %>
-                             disabled
-                        <% } %>>
-                      <%= option %> (<%= post.votes[option] %>)
-                    </label>
-                  <% }) %>
+                   <div id="options<%= post.id %>"
+                <%   if(post.isVotable){ %>
+                     <label>
+                       <input type="radio" name="vote" value="none"
+                           <% if(post.myVote.every(row=>row.value==0)){ %>checked<% } %>>
+                       未選択
+                     </label>
+                <%   } %>
+                <%   (post.options || []).forEach(option => { %>
+                     <label>
+                       <input type="radio" name="vote" value="<%= option %>"
+                <%     if(post.isVotable){
+                         if(post.myVote.find(row=>row.option==option).value){ %>
+                           checked
+                <%       }
+                       }else{ %>
+                         disabled
+                <%     } %>>
+                       <%= option %> (<%= post.votes[option] %>)
+                     </label>
+                <% }) %>
                   <button>
                     送信
                   </button>
