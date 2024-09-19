@@ -63,7 +63,7 @@
                            }else{ %>
                              disabled
                         <% } %>>
-                      <%= option %>
+                      <%= option %> (<%= post.votes[option] %>)
                     </label>
                   <% }) %>
                   <button>
@@ -81,7 +81,7 @@
                            }else{ %>
                              disabled
                         <% } %>>
-                      <%= option %>
+                      <%= option %> (<%= post.votes[option] %>)
                     </label>
                   <% }) %>
                   <button>
