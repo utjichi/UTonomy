@@ -2,13 +2,21 @@
 const db = require("../db/index");
 
 exports.getPosts = async (req, res) => {
+  console.log("getPosts");
   const user = req.isAuthenticated() ? req.user : { id: null };
   try {
+    console.log("投稿を取得...");
     const posts = await db.getPosts(user.id);
+    console.log("完了");
+    console.log("投票の情報を取得...");
     const promises = posts.map(async (post) => {
       try {
-        post.myVote = await db.getMyVote(user.id, post.id);
+        console.log("")
         post.isVotable = await db.checkVotable(user.id, post.id);
+        if (post.isVotable) {
+          console.log("自分はどこに投票したっけ");
+          post.myVote = await db.getMyVote(user.id, post.id);
+        }
         switch (post.vote_type) {
           case "radio":
           case "checkbox":
@@ -27,6 +35,7 @@ exports.getPosts = async (req, res) => {
       return post;
     });
     const resolvedPosts = await Promise.all(promises);
+    console.log("完了");
     res.render("index", {
       user,
       data: {
