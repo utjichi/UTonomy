@@ -60,7 +60,7 @@
                          <label>
                            <input type="radio" name="vote" value="<%= option %>"
                 <%         if(post.isVotable){
-                             if(post.myVote.find(row=>row.option==option).value){ %>
+                             if((post.myVote.find(row=>row.option==option) || 0).value){ %>
                                checked
                 <%           }
                            }else{ %>
@@ -85,7 +85,7 @@
                          <label>
                            <input type="checkbox" name="vote" value="<%= option %>"
                 <%         if(post.isVotable){
-                             if(post.myVote.find(row=>row.option==option).value){ %>
+                             if((post.myVote.find(row=>row.option==option) || 0).value){ %>
                                checked
                 <%           }
                            }else{ %>
