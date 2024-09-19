@@ -65,7 +65,8 @@ exports.addPost = (req, res) => {
 
 const nullVote=async(postId)=>{
   const vote={};
-  for await(const option of db.getOptions(postId)){
+  const options=await db.getOptions(postId)
+  for(const option of options){
     vote[option]=0
   }
   return vote
@@ -84,14 +85,23 @@ exports.votePost = (req, res) => {
             vote={};
             break;
           case "up/down":
-            vote={ updown: parseFloat(vote) };
+            vote={ updown: parseFloat(value) };
             break;
           case "radio":
             vote=nullVote(postId)
-            vote;
+            if(value=="none")break;
+            vote[value]=1;
             break;
           case "checkbox":
             vote=nullVote(postId)
+            if(!value)break;
+            if(Array.isArray(value)){
+              for(const checked of value){
+                vote[checked]=1
+              }
+            }else{
+              vote[value]=1
+            }
         }
         return db.votePost(userId, postId, vote);
       })
