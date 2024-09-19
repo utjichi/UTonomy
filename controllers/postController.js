@@ -64,6 +64,7 @@ exports.addPost = (req, res) => {
       }
   }
   db.addPost(userId, data).then((id) => {
+    console.log(id,nullVote)
     db.votePost(userId, id, nullVote);
   });
   res.redirect("/");

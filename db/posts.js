@@ -26,9 +26,9 @@ const addPost = (userId, data) => {
         data.voteType,
         Date.now(),
       ],
-      (err) => {
+      function (err) {
         if (err) reject(err);
-        console.log(this.lastID)
+        console.log(this.lastID);
         resolve(this.lastID);
       }
     );
@@ -107,7 +107,7 @@ const getPoster = (postId) => {
   return new Promise((resolve, reject) => {
     db.get("SELECT user_id FROM posts WHERE id = ?", postId, (err, row) => {
       if (err) reject(err);
-      console.log(row)
+      console.log(row);
       resolve(row.user_id);
     });
   });

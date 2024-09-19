@@ -57,7 +57,7 @@ const getOptions = (postId) => {
   console.log("getOptions",postId)
   return new Promise((resolve, reject) => {
     db.all(
-      "SELECT option FROM votes WHERE post_id = ?",
+      "SELECT DISTINCT option FROM votes WHERE post_id = ?",
       [postId],
       (err, rows) => {
         if (err) reject(err);
