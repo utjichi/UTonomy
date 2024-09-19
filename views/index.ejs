@@ -40,71 +40,72 @@
           <strong><%= post.nickname %></strong>
           <%= post.content %>
           - <%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %>
-          <% if(post.vote_type)
-          <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
-            <% switch(post.vote_type){
-                 case "up/down": %>
-                  <button type="submit" name="vote" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 <%= post.votes[+1] || 0 %></button>
-                  <button type="submit" name="vote" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 <%= post.votes[-1] || 0 %></button>  
-              <% break;
-                 case "radio": %>
-                   <div id="options<%= post.id %>" class="radio">
+       <% if(post.vote_type!="none"){
+              <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
+              <% switch(post.vote_type){
+                   case "up/down": %>
+                     <button type="submit" name="vote" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 <%= post.votes[+1] || 0 %></button>
+                     <button type="submit" name="vote" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 <%= post.votes[-1] || 0 %></button>  
+                <%   break;
+                   case "radio": %>
+                     <div id="options<%= post.id %>" class="radio">
+                <%     if(post.isVotable){ %>
+                       <label>
+                         <input type="radio" name="vote" value="none"
+                             <% if(post.myVote.every(row=>row.value==0)){ %>checked<% } %>>
+                         未選択
+                       </label>
+                <%     } %>
+                <%     (post.options || []).forEach(option => { %>
+                         <label>
+                           <input type="radio" name="vote" value="<%= option %>"
+                <%         if(post.isVotable){
+                             if(post.myVote.find(row=>row.option==option).value){ %>
+                               checked
+                <%           }
+                           }else{ %>
+                             disabled
+                <%         } %>>
+                           <%= option %> (<%= post.votes[option] %>)
+                         </label>
+                <%     }) %>
+                     </div>
                 <%   if(post.isVotable){ %>
-                     <label>
-                       <input type="radio" name="vote" value="none"
-                           <% if(post.myVote.every(row=>row.value==0)){ %>checked<% } %>>
-                       未選択
-                     </label>
+                       <button type="button" id="addOption<%= post.id %>" class="addOption">
+                         選択肢を追加
+                       </button>
+                       <button>
+                         投票
+                       </button>
                 <%   } %>
-                <%   (post.options || []).forEach(option => { %>
-                       <label>
-                         <input type="radio" name="vote" value="<%= option %>"
-                <%       if(post.isVotable){
-                           if(post.myVote.find(row=>row.option==option).value){ %>
-                             checked
-                <%         }
-                         }else{ %>
-                           disabled
-                <%       } %>>
-                         <%= option %> (<%= post.votes[option] %>)
-                       </label>
-                <%   }) %>
-                   </div>
-                <% if(post.isVotable){ %>
-                     <button type="button" id="addOption<%= post.id %>" class="addOption">
-                       選択肢を追加
-                     </button>
-                     <button>
-                       投票
-                     </button>
-                <% } %>
-              <% break;
-                 case "checkbox": %>
-                   <div id="options<%= post.id %>" class="checkbox">
-                <%   (post.options || []).forEach(option => { %>
-                       <label>
-                         <input type="checkbox" name="vote" value="<%= option %>"
-                <%       if(post.isVotable){
-                           if(post.myVote.find(row=>row.option==option).value){ %>
-                             checked
-                <%         }
-                         }else{ %>
-                           disabled
-                <%       } %>>
-                         <%= option %> (<%= post.votes[option] %>)
-                       </label>
-                <%   }) %>
-                   </div>
-                <% if(post.isVotable){ %>
-                     <button type="button" id="addOption<%= post.id %>" class="addOption">
-                       選択肢を追加
-                     </button>
-                     <button>
-                       投票
-                     </button>
-                <% } %>
-            <% } %>
-          </form>
+                <%   break;
+                   case "checkbox": %>
+                     <div id="options<%= post.id %>" class="checkbox">
+                <%     (post.options || []).forEach(option => { %>
+                         <label>
+                           <input type="checkbox" name="vote" value="<%= option %>"
+                <%         if(post.isVotable){
+                             if(post.myVote.find(row=>row.option==option).value){ %>
+                               checked
+                <%           }
+                           }else{ %>
+                             disabled
+                <%         } %>>
+                           <%= option %> (<%= post.votes[option] %>)
+                         </label>
+                <%     }) %>
+                     </div>
+                <%   if(post.isVotable){ %>
+                       <button type="button" id="addOption<%= post.id %>" class="addOption">
+                         選択肢を追加
+                       </button>
+                       <button>
+                         投票
+                       </button>
+                <%   } %>
+            <%   } %>
+              </form>
+       <% } %>
         </li>
       <% }) %>
     </ul>
