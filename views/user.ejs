@@ -6,12 +6,22 @@
 </head>
 <body>
   <header>
-    <a href="/"><h1>UTonomy</h1></a>
+    <div class="account">
+        <% if (user.id) { %>
+            <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
+            <a href="/logout">ログアウト</a>
+        <% } else { %>
+            <a href="/auth/google">ログイン</a>
+        <% } %>
+    </div>
+    <h1>UTonomy</h1>
     <nav>
-      <ul>
-        <li><a href="/">HOME</a></li>
-        <li><a href="/group">GROUP</a></li>
-      </ul>
+        <ul>
+            <li><a href="/">HOME</a></li>
+            <% if (user.id) { %>
+                <li><a href="/group">GROUP</a></li>
+            <% } %>
+        </ul>
     </nav>
   </header>
   <main>
