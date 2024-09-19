@@ -42,12 +42,12 @@ const votePost = (userId, postId, vote) => {
 
 const getMyVote = (userId, postId) => {
   return new Promise((resolve, reject) => {
-    db.get(
-      "SELECT * FROM votes WHERE user_id = ? AND post_id = ?",
+    db.all(
+      "SELECT option, value FROM votes WHERE user_id = ? AND post_id = ?",
       [userId, postId],
-      (err, row) => {
+      (err, rows) => {
         if (err) reject(err);
-        else resolve(row);
+        else resolve(rows);
       }
     );
   });
@@ -61,7 +61,6 @@ const getOptions = (postId) => {
       [postId],
       (err, rows) => {
         if (err) reject(err);
-        console.log("rows:",rows)
         resolve(rows.map((row) => row.option));
       }
     );

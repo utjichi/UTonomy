@@ -10,7 +10,7 @@ exports.getPosts = async (req, res) => {
       try {
         post.isVotable = await db.checkVotable(user.id, post.id);
         if (post.isVotable) {
-          post.myVote = await db.getMyVote(user.id, post.id);
+          post.myVote = (await db.getMyVote(user.id, post.id)).map();
         }
         switch (post.vote_type) {
           case "radio":
