@@ -1,6 +1,8 @@
 // controllers/postController.js
 const db = require("../db/index");
 
+const toArray=(value)=>value?Array.isArray(value)?value:[value]:[]
+
 exports.getPosts = async (req, res) => {
   console.log("getPosts");
   const user = req.isAuthenticated() ? req.user : { id: null };
@@ -79,7 +81,7 @@ exports.votePost = async(req, res) => {
   const postId = req.params.id;
   const userId = req.user.id;
   const value = req.body.vote;
-  const isVotable = await db.checkVotable(user.id, post.id);
+  const isVotable = await db.checkVotable(userId, postId);
   if(!isVotable)res.redirect("/");
   db.getPost(postId)
     .then(async (row) => {
