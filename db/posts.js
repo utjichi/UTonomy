@@ -88,6 +88,23 @@ const getPosts = (userId) => {
                       }
                     );
                   });
+                case "radio":
+                case "checkbox":
+                  return new Promise((resolve, reject) => {
+                    db.all(
+                      "SELECT option, SUM(*) AS sum FROM votes WHERE post_id = ? GROUP BY option",
+                      [post.id],
+                      (err, rows) => {
+                        if (err) reject(err);
+                        post.votes = {};
+                        console.log(rows)
+                        for (const row of rows) {
+                          post.votes[row.option] = row.sum;
+                        }
+                        resolve(post);
+                      }
+                    );
+                  });
                 default:
                   post.votes = {};
                   return post;
