@@ -1,57 +1,193 @@
-/* a minimalist set of CSS resets */
+/* style.css */
 
-/* default to border-box */
-html {
-  box-sizing: border-box;
-  font-size: 16px;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
-
-/* adjust typography defaults */
 body {
-  margin: 1rem;
-  font-family: sans-serif;
-  line-height: 1.5;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
 }
 
-/* images and videos max out at full width */
-img,
-video {
-  height: auto;
-  max-width: 100%;
+header {
+    background: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.account {
-  float: right;
+header h1 {
+    margin: 0;
 }
 
-.account img {
-  height: 2em;
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
 }
 
-nav > ul > li {
-  display: inline;
-  list-style: none;
+nav ul li {
+    margin-left: 20px;
 }
 
-.input-container {
-  margin-top: 10px;
+nav ul li a {
+    color: white; /* テキストの色を白に設定 */
+    text-decoration: none; /* 下線を消す */
+    padding: 10px 15px; /* パディングを追加 */
+    border-radius: 4px; /* 角を丸くする */
+    background-color: #4CAF50; /* ボタンの背景色を設定 */
+    transition: background-color 0.3s; /* ホバー時のスムーズな変化 */
+    display: inline-block; /* インラインブロックにしてボタンのように見せる */
 }
-.draggable {
-  margin: 5px 0;
-  padding: 5px;
-  border: 1px solid #cccccc;
-  display: flex;
-  align-items: center;
+
+nav ul li a:hover {
+    background-color: #45a049; /* ホバー時に背景色を変更 */
 }
-.draggable:hover {
-  background-color: #f0f0f0;
+
+.account a {
+    color: white;
+    margin-right: 15px;
 }
-.dragging {
-  opacity: 0.5;
+
+h2 {
+    margin: 20px 0;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+li {
+    background: white;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+input[type="text"],
+textarea,
+select {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #45a049;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+}
+
+.radio, .checkbox {
+    margin: 10px 0;
+}
+
+.addOption {
+    background: #2196F3;
+}
+
+.addOption:hover {
+    background: #1976D2;
+}
+
+h2 {
+    margin: 20px 0;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+li {
+    background: white;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+input[type="text"],
+textarea,
+select {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #45a049;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+}
+
+.radio, .checkbox {
+    margin: 10px 0;
+}
+
+.addOption {
+    background: #2196F3;
+}
+
+.addOption:hover {
+    background: #1976D2;
 }
