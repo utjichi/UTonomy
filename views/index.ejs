@@ -3,7 +3,7 @@
 <head>
   <title>UTonomy</title>
   <link rel="stylesheet" href="/style.css">
-  <script type="module" src="/client.js"></script>
+  <script type="module" src="/post.js"></script>
 </head>
 <body>
   <header>
@@ -70,7 +70,7 @@
                  case "checkbox": %>
                   <% (post.options || []).forEach(option => { %>
                     <label>
-                      <input type="radio" name="vote" value="<%= option %>"
+                      <input type="checkbox" name="vote" value="<%= option %>"
                         <% if(post.isVotable){
                              if(post.myVote.find(row=>row.option==option).value){ %>
                                checked
@@ -80,20 +80,6 @@
                         <% } %>>
                       <%= option %>
                     </label>
-                  <% }) %>
-              <% break;
-                 case "select": %>
-                  <% (post.options || []).forEach(option => { %>
-                    <select name="vote">
-                      <option><%= option %></option>
-                    </select>
-                  <% }) %>
-              <% break;
-                 case "select-multiple": %>
-                  <% (post.options || []).forEach(option => { %>
-                    <select name="vote" multiple>
-                      <option><%= option %></option>
-                    </select>
                   <% }) %>
             <% } %>
           </form>
@@ -116,10 +102,8 @@
           <select id="voteType" name="voteType">
               <option value="none">無効</option>
               <option value="up/down">👍/👎</option>
-              <option value="radio" class="customOptions">🔘択一（ラジオボタン）</option>
-              <option value="checkbox" class="customOptions">☑複数選択（チェックボックス）</option>
-              <option value="select" class="customOptions">択一（ドロップダウン）⌄</option>
-              <option value="select-multuple" class="customOptions">複数選択（リスト形式）▲▼</option>
+              <option value="radio" class="customOptions">🔘択一</option>
+              <option value="checkbox" class="customOptions">☑複数選択</option>
           </select>
 
           <div id="inputContainer" class="input-container" style="display: none;">

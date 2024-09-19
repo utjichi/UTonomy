@@ -15,8 +15,6 @@ exports.getPosts = async (req, res) => {
         switch (post.vote_type) {
           case "radio":
           case "checkbox":
-          case "select":
-          case "select-multiple":
             post.options = await db.getOptions(post.id);
             console.log(post.options);
         }
@@ -54,8 +52,6 @@ exports.addPost = (req, res) => {
       break;
     case "radio":
     case "checkbox":
-    case "select":
-    case "select-multiple":
       const options = Array.isArray(data.option) ? data.option : [data.option];
       for (const option of options) {
         nullVote[option] = 0;
