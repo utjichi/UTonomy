@@ -69,12 +69,14 @@
                        </label>
                 <%   }) %>
                    </div>
-                   <button type="button" id="addOption<%= post.id %>" class="addOption">
-                     選択肢を追加
-                   </button>
-                   <button>
-                     送信
-                   </button>
+                <% if(post.isVotable){ %>
+                     <button type="button" id="addOption<%= post.id %>" class="addOption">
+                       選択肢を追加
+                     </button>
+                     <button>
+                       送信
+                     </button>
+                <% } %>
               <% break;
                  case "checkbox": %>
                    <div id="options<%= post.id %>">
@@ -92,12 +94,14 @@
                        </label>
                 <%   }) %>
                    </div>
-                   <button type="button" id="addOption<%= post.id %>" class="addOption">
-                     選択肢を追加
-                   </button>
-                   <button>
-                     送信
-                   </button>
+                <% if(post.isVotable){ %>
+                     <button type="button" id="addOption<%= post.id %>" class="addOption">
+                       選択肢を追加
+                     </button>
+                     <button>
+                       送信
+                     </button>
+                <% } %>
             <% } %>
           </form>
         </li>

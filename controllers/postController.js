@@ -17,7 +17,7 @@ exports.getPosts = async (req, res) => {
           case "checkbox":
             post.options = await db.getOptions(post.id);
         }
-        post.votes=await db.getVotes(post.id,post.vote_type)
+        post.votes = await db.getVotes(post.id, post.vote_type);
       } catch (err) {
         console.error("投稿の情報取得に失敗:", err);
         post.myVote = null;
@@ -72,46 +72,47 @@ const nullVote = async (postId) => {
   return vote;
 };
 
-exports.votePost = (req, res) => {
-  if (req.isAuthenticated()) {
-    const postId = req.params.id;
-    const userId = req.user.id;
-    const value = req.body.vote;
-    db.getPost(postId)
-      .then(async (row) => {
-        let vote;
-        switch (row.vote_type) {
-          case "none":
-            vote = {};
-            break;
-          case "up/down":
-            vote = { updown: parseFloat(value) };
-            break;
-          case "radio":
-            vote = await nullVote(postId);
-            if (value == "none") break;
-            vote[value] = 1;
-            break;
-          case "checkbox":
-            vote = await nullVote(postId);
-            if (!value) break;
-            if (Array.isArray(value)) {
-              for (const checked of value) {
-                vote[checked] = 1;
-              }
-            } else {
-              vote[value] = 1;
-            }
-        }
-        console.log("vote", vote);
-        return db.votePost(userId, postId, vote);
-      })
-      .then(() => res.redirect("/")) // 投票後は / へリダイレクト
-      .catch((err) => {
-        console.error("Failed to vote post:", err);
-        res.redirect("/?error=" + encodeURIComponent(err.message));
-      });
-  } else {
+exports.votePost = async(req, res) => {
+  if (!req.isAuthenticated()) {
     res.redirect("/");
   }
+  const postId = req.params.id;
+  const userId = req.user.id;
+  const value = req.body.vote;
+  const isVotable = await db.checkVotable(user.id, post.id);
+  if(!isVotable)res.redirect("/");
+  db.getPost(postId)
+    .then(async (row) => {
+      let vote;
+      switch (row.vote_type) {
+        case "none":
+          vote = {};
+          break;
+        case "up/down":
+          vote = { updown: parseFloat(value) };
+          break;
+        case "radio":
+          vote = await nullVote(postId);
+          if (value == "none") break;
+          vote[value] = 1;
+          break;
+        case "checkbox":
+          vote = await nullVote(postId);
+          if (!value) break;
+          if (Array.isArray(value)) {
+            for (const checked of value) {
+              vote[checked] = 1;
+            }
+          } else {
+            vote[value] = 1;
+          }
+      }
+      console.log("vote", vote);
+      return db.votePost(userId, postId, vote);
+    })
+    .then(() => res.redirect("/")) // 投票後は / へリダイレクト
+    .catch((err) => {
+      console.error("Failed to vote post:", err);
+      res.redirect("/?error=" + encodeURIComponent(err.message));
+    });
 };
