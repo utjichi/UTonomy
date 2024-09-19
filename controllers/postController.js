@@ -17,11 +17,10 @@ exports.getPosts = async (req, res) => {
           case "checkbox":
           case "select":
           case "select-multiple":
-            const poster=await db.getPoster(post.id)
             post.options = await db.getOptions(
-              post.id,
-              poster
+              post.id
             );
+            console.log(post.options)
         }
       } catch (err) {
         console.error("投稿の情報取得に失敗:", err);
@@ -65,7 +64,6 @@ exports.addPost = (req, res) => {
       }
   }
   db.addPost(userId, data).then((id) => {
-    console.log(id,nullVote);
     db.votePost(userId, id, nullVote);
   });
   res.redirect("/");

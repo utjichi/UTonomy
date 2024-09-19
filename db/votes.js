@@ -53,14 +53,15 @@ const getMyVote = (userId, postId) => {
   });
 };
 
-const getOptions = (postId, voter) => {
-  console.log("getOptions")
+const getOptions = (postId) => {
+  console.log("getOptions",postId)
   return new Promise((resolve, reject) => {
     db.all(
-      "SELECT option FROM votes WHERE post_id = ? AND user_id = ?",
-      [postId, voter],
+      "SELECT option FROM votes WHERE post_id = ?",
+      [postId],
       (err, rows) => {
         if (err) reject(err);
+        console.log("rows:",rows)
         resolve(rows.map((row) => row.option));
       }
     );

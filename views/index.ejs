@@ -47,24 +47,28 @@
               <% break;
                  case "radio": %>
                   <label><input type="radio" name="vote" value="none"a<% if(!post.isVotable){ %>disabled<% } %>>未選択</label>
-                  <% (post.options)|| [].forEach(option => { %>
+                  <% (post.options || []).forEach(option => { %>
                     <label><input type="radio" name="vote" value="<%= option %>" <% if(!post.isVotable){ %>disabled<% } %>><%= option %></label>
                   <% }) %>
               <% break;
                  case "checkbox": %>
-                  <% (post.options)|| [].forEach(option => { %>
+                  <% (post.options || []).forEach(option => { %>
                     <label><input type="checkbox" name="vote" value="<%= option %>" <% if(!post.isVotable){ %>disabled<% } %>><%= option %></label>
                   <% }) %>
               <% break;
                  case "select": %>
-                  <select name="vote">
-                    <option><%= option %></option>
-                  </select>
+                  <% (post.options || []).forEach(option => { %>
+                    <select name="vote">
+                      <option><%= option %></option>
+                    </select>
+                  <% }) %>
               <% break;
                  case "select-multiple": %>
-                  <select name="vote" multiple>
-                    <option><%= option %></option>
-                  </select>
+                  <% (post.options || []).forEach(option => { %>
+                    <select name="vote" multiple>
+                      <option><%= option %></option>
+                    </select>
+                  <% }) %>
             <% } %>
           </form>
         </li>
