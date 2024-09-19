@@ -54,7 +54,7 @@ const getMyVote = (userId, postId) => {
 };
 
 const getOptions = (postId) => {
-  console.log("getOptions",postId)
+  console.log("getOptions", postId);
   return new Promise((resolve, reject) => {
     db.all(
       "SELECT DISTINCT option FROM votes WHERE post_id = ?",
@@ -67,10 +67,51 @@ const getOptions = (postId) => {
   });
 };
 
+const getVotes = (postId,voteType) => {
+  switch (voteType) {
+    case "up/down":
+      return new Promise((resolve, reject) => {
+        db.all(
+          "SELECT value, COUNT(*) AS count FROM votes WHERE post_id = ? GROUP BY value",
+          [postId],
+          (err, rows) => {
+            if (err) reject(err);
+            const votes = {};
+            for (const row of rows) {
+              votes[row.value] = row.count;
+            }
+            resolve(votes);
+          }
+        );
+      });
+    case "radio":
+    case "checkbox":
+      return new Promise((resolve, reject) => {
+        db.all(
+          "SELECT option, SUM(value) AS sum FROM votes WHERE post_id = ? GROUP BY option",
+          [postId],
+          (err, rows) => {
+            if (err) reject(err);
+            const votes = {};
+            if (rows) {
+              for (const row of rows) {
+                votes[row.option] = row.sum;
+              }
+            }
+            resolve(votes);
+          }
+        );
+      });
+    default:
+      return {};
+  }
+};
+
 // 他の投票関連の関数もここに追加
 
 module.exports = {
   votePost,
   getMyVote,
   getOptions,
+  getVotes,
 };

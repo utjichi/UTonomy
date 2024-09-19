@@ -17,6 +17,7 @@ exports.getPosts = async (req, res) => {
           case "checkbox":
             post.options = await db.getOptions(post.id);
         }
+        post.votes=await db.getVotes(post.id,post.vote_type)
       } catch (err) {
         console.error("投稿の情報取得に失敗:", err);
         post.myVote = null;

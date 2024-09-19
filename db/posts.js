@@ -69,50 +69,7 @@ const getPosts = (userId) => {
               resolve(rows);
             }
           );
-        })/*.then((posts) =>
-          Promise.all(
-            posts.map((post) => {
-              switch (post.vote_type) {
-                case "up/down":
-                  return new Promise((resolve, reject) => {
-                    db.all(
-                      "SELECT value, COUNT(*) AS count FROM votes WHERE post_id = ? GROUP BY value",
-                      [post.id],
-                      (err, rows) => {
-                        if (err) reject(err);
-                        post.votes = {};
-                        for (const row of rows) {
-                          post.votes[row.value] = row.count;
-                        }
-                        resolve(post);
-                      }
-                    );
-                  });
-                case "radio":
-                case "checkbox":
-                  return new Promise((resolve, reject) => {
-                    db.all(
-                      "SELECT option, SUM(value) AS sum FROM votes WHERE post_id = ? GROUP BY option",
-                      [post.id],
-                      (err, rows) => {
-                        if (err) reject(err);
-                        post.votes = {};
-                        if(rows){
-                          for (const row of rows) {
-                            post.votes[row.option] = row.sum;
-                          }
-                        }
-                        resolve(post);
-                      }
-                    );
-                  });
-                default:
-                  post.votes = {};
-                  return post;
-              }
-            })
-          )
-        );*/
+        })
       })
     ).then((subsets) => {
       return subsets.reduce((a, b) => a.concat(b));
