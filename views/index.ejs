@@ -56,15 +56,30 @@
                   <% (post.options || []).forEach(option => { %>
                     <label>
                       <input type="radio" name="vote" value="<%= option %>"
-                             <% if(post.isVotable){
-                                  if(post.myVote)%><% }else{ %>disabled<% } %>>
+                        <% if(post.isVotable){
+                             if(post.myVote.find(row=>row.option==option).value){ %>
+                               checked
+                        <%   }
+                           }else{ %>
+                             disabled
+                        <% } %>>
                       <%= option %>
-                      </label>
+                    </label>
                   <% }) %>
               <% break;
                  case "checkbox": %>
                   <% (post.options || []).forEach(option => { %>
-                    <label><input type="checkbox" name="vote" value="<%= option %>" <% if(!post.isVotable){ %>disabled<% } %>><%= option %></label>
+                    <label>
+                      <input type="radio" name="vote" value="<%= option %>"
+                        <% if(post.isVotable){
+                             if(post.myVote.find(row=>row.option==option).value){ %>
+                               checked
+                        <%   }
+                           }else{ %>
+                             disabled
+                        <% } %>>
+                      <%= option %>
+                    </label>
                   <% }) %>
               <% break;
                  case "select": %>
