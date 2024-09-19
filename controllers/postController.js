@@ -16,7 +16,6 @@ exports.getPosts = async (req, res) => {
           case "radio":
           case "checkbox":
             post.options = await db.getOptions(post.id);
-            console.log(post.options);
         }
       } catch (err) {
         console.error("投稿の情報取得に失敗:", err);
@@ -64,25 +63,36 @@ exports.addPost = (req, res) => {
   res.redirect("/");
 };
 
+const nullVote=async(postId)=>{
+  const vote={};
+  for await(const option of db.getOptions(postId)){
+    vote[option]=0
+  }
+  return vote
+}
+
 exports.votePost = (req, res) => {
   if (req.isAuthenticated()) {
     const postId = req.params.id;
     const userId = req.user.id;
-    const vote = req.body.vote;
+    const value = req.body.vote;
     db.getPost(postId)
       .then((row) => {
+        let vote;
         switch (row.vote_type) {
           case "none":
-            return {};
+            vote={};
+            break;
           case "up/down":
-            return { updown: parseFloat(vote) };
+            vote={ updown: parseFloat(vote) };
+            break;
           case "radio":
-            return {};
+            vote=nullVote(postId)
+            vote;
+            break;
           case "checkbox":
-            return {};
+            vote=nullVote(postId)
         }
-      })
-      .then((vote) => {
         return db.votePost(userId, postId, vote);
       })
       .then(() => res.redirect("/")) // 投票後は / へリダイレクト
