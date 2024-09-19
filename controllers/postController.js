@@ -5,28 +5,28 @@ exports.getPosts = async (req, res) => {
   console.log("getPosts");
   const user = req.isAuthenticated() ? req.user : { id: null };
   try {
-    console.log("投稿を取得...");
     const posts = await db.getPosts(user.id);
-    console.log("完了");
-    console.log("投票の情報を取得...");
     const promises = posts.map(async (post) => {
       try {
-        console.log("")
         post.isVotable = await db.checkVotable(user.id, post.id);
         if (post.isVotable) {
-          console.log("自分はどこに投票したっけ");
           post.myVote = await db.getMyVote(user.id, post.id);
         }
+        console.log("選択肢を取得...")
         switch (post.vote_type) {
           case "radio":
           case "checkbox":
           case "select":
           case "select-multiple":
+            console.log("投稿者を確認...")
+            const poster=await db.getPoster(post.id)
+            console.log("完了")
             post.options = await db.getOptions(
               post.id,
-              await db.getPoster(post.id)
+              poster
             );
         }
+        console.log("完了")
       } catch (err) {
         console.error("投稿の情報取得に失敗:", err);
         post.myVote = null;

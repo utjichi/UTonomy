@@ -28,7 +28,7 @@ const addPost = (userId, data) => {
       ],
       (err) => {
         if (err) reject(err);
-        resolve(this.lastID)
+        resolve(this.lastID);
       }
     );
   });
@@ -101,14 +101,16 @@ const getPosts = (userId) => {
   });
 };
 
-const getPoster=(postId)=>{
-  return new Promise((resolve,reject)=>{
-    db.get("SELECT user_id FROM posts WHERE id = ?",postId,(err,row)=>{
-      if(err)reject(err);
-      return row.user_id
-    })
-  })
-}
+const getPoster = (postId) => {
+  console.log("getPoster");
+  return new Promise((resolve, reject) => {
+    db.get("SELECT user_id FROM posts WHERE id = ?", postId, (err, row) => {
+      if (err) reject(err);
+      console.log(row)
+      return row.user_id;
+    });
+  });
+};
 
 // 他の投稿関連の関数もここに追加
 
@@ -116,5 +118,5 @@ module.exports = {
   addPost,
   getPost,
   getPosts,
-  getPoster
+  getPoster,
 };

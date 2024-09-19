@@ -54,6 +54,7 @@ const getMyVote = (userId, postId) => {
 };
 
 const getOptions = (postId, voter) => {
+  console.log("getOptions")
   return new Promise((resolve, reject) => {
     db.all(
       "SELECT option FROM votes WHERE post_id = ? AND user_id = ?",
