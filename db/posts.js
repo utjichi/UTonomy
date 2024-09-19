@@ -15,7 +15,7 @@ db.run(`CREATE TABLE IF NOT EXISTS posts (
 
 const addPost = (userId, data) => {
   return new Promise((resolve, reject) => {
-    db.get(
+    db.run(
       "INSERT INTO posts (user_id, nickname, viewer, voter, content, vote_type, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [
         userId,
@@ -28,6 +28,7 @@ const addPost = (userId, data) => {
       ],
       (err) => {
         if (err) reject(err);
+        console.log(this.lastID)
         resolve(this.lastID);
       }
     );
@@ -107,7 +108,7 @@ const getPoster = (postId) => {
     db.get("SELECT user_id FROM posts WHERE id = ?", postId, (err, row) => {
       if (err) reject(err);
       console.log(row)
-      return row.user_id;
+      resolve(row.user_id);
     });
   });
 };

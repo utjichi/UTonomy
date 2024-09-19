@@ -61,7 +61,7 @@ const getOptions = (postId, voter) => {
       [postId, voter],
       (err, rows) => {
         if (err) reject(err);
-        return rows.map((row) => row.option);
+        resolve(rows.map((row) => row.option));
       }
     );
   });

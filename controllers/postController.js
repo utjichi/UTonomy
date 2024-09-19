@@ -12,21 +12,17 @@ exports.getPosts = async (req, res) => {
         if (post.isVotable) {
           post.myVote = await db.getMyVote(user.id, post.id);
         }
-        console.log("選択肢を取得...")
         switch (post.vote_type) {
           case "radio":
           case "checkbox":
           case "select":
           case "select-multiple":
-            console.log("投稿者を確認...")
             const poster=await db.getPoster(post.id)
-            console.log("完了")
             post.options = await db.getOptions(
               post.id,
               poster
             );
         }
-        console.log("完了")
       } catch (err) {
         console.error("投稿の情報取得に失敗:", err);
         post.myVote = null;
@@ -35,14 +31,13 @@ exports.getPosts = async (req, res) => {
       return post;
     });
     const resolvedPosts = await Promise.all(promises);
-    console.log("完了");
     res.render("index", {
       user,
       data: {
         posts: resolvedPosts,
         permissions: await db.getMyGroups(user.id),
       },
-      error: null,
+      error: null
     });
   } catch (err) {
     console.error("Failed to retrieve posts:", err);
@@ -70,7 +65,7 @@ exports.addPost = (req, res) => {
       }
   }
   db.addPost(userId, data).then((id) => {
-    console.log(nullVote);
+    console.log(id,nullVote);
     db.votePost(userId, id, nullVote);
   });
   res.redirect("/");
