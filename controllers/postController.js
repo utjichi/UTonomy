@@ -62,14 +62,14 @@ exports.addPost = (req, res) => {
   res.redirect("/");
 };
 
-const nullVote=async(postId)=>{
-  const vote={};
-  const options=await db.getOptions(postId)
-  for(const option of options){
-    vote[option]=0
+const nullVote = async (postId) => {
+  const vote = {};
+  const options = await db.getOptions(postId);
+  for (const option of options) {
+    vote[option] = 0;
   }
-  return vote
-}
+  return vote;
+};
 
 exports.votePost = (req, res) => {
   if (req.isAuthenticated()) {
@@ -77,31 +77,32 @@ exports.votePost = (req, res) => {
     const userId = req.user.id;
     const value = req.body.vote;
     db.getPost(postId)
-      .then((row) => {
+      .then(async (row) => {
         let vote;
         switch (row.vote_type) {
           case "none":
-            vote={};
+            vote = {};
             break;
           case "up/down":
-            vote={ updown: parseFloat(value) };
+            vote = { updown: parseFloat(value) };
             break;
           case "radio":
-            vote=nullVote(postId)
-            if(value=="none")break;
-            vote[value]=1;
+            vote = await nullVote(postId);
+            if (value == "none") break;
+            vote[value] = 1;
             break;
           case "checkbox":
-            vote=nullVote(postId)
-            if(!value)break;
-            if(Array.isArray(value)){
-              for(const checked of value){
-                vote[checked]=1
+            vote = await nullVote(postId);
+            if (!value) break;
+            if (Array.isArray(value)) {
+              for (const checked of value) {
+                vote[checked] = 1;
               }
-            }else{
-              vote[value]=1
+            } else {
+              vote[value] = 1;
             }
         }
+        console.log("vote", vote);
         return db.votePost(userId, postId, vote);
       })
       .then(() => res.redirect("/")) // 投票後は / へリダイレクト

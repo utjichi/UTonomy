@@ -69,7 +69,7 @@ const getPosts = (userId) => {
               resolve(rows);
             }
           );
-        }).then((posts) =>
+        })/*.then((posts) =>
           Promise.all(
             posts.map((post) => {
               switch (post.vote_type) {
@@ -112,7 +112,7 @@ const getPosts = (userId) => {
               }
             })
           )
-        );
+        );*/
       })
     ).then((subsets) => {
       return subsets.reduce((a, b) => a.concat(b));
