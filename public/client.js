@@ -82,35 +82,3 @@ const drop = (event) => {
 
   draggingElement.classList.remove("dragging");
 };
-
-postForm.onsubmit = (event) => {
-  event.preventDefault(); // デフォルトの送信を防ぐ
-
-  console.log(postForm.outerHTML)
-  const formData = new FormData(postForm); // フォームデータを作成
-  for(const data in (new FormData(postForm)).entries())console.log(data)
-  const optionList = document.getElementById("optionList");
-  
-  // 選択肢を収集してフォームデータに追加
-  const options = Array.from(optionList.children).map(li => {
-    return li.querySelector("input").value; // 各選択肢の入力値を取得
-  });
-
-  // 選択肢をフォームデータに追加
-  options.forEach((option, index) => {
-    formData.append(`options[${index}]`, option); // optionsという名前で追加
-  });
-
-  for(const data in formData)console.log(data)
-  // フォームデータを送信する（例: fetch APIを使用）
-  fetch("/post", {
-    method: "POST",
-    body: formData
-  })
-  .then(response => {
-    // 成功時の処理
-  })
-  .catch(error => {
-    // エラー時の処理
-  });
-};
