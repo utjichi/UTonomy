@@ -86,7 +86,9 @@ const drop = (event) => {
 postForm.onsubmit = (event) => {
   event.preventDefault(); // デフォルトの送信を防ぐ
 
+  console.log(postForm.outerHTML)
   const formData = new FormData(postForm); // フォームデータを作成
+  for(const data in (new FormData(postForm)).entries())console.log(data)
   const optionList = document.getElementById("optionList");
   
   // 選択肢を収集してフォームデータに追加
@@ -99,6 +101,7 @@ postForm.onsubmit = (event) => {
     formData.append(`options[${index}]`, option); // optionsという名前で追加
   });
 
+  for(const data in formData)console.log(data)
   // フォームデータを送信する（例: fetch APIを使用）
   fetch("/post", {
     method: "POST",

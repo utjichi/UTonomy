@@ -44,6 +44,7 @@ exports.getPosts = async (req, res) => {
 exports.addPost = (req, res) => {
   if (!req.isAuthenticated()) res.redirect("/");
   const userId = req.user.id;
+  console.log(req.body)
   const data = req.body;
   let nullVote = {};
   switch (data.voteType) {
