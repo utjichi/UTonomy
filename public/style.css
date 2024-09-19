@@ -13,8 +13,12 @@ header {
     color: white;
     padding: 10px 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Space between header elements */
     align-items: center;
+}
+
+.account {
+    margin-left: auto; /* Pushes the account section to the right */
 }
 
 header h1 {
