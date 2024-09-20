@@ -4,29 +4,29 @@ const db = require("../db/index");
 const toArray = (value) =>
   value ? (Array.isArray(value) ? value : [value]) : [];
 
-exports.getPosts = async (userId)=>{
-  console.log("getPosts")
-    const posts = await db.getPosts(userId);
-    const promises = posts.map(async (post) => {
-      try {
-        post.isVotable = await db.checkVotable(userId, post.id);
-        if (post.isVotable) {
-          post.myVote = await db.getMyVote(userId, post.id);
-        }
-        switch (post.vote_type) {
-          case "radio":
-          case "checkbox":
-            post.options = await db.getOptions(post.id);
-        }
-        post.votes = await db.getVotes(post.id, post.vote_type);
-      } catch (err) {
-        console.error("投稿の情報取得に失敗:", err);
-        post.myVote = null;
-        post.isVotable = false; // デフォルト値
+exports.getPosts = async (userId, groups) => {
+  console.log("getPosts");
+  const posts = await db.getPosts(userId);
+  const promises = posts.map(async (post) => {
+    try {
+      post.isVotable = await db.checkVotable(userId, post.id);
+      if (post.isVotable) {
+        post.myVote = await db.getMyVote(userId, post.id);
       }
-      return post;
-    });
-    return Promise.all(promises);
+      switch (post.vote_type) {
+        case "radio":
+        case "checkbox":
+          post.options = await db.getOptions(post.id);
+      }
+      post.votes = await db.getVotes(post.id, post.vote_type);
+    } catch (err) {
+      console.error("投稿の情報取得に失敗:", err);
+      post.myVote = null;
+      post.isVotable = false; // デフォルト値
+    }
+    return post;
+  });
+  return Promise.all(promises);
 };
 
 exports.addPost = (req, res) => {
