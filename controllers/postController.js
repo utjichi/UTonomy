@@ -5,9 +5,12 @@ const toArray = (value) =>
   value ? (Array.isArray(value) ? value : [value]) : [];
 
 exports.getPosts = async (user)=>{
+  console.log("getPosts")
     const posts = await db.getPosts(user.id);
+    console.log(posts)
     const promises = posts.map(async (post) => {
       try {
+        console.log("get a post")
         post.isVotable = await db.checkVotable(user.id, post.id);
         if (post.isVotable) {
           post.myVote = await db.getMyVote(user.id, post.id);
@@ -23,6 +26,7 @@ exports.getPosts = async (user)=>{
         post.myVote = null;
         post.isVotable = false; // デフォルト値
       }
+      console.log("done")
       return post;
     });
     return Promise.all(promises);

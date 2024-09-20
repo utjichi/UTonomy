@@ -4,7 +4,7 @@ const router = express.Router();
 const groupController = require("../controllers/groupController");
 
 // ユーザーのグループを取得
-router.get("/user", groupController.getMyGroups);
+router.get("/user", groupController.getUser);
 router.get("/group", groupController.group);
 
 // 新しいグループの作成

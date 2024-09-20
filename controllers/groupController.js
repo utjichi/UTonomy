@@ -1,13 +1,18 @@
 // controllers/groupController.js
 const db = require("../db/index");
 
-exports.getMyGroups = async (req, res) => {
+exports.getUser = async (req, res) => {
   if (req.isAuthenticated()) {
     res.render("user", { user: req.user, error: null });
   } else {
     res.render("index", { user: req.user, posts: [], error: null });
   }
 };
+
+exports.getMyGroups=async(userId)=>{
+  console.log("getMyGroups")
+  return db.getMyGroyps(userId)
+}
 
 exports.group=async (req,res)=>{
   if (req.isAuthenticated()) {
