@@ -92,6 +92,8 @@ form {
     border-radius: 5px; /* 角を丸くする */
 }
 
+#post
+
 input[type="text"],
 textarea,
 select {
@@ -128,12 +130,4 @@ button:hover {
 
 .addOption:hover {
     background: #1976D2;
-}
-
-form {
-  background:red !important;
-}
-
-div{
-  background:blue !important
 }
