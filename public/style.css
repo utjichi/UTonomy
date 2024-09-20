@@ -71,7 +71,7 @@ ul {
     margin: 0 auto;
 }
 
-li {
+#posts>li {
     background: white;
     margin: 10px 0;
     padding: 15px;

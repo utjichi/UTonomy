@@ -34,7 +34,7 @@
         <div style="color: red;"><%= error %></div>
     <% } %>
 
-    <ul>
+    <ul id="posts">
       <% (data.posts || []).forEach(post => { %>
         <li>
           <strong><%= post.nickname %></strong>
