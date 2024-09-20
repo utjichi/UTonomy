@@ -13,10 +13,8 @@ exports.showHome = async (req, res) => {
     res.render("index", {
       user,
       showing,
-      data: {
         posts,
         permissions,
-      },
       error: null,
     });
   } catch (err) {
