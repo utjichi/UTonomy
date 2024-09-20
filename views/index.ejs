@@ -57,7 +57,7 @@
                        </label></li>
                 <%     } %>
                 <%     (post.options || []).forEach(option => { %>
-                         <ul><label>
+                         <li><label>
                            <input type="radio" name="vote" value="<%= option %>"
                 <%         if(post.isVotable){
                              if((post.myVote.find(row=>row.option==option) || 0).value){ %>
