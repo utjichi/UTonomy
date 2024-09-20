@@ -85,7 +85,6 @@ form {
     padding: 20px; /* 内側のパディングを追加 */
     background: white; /* 背景色を白に設定 */
     border-radius: 5px; /* 角を丸くする */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 影を追加 */
 }
 
 input[type="text"],
