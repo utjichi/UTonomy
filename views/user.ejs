@@ -6,14 +6,6 @@
 </head>
 <body>
   <header>
-    <div class="account">
-        <% if (user.id) { %>
-            <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
-            <a href="/logout">ログアウト</a>
-        <% } else { %>
-            <a href="/auth/google">ログイン</a>
-        <% } %>
-    </div>
     <h1>UTonomy</h1>
     <nav>
         <ul>
@@ -23,6 +15,14 @@
             <% } %>
         </ul>
     </nav>
+    <div class="account">
+        <% if (user.id) { %>
+            <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
+            <a href="/logout">ログアウト</a>
+        <% } else { %>
+            <a href="/auth/google">ログイン</a>
+        <% } %>
+    </div>
   </header>
   <main>
     <h1><%= user.displayName %></h1>

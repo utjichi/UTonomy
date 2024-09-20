@@ -40,7 +40,7 @@
           <strong><%= post.nickname %></strong>
           <%= post.content %>
           - <%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %>
-       <% if(post.vote_type!="none"){
+       <% if(post.vote_type!="none"){ %>
               <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
               <% switch(post.vote_type){
                    case "up/down": %>
