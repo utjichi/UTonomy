@@ -35,11 +35,17 @@
     <% } %>
     
     <form action="/">
+      <h3>
+        表示範囲
+      </h3>
       <ul>
-        <li><label><input type="checkbox">🌏全世界</label></li>
+        <li><label><input type="checkbox" <% if (showing.includes()) { %>checked<% } %>>🌏全世界</label></li>
+        <% if (user.id) { %>
+          <li><label><input type="checkbox" <% if (user.id) { %>checked<% } %>>🎓全構成員</label></li>
+        <% } %>
       </ul>
       <button>
-        変更
+        適用
       </button>
     </form>
 
