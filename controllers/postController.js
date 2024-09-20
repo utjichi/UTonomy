@@ -6,7 +6,8 @@ const toArray = (value) =>
 
 exports.getPosts = async (userId, groups) => {
   console.log("getPosts");
-  const posts = await db.getPosts(userId);
+  groups=groups.filter(group=>{})
+  const posts = await db.getPosts(userId,groups);
   const promises = posts.map(async (post) => {
     try {
       post.isVotable = await db.checkVotable(userId, post.id);

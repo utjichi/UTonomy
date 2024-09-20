@@ -65,6 +65,15 @@ const getPermissions = (member) => {
   });
 };
 
+const checkPermission=(userId,groupId)=>{
+  return new Promise((resolve,reject)=>{
+    db.get("SELECT id FROM permissions WHERE member = ? AND target = ?",[userId,groupId],(err,row)=>{
+      if(err)reject(err);
+      else resolve()
+    })
+  })
+}
+
 const checkVotable = (userId, postId) => {
   return posts.getPost(postId).then((row) => {
     return row.voter == "all"
@@ -87,5 +96,6 @@ const checkVotable = (userId, postId) => {
 module.exports = {
   invite,
   getPermissions,
+  checkPermission,
   checkVotable,
 };
