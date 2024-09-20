@@ -66,10 +66,12 @@ const getPermissions = (member) => {
 };
 
 const checkPermission=(userId,groupId)=>{
+  if(groupId=="world")return true;
+  if(groupId=="all")return userId;
   return new Promise((resolve,reject)=>{
     db.get("SELECT id FROM permissions WHERE member = ? AND target = ?",[userId,groupId],(err,row)=>{
       if(err)reject(err);
-      else resolve()
+      else resolve(row)
     })
   })
 }

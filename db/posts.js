@@ -45,35 +45,16 @@ const getPost = (id) => {
   });
 };
 
-const getPosts = (userId) => {
+const getPosts = (groupId) => {
   return new Promise((resolve, reject) => {
     db.all(
-      "SELECT target FROM permissions WHERE member = ?",
-      [userId],
+      "SELECT * from posts WHERE viewer = ?",
+      [groupId],
       (err, rows) => {
         if (err) reject(err);
         resolve(rows);
       }
     );
-  }).then((rows) => {
-    rows.push({ target: "world" });
-    if (userId) rows.push({ target: "all" });
-    return Promise.all(
-      rows.map((row) => {
-        return new Promise((resolve, reject) => {
-          db.all(
-            "SELECT * from posts WHERE viewer = ?",
-            [row.target],
-            (err, rows) => {
-              if (err) reject(err);
-              resolve(rows);
-            }
-          );
-        })
-      })
-    ).then((subsets) => {
-      return subsets.reduce((a, b) => a.concat(b));
-    });
   });
 };
 

@@ -8,6 +8,7 @@ exports.showHome = async (req, res) => {
   try {
     const permissions = await group.getMyGroups(user.id);
     const showing = req.query.show || ["world","all"].concat(permissions.map(permission=>permission.target));
+    console.log(showing)
     const posts = await post.getPosts(user.id,showing);
     res.render("index", {
       user,
@@ -20,7 +21,8 @@ exports.showHome = async (req, res) => {
     console.error("Failed to retrieve posts:", err);
     res.render("index", {
       user,
-      data: {},
+      showing: [],
+      posts:[],
       permissions: [],
       error: err.message,
     });
