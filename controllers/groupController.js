@@ -11,7 +11,7 @@ exports.getUser = async (req, res) => {
 
 exports.getMyGroups=async(userId)=>{
   console.log("getMyGroups")
-  return db.getMyGroyps(userId)
+  return db.getMyGroups(userId)
 }
 
 exports.group=async (req,res)=>{

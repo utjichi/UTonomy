@@ -4,16 +4,14 @@ const db = require("../db/index");
 const toArray = (value) =>
   value ? (Array.isArray(value) ? value : [value]) : [];
 
-exports.getPosts = async (user)=>{
+exports.getPosts = async (userId)=>{
   console.log("getPosts")
-    const posts = await db.getPosts(user.id);
-    console.log(posts)
+    const posts = await db.getPosts(userId);
     const promises = posts.map(async (post) => {
       try {
-        console.log("get a post")
-        post.isVotable = await db.checkVotable(user.id, post.id);
+        post.isVotable = await db.checkVotable(userId, post.id);
         if (post.isVotable) {
-          post.myVote = await db.getMyVote(user.id, post.id);
+          post.myVote = await db.getMyVote(userId, post.id);
         }
         switch (post.vote_type) {
           case "radio":
@@ -26,10 +24,8 @@ exports.getPosts = async (user)=>{
         post.myVote = null;
         post.isVotable = false; // デフォルト値
       }
-      console.log("done")
       return post;
     });
-    console.log(promises)
     return Promise.all(promises);
 };
 
