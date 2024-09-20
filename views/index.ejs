@@ -39,10 +39,13 @@
         表示範囲
       </h3>
       <ul>
-        <li><label><input type="checkbox" <% if (showing.includes()) { %>checked<% } %>>🌏全世界</label></li>
+        <li><label><input type="checkbox" name="show" value="world" <% if (showing.includes("world")) { %>checked<% } %>>🌏全世界</label></li>
         <% if (user.id) { %>
-          <li><label><input type="checkbox" <% if (user.id) { %>checked<% } %>>🎓全構成員</label></li>
+          <li><label><input type="checkbox" name="show" value="all" <% if (showing.includes("all")) { %>checked<% } %>>🎓全構成員</label></li>
         <% } %>
+        <% (permissions || []).forEach(permission => { %>
+          <li><label><input type="checkbox" name="show" value="world" <% if (showing.includes("world")) { %>checked<% } %>>🌏全世界</label></li>
+        <% }) %>
       </ul>
       <button>
         適用
