@@ -33,6 +33,12 @@
     <% if (error) { %>
         <div style="color: red;"><%= error %></div>
     <% } %>
+    
+    <form action="/">
+      <ul>
+        <li><label><input type="checkbox">🌏全世界</label></li>
+      </ul>
+    </form>
 
     <ul id="posts">
       <% (data.posts || []).forEach(post => { %>
