@@ -44,7 +44,7 @@
           <li><label><input type="checkbox" name="show" value="all" <% if (showing.includes("all")) { %>checked<% } %>>🎓全構成員</label></li>
         <% } %>
         <% (permissions || []).forEach(permission => { %>
-          <li><label><input type="checkbox" name="show" value="world" <% if (showing.includes("world")) { %>checked<% } %>>🌏全世界</label></li>
+          <li><label><input type="checkbox" name="show" value="<%= permission.target %>" <% if (showing.includes(permission.target)) { %>checked<% } %>><%= permission.group.name %></label></li>
         <% }) %>
       </ul>
       <button>
