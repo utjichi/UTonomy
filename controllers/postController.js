@@ -1,5 +1,5 @@
 // controllers/postController.js
-const lib=
+const lib=require("../lib")
 const db = require("../db/index");
 
 exports.getPosts = async (userId, groups) => {
@@ -44,7 +44,7 @@ exports.addPost = (req, res) => {
       break;
     case "radio":
     case "checkbox":
-      for (const option of toArray(data.option)) {
+      for (const option of lib.toArray(data.option)) {
         nullVote[option] = 0;
       }
   }
@@ -88,10 +88,10 @@ exports.votePost = async (req, res) => {
             throw new Error("択一式なのに複数選択された");
         case "checkbox":
           vote = await nullVote(postId);
-          for (const newOption of toArray(data.newOption)) {
+          for (const newOption of lib.toArray(data.newOption)) {
             vote[newOption] = 0;
           }
-          for (const checked of toArray(value)) {
+          for (const checked of lib.toArray(value)) {
             vote[checked] = 1;
           }
       }

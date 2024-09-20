@@ -1,4 +1,5 @@
 // controllers/homeController.js
+const lib=require("../lib")
 const post = require("./postController");
 const group = require("./groupController");
 
@@ -7,7 +8,7 @@ exports.showHome = async (req, res) => {
   const user = req.isAuthenticated() ? req.user : { id: null };
   try {
     const permissions = await group.getMyGroups(user.id);
-    const showing = req.query.show || ["world","all"].concat(permissions.map(permission=>permission.target));
+    const showing = lib.toArray(req.query.show) || ["world","all"].concat(permissions.map(permission=>permission.target));
     const posts = await post.getPosts(user.id,showing);
     res.render("index", {
       user,
