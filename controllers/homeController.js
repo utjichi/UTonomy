@@ -1,5 +1,5 @@
 // controllers/homeController.js
-const lib=require("../lib")
+const lib = require("../lib");
 const post = require("./postController");
 const group = require("./groupController");
 
@@ -8,8 +8,12 @@ exports.showHome = async (req, res) => {
   const user = req.isAuthenticated() ? req.user : { id: null };
   try {
     const permissions = await group.getMyGroups(user.id);
-    const showing = Array.isArray(req.query.show)?req.query.show:["world","all"].concat(permissions.map(permission=>permission.target));
-    const posts = await post.getPosts(user.id,showing);
+    const showing = req.query.show
+      ? lib.toArray(req.query.show)
+      : ["world", "all"].concat(
+          permissions.map((permission) => permission.target)
+        );
+    const posts = await post.getPosts(user.id, showing);
     res.render("index", {
       user,
       showing,
@@ -22,7 +26,7 @@ exports.showHome = async (req, res) => {
     res.render("index", {
       user,
       showing: [],
-      posts:[],
+      posts: [],
       permissions: [],
       error: err.message,
     });
