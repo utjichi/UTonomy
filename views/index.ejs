@@ -48,7 +48,7 @@
                      <button type="submit" name="vote" value="-1" <% if(!post.isVotable){ %>disabled<% } %>>👎 <%= post.votes[-1] || 0 %></button>  
                 <%   break;
                    case "radio": %>
-                     <div id="options<%= post.id %>" class="radio">
+                     <ul id="options<%= post.id %>" class="radio">
                 <%     if(post.isVotable){ %>
                        <label>
                          <input type="radio" name="vote" value="none"
@@ -69,7 +69,7 @@
                            <%= option %> (<%= post.votes[option] %>)
                          </label>
                 <%     }) %>
-                     </div>
+                     </ul>
                 <%   if(post.isVotable){ %>
                        <button type="button" id="addOption<%= post.id %>" class="addOption">
                          選択肢を追加
@@ -80,7 +80,7 @@
                 <%   } %>
                 <%   break;
                    case "checkbox": %>
-                     <div id="options<%= post.id %>" class="checkbox">
+                     <ul id="options<%= post.id %>" class="checkbox">
                 <%     (post.options || []).forEach(option => { %>
                          <label>
                            <input type="checkbox" name="vote" value="<%= option %>"
@@ -94,7 +94,7 @@
                            <%= option %> (<%= post.votes[option] %>)
                          </label>
                 <%     }) %>
-                     </div>
+                     </ul>
                 <%   if(post.isVotable){ %>
                        <button type="button" id="addOption<%= post.id %>" class="addOption">
                          選択肢を追加
