@@ -8,7 +8,6 @@ exports.showHome = async (req, res) => {
   try {
     const permissions = await group.getMyGroups(user.id);
     const showing = req.query.show || ["world","all"].concat(permissions.map(permission=>permission.target));
-    console.log(showing)
     const posts = await post.getPosts(user.id,showing);
     res.render("index", {
       user,

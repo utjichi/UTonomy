@@ -1,17 +1,15 @@
 // controllers/postController.js
+const lib=
 const db = require("../db/index");
-
-const toArray = (value) =>
-  value ? (Array.isArray(value) ? value : [value]) : [];
 
 exports.getPosts = async (userId, groups) => {
   console.log("getPosts");
   groups = groups.filter(
     async (group) => await db.checkPermission(userId, group)
   );
-  const posts = groups
-    .map(async (group) => await db.getPosts(group))
-    .reduce((a, b) => a.concat(b));
+  const posts = (
+    await Promise.all(groups.map((group) => db.getPosts(group)))
+  ).reduce((a, b) => a.concat(b));
   const promises = posts.map(async (post) => {
     try {
       post.isVotable = await db.checkVotable(userId, post.id);
