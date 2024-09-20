@@ -4,10 +4,7 @@ const db = require("../db/index");
 const toArray = (value) =>
   value ? (Array.isArray(value) ? value : [value]) : [];
 
-exports.getPosts = async (req, res) => {
-  console.log("getPosts");
-  const user = req.isAuthenticated() ? req.user : { id: null };
-  try {
+exports.getPosts = async (user)=>{
     const posts = await db.getPosts(user.id);
     const promises = posts.map(async (post) => {
       try {
@@ -28,19 +25,7 @@ exports.getPosts = async (req, res) => {
       }
       return post;
     });
-    const resolvedPosts = await Promise.all(promises);
-    res.render("index", {
-      user,
-      data: {
-        posts: resolvedPosts,
-        permissions: await db.getMyGroups(user.id),
-      },
-      error: null,
-    });
-  } catch (err) {
-    console.error("Failed to retrieve posts:", err);
-    res.render("index", { user, data: {}, error: err.message });
-  }
+    return Promise.all(promises);
 };
 
 exports.addPost = (req, res) => {
