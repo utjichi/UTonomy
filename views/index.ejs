@@ -50,14 +50,14 @@
                    case "radio": %>
                      <ul id="options<%= post.id %>" class="radio">
                 <%     if(post.isVotable){ %>
-                       <label>
+                       <li><label>
                          <input type="radio" name="vote" value="none"
                              <% if(post.myVote.every(row=>row.value==0)){ %>checked<% } %>>
                          未選択
-                       </label>
+                       </label></li>
                 <%     } %>
                 <%     (post.options || []).forEach(option => { %>
-                         <label>
+                         <ul><label>
                            <input type="radio" name="vote" value="<%= option %>"
                 <%         if(post.isVotable){
                              if((post.myVote.find(row=>row.option==option) || 0).value){ %>
@@ -67,7 +67,7 @@
                              disabled
                 <%         } %>>
                            <%= option %> (<%= post.votes[option] %>)
-                         </label>
+                         </label></li>
                 <%     }) %>
                      </ul>
                 <%   if(post.isVotable){ %>
@@ -82,7 +82,7 @@
                    case "checkbox": %>
                      <ul id="options<%= post.id %>" class="checkbox">
                 <%     (post.options || []).forEach(option => { %>
-                         <label>
+                         <li><label>
                            <input type="checkbox" name="vote" value="<%= option %>"
                 <%         if(post.isVotable){
                              if((post.myVote.find(row=>row.option==option) || 0).value){ %>
@@ -92,7 +92,7 @@
                              disabled
                 <%         } %>>
                            <%= option %> (<%= post.votes[option] %>)
-                         </label>
+                         </label></li>
                 <%     }) %>
                      </ul>
                 <%   if(post.isVotable){ %>
