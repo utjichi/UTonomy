@@ -3,13 +3,16 @@ const post = require("./postController");
 const group = require("./groupController");
 
 exports.showHome = async (req, res) => {
+  console.log("showHome")
   const user = req.isAuthenticated() ? req.user : { id: null };
   try {
+    const posts=await post.getPosts(user)
+    const permissions=await group.getMyGroups(user.id)
     res.render("index", {
       user,
       data: {
-        posts: await post.getPosts(user),
-        permissions: await group.getMyGroups(user.id),
+        posts,
+        permissions,
       },
       error: null,
     });

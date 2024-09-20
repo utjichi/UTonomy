@@ -29,6 +29,7 @@ exports.getPosts = async (user)=>{
       console.log("done")
       return post;
     });
+    console.log(promises)
     return Promise.all(promises);
 };
 

@@ -3,9 +3,6 @@ const express = require("express");
 const router = express.Router();
 const postController = require("../controllers/postController");
 
-// 投稿の取得
-router.get("/", postController.getPosts);
-
 // 新しい投稿の作成
 router.post("/post", postController.addPost);
 

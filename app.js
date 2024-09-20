@@ -6,6 +6,7 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const SQLiteStore = require("connect-sqlite3")(session);
 const db = require("./db/index");
+const homeRoutes = require("./routes/homeRoutes");
 const authRoutes = require("./routes/authRoutes");
 const postRoutes = require("./routes/postRoutes");
 const groupRoutes = require("./routes/groupRoutes");
@@ -55,6 +56,7 @@ passport.deserializeUser((obj, done) => {
 });
 
 // ルートの使用
+app.use("/", homeRoutes);
 app.use("/", postRoutes);
 app.use("/", groupRoutes);
 app.use("/", authRoutes);
