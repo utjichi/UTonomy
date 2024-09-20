@@ -87,12 +87,13 @@ strong {
 form {
     max-width: 600px; /* フォームの最大幅を設定 */
     margin: 20px auto; /* 上下にマージンを追加し、中央に配置 */
-    padding: 20px; /* 内側のパディングを追加 */
     background: white; /* 背景色を白に設定 */
     border-radius: 5px; /* 角を丸くする */
 }
 
-#post
+#post{
+    padding: 20px; /* 内側のパディングを追加 */  
+}
 
 input[type="text"],
 textarea,
