@@ -39,9 +39,7 @@
         <li>
           <strong><%= post.nickname %></strong>
           <%= post.content %>
-          - <%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %>
-       <% if(post.vote_type!="none"){ %>
-              <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
+          - <%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %><% if(post.vote_type!="none"){ %><form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
               <% switch(post.vote_type){
                    case "up/down": %>
                      <button type="submit" name="vote" value="+1" <% if(!post.isVotable){ %>disabled<% } %>>👍 <%= post.votes[+1] || 0 %></button>
