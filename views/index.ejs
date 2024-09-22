@@ -56,8 +56,8 @@
       <% (posts || []).forEach(post => { %>
         <li>
           <strong><%= post.nickname %></strong>
+          <time><%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %></time>
           <%= post.content %>
-          - <%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %>
        <% if(post.vote_type!="none"){ %>
               <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
               <% switch(post.vote_type){
@@ -127,8 +127,8 @@
         </li>
       <% }) %>
     </ul>
+  <form id="post" action="/post" method="post">
       <% if (user.id) { %>
-        <form id="post" action="/post" method="post">
           <input name="nickname" value="<%= user.displayName %>" placeholder="藤井輝夫">
           <textarea name="content" placeholder="総長万歳" required></textarea>
           <label for="viewer">閲覧</label>
@@ -158,11 +158,11 @@
             <% }) %>
           </select>
           <button type="submit">投稿</button>
-        </form>
       <% } else{ %>
         <p>
           投稿するには<a href="/auth/google">ログイン</a>
         </p>
       <% } %>
+  </form>
 </body>
 </html>

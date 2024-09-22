@@ -47,11 +47,9 @@ const getPost = (id) => {
 
 const getPosts = (groups) => {
   return new Promise((resolve, reject) => {
-    // プレースホルダーを生成
-    const placeholders = groups.map(() => "?").join(",");
     db.all(
-      `SELECT * from posts WHERE viewer IN (${placeholders})`,
-      [groups],
+      `SELECT * from posts WHERE viewer IN (${groups.map(() => "?").join(",")}) ORDER BY timestamp`,
+      groups,
       (err, rows) => {
         if (err) reject(err);
         resolve(rows);
