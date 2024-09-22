@@ -45,11 +45,13 @@ const getPost = (id) => {
   });
 };
 
-const getPosts = (groupId) => {
+const getPosts = (groups) => {
   return new Promise((resolve, reject) => {
+    // プレースホルダーを生成
+    const placeholders = groups.map(() => "?").join(",");
     db.all(
-      "SELECT * from posts WHERE viewer = ?",
-      [groupId],
+      `SELECT * from posts WHERE viewer IN (${placeholders})`,
+      [groups],
       (err, rows) => {
         if (err) reject(err);
         resolve(rows);

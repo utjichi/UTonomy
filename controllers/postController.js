@@ -7,9 +7,7 @@ exports.getPosts = async (userId, groups) => {
   groups = groups.filter(
     async (group) => await db.checkPermission(userId, group)
   );
-  const posts = (
-    await Promise.all(groups.map((group) => db.getPosts(group)))
-  ).reduce((a, b) => a.concat(b),[]);
+  const posts = await db.getPosts(groups)
   const promises = posts.map(async (post) => {
     try {
       post.isVotable = await db.checkVotable(userId, post.id);
