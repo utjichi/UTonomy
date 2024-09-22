@@ -55,8 +55,10 @@
     <ul id="posts">
       <% (posts || []).forEach(post => { %>
         <li>
-          <strong><%= post.nickname %></strong>
-          <time><%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %></time>
+          <div class="meta">
+            <strong><%= post.nickname %></strong>
+            <time><%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %></time>
+          </div>
           <%= post.content %>
        <% if(post.vote_type!="none"){ %>
               <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
