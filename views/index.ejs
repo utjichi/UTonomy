@@ -64,8 +64,8 @@
               <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
               <% switch(post.vote_type){
                    case "up/down": %>
-                     <button type="submit" name="vote" value="+1" <% if(post.myVote[0].value==+1){ %>class="toggled"<% } %> <% if(!post.isVotable){ %>disabled<% } %>>👍 <%= post.votes[+1] || 0 %></button>
-                     <button type="submit" name="vote" value="-1" <% if(post.myVote[0].value==-1){ %>class="toggled"<% } %> <% if(!post.isVotable){ %>disabled<% } %>>👎 <%= post.votes[-1] || 0 %></button>  
+                     <button type="submit" name="vote" <%= post.myVote[0].value==+1 ? "value=0 class=toggled" : "value=+1" %> <% if(!post.isVotable){ %>disabled<% } %>>👍 <%= post.votes[+1] || 0 %></button>
+                     <button type="submit" name="vote" <%= post.myVote[0].value==-1 ? "value=0 class=toggled" : "value=-1" %> <% if(!post.isVotable){ %>disabled<% } %>>👎 <%= post.votes[-1] || 0 %></button>  
                 <%   break;
                    case "radio": %>
                      <ul id="options<%= post.id %>" class="radio">

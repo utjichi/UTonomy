@@ -122,11 +122,11 @@ button {
 }
 
 button:hover {
-  background: #45a049;
+  background: oklch(85% none none);
 }
 
 .toggled{
-  background:oklch(var(--ui-l) 100% 210deg);
+  background:oklch(var(--ui-l) 100% 240deg);
 }
 
 .error-message {
@@ -137,12 +137,4 @@ button:hover {
 .radio,
 .checkbox {
   margin: 10px 0;
-}
-
-.addOption {
-  background: #2196f3;
-}
-
-.addOption:hover {
-  background: #1976d2;
 }
