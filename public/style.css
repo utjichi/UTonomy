@@ -125,6 +125,10 @@ button:hover {
   background: #45a049;
 }
 
+.toggled{
+  background:oklch(var(--ui-l) 100% 210deg);
+}
+
 .error-message {
   color: red;
   text-align: center;
