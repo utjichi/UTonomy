@@ -79,6 +79,8 @@ button {
   color: white; /* ボタンの文字色 */
   cursor: pointer;
   border: none; /* ボーダーをなしに */
+  line-height: normal; /* 行の高さを通常に設定 */
+  display: inline-block; /* インラインブロックに設定 */
 }
 
 button:hover {
