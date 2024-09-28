@@ -14,9 +14,24 @@ h1 {
   text-align:center;
 }
 
+h1 a{
+  text-decoration:none;
+  color:white;
+}
+
+.account img{
+  height:35px;
+  border-radius:50%;
+}
+
 .account a {
   color: white;
   margin-right: 15px;
+}
+
+.login,.logout{
+  background:white;
+  border-radius:50%;
 }
 
 nav ul {
