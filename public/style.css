@@ -71,10 +71,6 @@ form {
   border-radius: 5px;
 }
 
-#post {
-  padding: 20px;
-}
-
 input[type="text"],
 textarea,
 select {

@@ -5,6 +5,7 @@
     <title>新しい提起</title>
     <link rel="stylesheet" href="/header.css">
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/post.css">
     <script type="module" src="/ui.js"></script>
     <% if (user.id) { %><script type="module" src="/post.js"></script><% } %>
   </head>
@@ -35,7 +36,7 @@
     <form id="post" action="/post" method="post">
       <% if (user.id) { %>
           <input name="nickname" value="<%= user.displayName %>" placeholder="藤井輝夫">
-          <textarea name="content" placeholder="総長万歳" required></textarea>
+          <textarea class="main" name="content" placeholder="総長万歳" required></textarea>
           <label for="viewer">閲覧</label>
           <select id="viewer" name="viewer">
             <option value="all">🎓全構成員</option>
@@ -47,21 +48,21 @@
           <label for="voteType">投票</label>
           <select id="voteType" name="voteType">
               <option value="none">無効</option>
-              <option value="up/down">👍/👎</option>
+              <option value="up/down" selected>👍/👎</option>
               <option value="radio" class="customOptions">🔘択一</option>
               <option value="checkbox" class="customOptions">☑複数選択</option>
           </select>
 
-          <div id="inputContainer" class="input-container" style="display: none;">
-              <ul id="optionList"></ul>
-              <button type="button" id="addOptionButton">選択肢を追加</button>
-          </div>
-          <select name="voter" hidden>
+          <select name="voter">
             <option value="all">🎓全構成員</option>
             <% (permissions || []).forEach(permission => { %>
               <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
             <% }) %>
           </select>
+          <div id="inputContainer" class="input-container" style="display: none;">
+              <ul id="optionList"></ul>
+              <button type="button" id="addOptionButton">選択肢を追加</button>
+          </div>
           <button type="submit">投稿</button>
       <% } else{ %>
         <p>
