@@ -16,50 +16,6 @@ body {
   color: #333333;
 }
 
-header {
-  position: relative; /* 相対位置に変更 */
-  display: flex;
-  flex-wrap: wrap; /* Allow wrapping for smaller screens */
-  background: #4caf50;
-  color: white;
-  padding: 10px 20px;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.account {
-  margin-left: auto;
-}
-
-.account a {
-  color: white;
-  margin-right: 15px;
-}
-
-nav ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap; /* Allow wrapping for smaller screens */
-}
-
-nav ul li {
-  margin-left: 20px;
-}
-
-nav ul li a {
-  color: white;
-  text-decoration: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  background-color: #4caf50;
-  transition: background-color 0.3s;
-  display: inline-block;
-}
-
-nav ul li a:hover {
-  background-color: #45a049;
-}
 
 h2 {
   margin: 20px 0;
@@ -137,100 +93,8 @@ button:hover {
   margin: 10px 0;
 }
 
-.drawer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100%;
-  background: #4caf50; /* 背景色 */
-  color: white; /* 文字色 */
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-  transform: translateX(-100%); /* Hide off-screen */
-  transition: transform 0.3s ease;
-  overflow-y: auto; /* 縦スクロールを可能に */
-}
-
-.drawer.open {
-  transform: translateX(0); /* Show the drawer */
-}
-
-.drawer ul {
-  list-style: none; /* リストスタイルをなしに */
-  padding: 0; /* パディングをなしに */
-}
-
-.drawer ul li {
-  margin: 15px 0; /* 上下のマージン */
-}
-
-.drawer ul li a {
-  color: white; /* 文字色 */
-  text-decoration: none; /* 下線をなしに */
-  padding: 10px 15px; /* パディング */
-  border-radius: 4px; /* 角を丸く */
-  transition: background-color 0.3s; /* 背景色の遷移 */
-  display: block; /* ブロック要素にして全幅を使う */
-}
-
-.drawer h2 {
-  margin-bottom: 20px; /* タイトルの下にマージン */
-  font-size: 1.5em; /* フォントサイズ */
-  text-align: center; /* 中央揃え */
-}
-
-.drawer .account {
-  margin-top: 20px; /* アカウントセクションの上にマージン */
-  text-align: center; /* 中央揃え */
-}
-
-.drawer .account a {
-  color: white; /* 文字色 */
-  margin: 0 10px; /* 左右のマージン */
-  display: inline-block; /* インラインブロック */
-}
-
-.drawer ul li a:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* ホバー時の背景色 */
-}
-
-#drawer-toggle {
-  position: fixed; /* 固定位置に変更 */
-  top: 10px; /* 上からの距離 */
-  left: 10px; /* 左からの距離 */
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 15px; /* 上下10px、左右15pxのパディング */
-  cursor: pointer;
-  z-index: 1000; /* 他の要素の上に表示 */
-  width: auto; /* 幅を自動に設定 */
-  display: none;
-  font-size: 32px;
-}
-
 /* Responsive Styles */
 @media (max-width: 950px) {
-  header {
-    flex-direction: column; /* Stack header elements vertically */
-    align-items: center; /* Align items to the start */
-  }
-
-  nav ul {
-    flex-direction: column; /* Stack navigation items vertically */
-    width: 100%; /* Full width for nav */
-  }
-
-  nav ul li {
-    margin-left: 0; /* Remove left margin for stacked items */
-    margin-bottom: 10px; /* Add bottom margin for spacing */
-  }
-
-  .account {
-    margin-top: 10px; /* Add margin for spacing */
-  }
-
   #posts > li {
     padding: 10px; /* Reduce padding for smaller screens */
   }
@@ -242,13 +106,5 @@ button:hover {
   button {
     width: 100%; /* Full width for buttons */
     margin-top: 10px; /* Add margin for spacing */
-  }
-  
-  #drawer-toggle {
-    display: inline-block; /* 小さい画面で表示 */
-  }
-
-  nav {
-    display: none; /* Hide the regular nav on small screens */
   }
 }

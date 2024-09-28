@@ -3,6 +3,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UTonomy</title>
+  <link rel="stylesheet" href="/header.css">
   <link rel="stylesheet" href="/style.css">
   <script type="module" src="/post.js"></script>
   <script type="module" src="/vote.js"></script>
@@ -15,35 +16,25 @@
       <h1>UTonomy</h1>
     </div>
     <button id="drawer-toggle">☰</button>
-    <nav>
+    <div id="drawer" class="drawer">
+      <nav>
         <ul>
             <li><a href="/">HOME</a></li>
             <% if (user.id) { %>
                 <li><a href="/group">GROUP</a></li>
             <% } %>
         </ul>
-    </nav>
-    <div class="account">
+      </nav>
+      <div class="account">
         <% if (user.id) { %>
             <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
             <a href="/logout">ログアウト</a>
         <% } else { %>
             <a href="/auth/google">ログイン</a>
         <% } %>
+      </div>
     </div>
   </header>
-
-  <div id="drawer" class="drawer">
-    <ul>
-      <li><a href="/">HOME</a></li>
-      <% if (user.id) { %>
-          <li><a href="/group">GROUP</a></li>
-      <% } %>
-      <li><a href="/user">ユーザー</a></li>
-      <li><a href="/logout">ログアウト</a></li>
-      <li><a href="/auth/google">ログイン</a></li>
-    </ul>
-  </div>
       
     <h2>Posts</h2>
 
