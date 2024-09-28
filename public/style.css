@@ -1,5 +1,6 @@
 :root {
   --ui-l: 95%;
+  --padding: 15px;
 }
 
 * {
@@ -25,6 +26,7 @@ main{
   display:flex;
   justify-content: space-between;
   align-items: center;
+  padding:var(--padding);
 }
 
 h2 {
@@ -39,9 +41,14 @@ ul {
 #posts > li {
   background: white;
   margin: 10px 0;
-  padding: 15px;
+  padding: var(--padding);
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#posts > li > form {
+  margin:0;
+  padding:0;
 }
 
 time {
@@ -55,6 +62,7 @@ time {
 form {
   max-width: 600px;
   margin: 20px auto;
+  padding:var(--padding);
   background: white;
   border-radius: 5px;
 }
@@ -98,15 +106,4 @@ button:hover {
 .radio,
 .checkbox {
   margin: 10px 0;
-}
-
-/* Responsive Styles */
-@media (max-width: 950px) {
-  #posts > li {
-    padding: 10px; /* Reduce padding for smaller screens */
-  }
-
-  form {
-    padding: 15px; /* Reduce padding for forms */
-  }
 }
