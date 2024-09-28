@@ -16,10 +16,12 @@ body {
   color: #333333;
 }
 
+.line{
+  display:flex;
+}
 
 h2 {
   margin: 20px 0;
-  text-align: center;
 }
 
 ul {
@@ -101,10 +103,5 @@ button:hover {
 
   form {
     padding: 15px; /* Reduce padding for forms */
-  }
-
-  button {
-    width: 100%; /* Full width for buttons */
-    margin-top: 10px; /* Add margin for spacing */
   }
 }

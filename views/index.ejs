@@ -12,9 +12,7 @@
 
 <body>
   <header>
-    <div class="center">
-      <h1>UTonomy</h1>
-    </div>
+    <h1>UTonomy</h1>
     <button id="drawer-toggle">☰</button>
     <div id="drawer" class="drawer">
       <div class="account">
@@ -35,8 +33,13 @@
       </nav>
     </div>
   </header>
-      
-    <h2>Posts</h2>
+  <main>
+    <div class="flex">
+      <h2>提起ひろば</h2>
+      <button>
+        新しい提起+
+      </button>
+    </div>
 
     <!-- エラーメッセージの表示 -->
     <% if (error) { %>
@@ -176,5 +179,6 @@
         </p>
       <% } %>
   </form>
+  </main>
 </body>
 </html>
