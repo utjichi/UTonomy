@@ -45,11 +45,11 @@ const getPost = (id) => {
   });
 };
 
-const getPosts = (groups) => {
+const getPosts = (group) => {
   return new Promise((resolve, reject) => {
     db.all(
-      `SELECT * from posts WHERE viewer IN (${groups.map(() => "?").join(",")}) ORDER BY timestamp`,
-      groups,
+      "SELECT * from posts WHERE viewer = ? ORDER BY timestamp",
+      group,
       (err, rows) => {
         if (err) reject(err);
         resolve(rows);

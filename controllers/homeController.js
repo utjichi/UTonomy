@@ -1,5 +1,4 @@
 // controllers/homeController.js
-const lib = require("../lib");
 const post = require("./postController");
 const group = require("./groupController");
 
