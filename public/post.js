@@ -1,25 +1,3 @@
-const postForm = document.getElementById("post");
-const voteType = postForm.voteType;
-// ログイン済の場合
-if (voteType) {
-  voteType.onchange = () => {
-    postForm.voter.style.display = voteType.value == "none" ? "none" : "inline";
-    const selectElement = document.getElementById("voteType");
-    const inputContainer = document.getElementById("inputContainer");
-    const selectedOption = selectElement.options[selectElement.selectedIndex];
-
-    if (selectedOption.classList.contains("customOptions")) {
-      inputContainer.style.display = "block";
-    } else {
-      inputContainer.style.display = "none";
-      document.getElementById("optionList").innerHTML = ""; // リストをクリア
-    }
-  };
-
-  // 追加ボタンのonclickイベントを設定
-  document.getElementById("addOptionButton").onclick = addOption;
-}
-
 const addOption = () => {
   const optionList = document.getElementById("optionList");
 
@@ -50,6 +28,29 @@ const addOption = () => {
   newOption.ondragover = dragOver;
   newOption.ondrop = drop;
 };
+
+const postForm = document.getElementById("post");
+const voteType = postForm.voteType;
+// ログイン済の場合
+if (voteType) {
+  voteType.onchange = () => {
+    postForm.voter.style.display = voteType.value == "none" ? "none" : "inline";
+    const selectElement = document.getElementById("voteType");
+    const inputContainer = document.getElementById("inputContainer");
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+    if (selectedOption.classList.contains("customOptions")) {
+      inputContainer.style.display = "block";
+    } else {
+      inputContainer.style.display = "none";
+      document.getElementById("optionList").innerHTML = ""; // リストをクリア
+    }
+  };
+
+  // 追加ボタンのonclickイベントを設定
+  document.getElementById("addOptionButton").onclick = addOption;
+}
+
 
 const removeOption = (button) => {
   const listItem = button.parentElement;
