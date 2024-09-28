@@ -58,18 +58,15 @@
     <% } %>
     
     <form action="/">
-      <h3>
-        表示範囲
-      </h3>
-      <ul>
-        <li><label><input type="checkbox" name="show" value="world" <% if (showing.includes("world")) { %>checked<% } %>> 🌏全世界</label></li>
+      <select name="show">
+        <option value="world" <% if (showing=="world") { %>selected<% } %>> 🌏全世界</option>
         <% if (user.id) { %>
-          <li><label><input type="checkbox" name="show" value="all" <% if (showing.includes("all")) { %>checked<% } %>> 🎓全構成員</label></li>
+          <option value="all" <% if (showing=="all") { %>selected<% } %>> 🎓全構成員</option>
         <% } %>
         <% (permissions || []).forEach(permission => { %>
-          <li><label><input type="checkbox" name="show" value="<%= permission.target %>" <% if (showing.includes(permission.target)) { %>checked<% } %>> <%= permission.group.name %></label></li>
+          <option value="<%= permission.target %>" <% if (showing==permission.target) { %>selected<% } %>> <%= permission.group.name %></option>
         <% }) %>
-      </ul>
+      </select>
       <button>
         適用
       </button>

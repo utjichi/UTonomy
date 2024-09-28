@@ -3,12 +3,10 @@ const lib = require("../lib");
 const db = require("../db/index");
 const group = require("./groupController");
 
-exports.getPosts = async (userId, groups) => {
+exports.getPosts = async (userId, group) => {
   console.log("getPosts");
-  groups = groups.filter(
-    async (group) => await db.checkPermission(userId, group)
-  );
-  const posts = await db.getPosts(groups);
+  if(!(await db.checkPermission(userId, group)))return []
+  const posts = await db.getPosts(group);
   const promises = posts.map(async (post) => {
     try {
       post.isVotable = await db.checkVotable(userId, post.id);
