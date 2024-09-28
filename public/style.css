@@ -13,7 +13,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
-  color: #333;
+  color: #333333;
 }
 
 header {
@@ -29,6 +29,11 @@ header {
 
 .account {
   margin-left: auto;
+}
+
+.account a {
+  color: white;
+  margin-right: 15px;
 }
 
 nav ul {
@@ -54,11 +59,6 @@ nav ul li a {
 
 nav ul li a:hover {
   background-color: #45a049;
-}
-
-.account a {
-  color: white;
-  margin-right: 15px;
 }
 
 h2 {
@@ -143,20 +143,60 @@ button:hover {
   left: 0;
   width: 250px;
   height: 100%;
-  background: #4caf50;
-  color: white;
+  background: #4caf50; /* 背景色 */
+  color: white; /* 文字色 */
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
   transform: translateX(-100%); /* Hide off-screen */
   transition: transform 0.3s ease;
+  overflow-y: auto; /* 縦スクロールを可能に */
 }
 
 .drawer.open {
   transform: translateX(0); /* Show the drawer */
 }
 
+.drawer ul {
+  list-style: none; /* リストスタイルをなしに */
+  padding: 0; /* パディングをなしに */
+}
+
+.drawer ul li {
+  margin: 15px 0; /* 上下のマージン */
+}
+
+.drawer ul li a {
+  color: white; /* 文字色 */
+  text-decoration: none; /* 下線をなしに */
+  padding: 10px 15px; /* パディング */
+  border-radius: 4px; /* 角を丸く */
+  transition: background-color 0.3s; /* 背景色の遷移 */
+  display: block; /* ブロック要素にして全幅を使う */
+}
+
+.drawer h2 {
+  margin-bottom: 20px; /* タイトルの下にマージン */
+  font-size: 1.5em; /* フォントサイズ */
+  text-align: center; /* 中央揃え */
+}
+
+.drawer .account {
+  margin-top: 20px; /* アカウントセクションの上にマージン */
+  text-align: center; /* 中央揃え */
+}
+
+.drawer .account a {
+  color: white; /* 文字色 */
+  margin: 0 10px; /* 左右のマージン */
+  display: inline-block; /* インラインブロック */
+}
+
+.drawer ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* ホバー時の背景色 */
+}
+
 #drawer-toggle {
-  position: absolute; /* 絶対位置に変更 */
+  position: fixed; /* 固定位置に変更 */
   top: 10px; /* 上からの距離 */
   left: 10px; /* 左からの距離 */
   background: #4caf50;
@@ -167,7 +207,7 @@ button:hover {
   z-index: 1000; /* 他の要素の上に表示 */
   width: auto; /* 幅を自動に設定 */
   display: none;
-  font-size:32px;
+  font-size: 32px;
 }
 
 /* Responsive Styles */
