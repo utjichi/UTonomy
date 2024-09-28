@@ -17,6 +17,7 @@ body {
 }
 
 header {
+  position: relative; /* 相対位置に変更 */
   display: flex;
   flex-wrap: wrap; /* Allow wrapping for smaller screens */
   background: #4caf50;
@@ -114,11 +115,12 @@ select {
 }
 
 button {
-  width: auto;
-  padding: 10px;
+  padding: 10px 15px; /* 上下10px、左右15pxのパディング */
   border-radius: 4px;
-  background: oklch(var(--ui-l) none none);
+  background: #4caf50; /* ボタンの背景色 */
+  color: white; /* ボタンの文字色 */
   cursor: pointer;
+  border: none; /* ボーダーをなしに */
 }
 
 button:hover {
@@ -139,8 +141,42 @@ button:hover {
   margin: 10px 0;
 }
 
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background: #4caf50;
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  transform: translateX(-100%); /* Hide off-screen */
+  transition: transform 0.3s ease;
+}
+
+.drawer.open {
+  transform: translateX(0); /* Show the drawer */
+}
+
+#drawer-toggle {
+  position: absolute; /* 絶対位置に変更 */
+  top: 10px; /* 上からの距離 */
+  left: 10px; /* 左からの距離 */
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px; /* 上下10px、左右15pxのパディング */
+  cursor: pointer;
+  z-index: 1000; /* 他の要素の上に表示 */
+  width: auto; /* 幅を自動に設定 */
+  display: none; /* インラインブロックに設定 */
+}
+
+
+
 /* Responsive Styles */
-@media (max-width: 768px) {
+@media (max-width: 950px) {
   header {
     flex-direction: column; /* Stack header elements vertically */
     align-items: flex-start; /* Align items to the start */
@@ -172,59 +208,12 @@ button:hover {
     width: 100%; /* Full width for buttons */
     margin-top: 10px; /* Add margin for spacing */
   }
-}
-
-.drawer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100%;
-  background: #4caf50;
-  color: white;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-  transform: translateX(-100%); /* Hide off-screen */
-  transition: transform 0.3s ease;
-}
-
-.drawer.open {
-  transform: translateX(0); /* Show the drawer */
-}
-
-#drawer-toggle {
-  display: none; /* Hide the toggle button by default */
-}
-
-@media (max-width: 950px) {
-  .drawer-toggle {
-    display: block; /* Show the toggle button on small screens */
-    background: #4caf50;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
+  
+  #drawer-toggle {
+    display: inline-block; /* 小さい画面で表示 */
   }
 
   nav {
     display: none; /* Hide the regular nav on small screens */
-  }
-  
-  header {
-    padding: 10px; /* Reduce padding for very small screens */
-  }
-
-  nav ul li {
-    margin-bottom: 5px; /* Reduce bottom margin for very small screens */
-  }
-
-  input[type="text"],
-  textarea,
-  select {
-    padding: 8px; /* Reduce padding for inputs */
-  }
-
-  button {
-    padding: 8px; /* Reduce padding for buttons */
   }
 }
