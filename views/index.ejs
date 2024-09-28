@@ -5,10 +5,17 @@
   <link rel="stylesheet" href="/style.css">
   <script type="module" src="/post.js"></script>
   <script type="module" src="/vote.js"></script>
+  <script>
+    function toggleDrawer() {
+      const drawer = document.getElementById('drawer');
+      drawer.classList.toggle('open');
+    }
+  </script>
 </head>
 <body>
   <header>
     <h1>UTonomy</h1>
+    <button class="drawer-toggle" onclick="toggleDrawer()">☰</button>
     <nav>
         <ul>
             <li><a href="/">HOME</a></li>
@@ -27,6 +34,18 @@
     </div>
   </header>
 
+  <div id="drawer" class="drawer">
+    <ul>
+      <li><a href="/">HOME</a></li>
+      <% if (user.id) { %>
+          <li><a href="/group">GROUP</a></li>
+      <% } %>
+      <li><a href="/user">ユーザー</a></li>
+      <li><a href="/logout">ログアウト</a></li>
+      <li><a href="/auth/google">ログイン</a></li>
+    </ul>
+  </div>
+      
     <h2>Posts</h2>
 
     <!-- エラーメッセージの表示 -->

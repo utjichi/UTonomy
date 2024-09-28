@@ -1,6 +1,5 @@
-/* style.css */
-:root{
-  --ui-l:95%;
+:root {
+  --ui-l: 95%;
 }
 
 * {
@@ -19,16 +18,16 @@ body {
 
 header {
   display: flex;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
   background: #4caf50;
   color: white;
   padding: 10px 20px;
-  display: flex;
-  justify-content: space-between; /* Space between header elements */
+  justify-content: space-between;
   align-items: center;
 }
 
 .account {
-  margin-left: auto; /* Pushes the account section to the right */
+  margin-left: auto;
 }
 
 header h1 {
@@ -39,6 +38,7 @@ nav ul {
   list-style: none;
   padding: 0;
   display: flex;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
 }
 
 nav ul li {
@@ -46,17 +46,17 @@ nav ul li {
 }
 
 nav ul li a {
-  color: white; /* テキストの色を白に設定 */
-  text-decoration: none; /* 下線を消す */
-  padding: 10px 15px; /* パディングを追加 */
-  border-radius: 4px; /* 角を丸くする */
-  background-color: #4caf50; /* ボタンの背景色を設定 */
-  transition: background-color 0.3s; /* ホバー時のスムーズな変化 */
-  display: inline-block; /* インラインブロックにしてボタンのように見せる */
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  background-color: #4caf50;
+  transition: background-color 0.3s;
+  display: inline-block;
 }
 
 nav ul li a:hover {
-  background-color: #45a049; /* ホバー時に背景色を変更 */
+  background-color: #45a049;
 }
 
 .account a {
@@ -93,40 +93,40 @@ time {
 }
 
 form {
-  max-width: 600px; /* フォームの最大幅を設定 */
-  margin: 20px auto; /* 上下にマージンを追加し、中央に配置 */
-  background: white; /* 背景色を白に設定 */
-  border-radius: 5px; /* 角を丸くする */
+  max-width: 600px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 5px;
 }
 
 #post {
-  padding: 20px; /* 内側のパディングを追加 */
+  padding: 20px;
 }
 
 input[type="text"],
 textarea,
 select {
-  width: 100%; /* 幅を100%に設定して親要素に合わせる */
-  padding: 10px; /* パディングを追加 */
-  margin: 5px 0; /* 上下のマージンを追加 */
-  border: 1px solid #ccc; /* ボーダーを設定 */
-  border-radius: 4px; /* 角を丸くする */
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 button {
-  width: auto; /* ボタンの幅を自動に設定 */
-  padding: 10px; /* パディングを追加 */
-  border-radius: 4px; /* 角を丸くする */
-  background:oklch(var(--ui-l) none none);
-  cursor: pointer; /* カーソルをポインターに変更 */
+  width: auto;
+  padding: 10px;
+  border-radius: 4px;
+  background: oklch(var(--ui-l) none none);
+  cursor: pointer;
 }
 
 button:hover {
   background: oklch(85% none none);
 }
 
-.toggled{
-  background:oklch(var(--ui-l) 100% 240deg);
+.toggled {
+  background: oklch(var(--ui-l) 100% 240deg);
 }
 
 .error-message {
@@ -137,4 +137,95 @@ button:hover {
 .radio,
 .checkbox {
   margin: 10px 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column; /* Stack header elements vertically */
+    align-items: flex-start; /* Align items to the start */
+  }
+
+  nav ul {
+    flex-direction: column; /* Stack navigation items vertically */
+    width: 100%; /* Full width for nav */
+  }
+
+  nav ul li {
+    margin-left: 0; /* Remove left margin for stacked items */
+    margin-bottom: 10px; /* Add bottom margin for spacing */
+  }
+
+  .account {
+    margin-top: 10px; /* Add margin for spacing */
+  }
+
+  #posts > li {
+    padding: 10px; /* Reduce padding for smaller screens */
+  }
+
+  form {
+    padding: 15px; /* Reduce padding for forms */
+  }
+
+  button {
+    width: 100%; /* Full width for buttons */
+    margin-top: 10px; /* Add margin for spacing */
+  }
+}
+
+.drawer {
+  display: none; /* Hide the drawer by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background: #4caf50;
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  transform: translateX(-100%); /* Hide off-screen */
+  transition: transform 0.3s ease;
+}
+
+.drawer.open {
+  transform: translateX(0); /* Show the drawer */
+}
+
+.drawer-toggle {
+  display: none; /* Hide the toggle button by default */
+}
+
+@media (max-width: 950px) {
+  .drawer-toggle {
+    display: block; /* Show the toggle button on small screens */
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  nav {
+    display: none; /* Hide the regular nav on small screens */
+  }
+  
+  header {
+    padding: 10px; /* Reduce padding for very small screens */
+  }
+
+  nav ul li {
+    margin-bottom: 5px; /* Reduce bottom margin for very small screens */
+  }
+
+  input[type="text"],
+  textarea,
+  select {
+    padding: 8px; /* Reduce padding for inputs */
+  }
+
+  button {
+    padding: 8px; /* Reduce padding for buttons */
+  }
 }
