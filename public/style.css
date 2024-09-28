@@ -112,3 +112,7 @@ button:hover,.button:hover {
 .checkbox {
   margin: 10px 0;
 }
+
+td{
+  text-align:center;
+}
