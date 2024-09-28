@@ -9,28 +9,23 @@ header {
   padding: 10px 20px;
 }
 
+header a{
+  text-decoration:none;
+  color:white;
+}
+
+header .button {
+  background: white;
+  color: #333333;
+}
+
 h1 {
   display:block;
   text-align:center;
 }
 
-h1 a{
-  text-decoration:none;
-  color:white;
-}
-
 .account img{
-  height:35px;
-  border-radius:50%;
-}
-
-.account a {
-  color: white;
-  margin-right: 15px;
-}
-
-.login,.logout{
-  background:white;
+  display:block;
   border-radius:50%;
 }
 
@@ -117,7 +112,6 @@ nav ul li a:hover {
     width: 250px;
     height: 100%;
     background: #4caf50; /* 背景色 */
-    color: white; /* 文字色 */
     padding: var(--header-height) 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     transform: translateX(-100%); /* Hide off-screen */
@@ -139,7 +133,6 @@ nav ul li a:hover {
   }
 
   .drawer ul li a {
-    color: white; /* 文字色 */
     text-decoration: none; /* 下線をなしに */
     padding: 10px 15px; /* パディング */
     border-radius: 4px; /* 角を丸く */
@@ -159,7 +152,6 @@ nav ul li a:hover {
   }
 
   .drawer .account a {
-    color: white; /* 文字色 */
     margin: 0 10px; /* 左右のマージン */
     display: inline-block; /* インラインブロック */
   }

@@ -88,6 +88,7 @@ button,.button {
   color: white; /* ボタンの文字色 */
   cursor: pointer;
   border: none; /* ボーダーをなしに */
+  text-decoration:none;
 }
 
 button:hover,.button:hover {
