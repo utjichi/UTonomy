@@ -1,6 +1,6 @@
 const postForm = document.getElementById("post");
 const voteType = postForm.voteType;
-voteType.onchange = () => {
+if(voteType)voteType.onchange = () => {
   postForm.voter.style.display = voteType.value == "none" ? "none" : "inline";
   const selectElement = document.getElementById("voteType");
   const inputContainer = document.getElementById("inputContainer");
