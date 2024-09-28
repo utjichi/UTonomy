@@ -5,13 +5,14 @@
   <title>UTonomy</title>
   <link rel="stylesheet" href="/header.css">
   <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/index.js"></script>
   <script type="module" src="/vote.js"></script>
   <script type="module" src="/ui.js"></script>
 </head>
 
 <body>
   <header>
-    <h1>UTonomy</h1>
+    <h1><a href="/">UTonomy</a></h1>
     <button id="drawer-toggle">☰</button>
     <div id="drawer" class="drawer">
       <div class="account">
@@ -57,8 +58,8 @@
         <div style="color: red;"><%= error %></div>
     <% } %>
     
-    <form method="get" action="/">
-      <select name="show" onchange="this.submit()">
+    <form id="viewOpt" method="get" action="/">
+      <select name="show">
         <option value="world" <% if (showing=="world") { %>selected<% } %>> 🌏全世界</option>
         <% if (user.id) { %>
           <option value="all" <% if (showing=="all") { %>selected<% } %>> 🎓全構成員</option>
