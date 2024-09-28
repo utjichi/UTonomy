@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新しい提起</title>
+    <title>提起の作成</title>
     <link rel="stylesheet" href="/header.css">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/post.css">
@@ -33,6 +33,10 @@
       </nav>
     </div>
   </header>
+  <main>
+    <h1>
+      提起の作成
+    </h1>
     <form id="post" action="/post" method="post">
       <% if (user.id) { %>
           <input name="nickname" value="<%= user.displayName %>" placeholder="自称理事">
@@ -69,6 +73,7 @@
           投稿するには<a href="/auth/google">ログイン</a>
         </p>
       <% } %>
-  </form>
+    </form>
+  </main>
   </body>
 </html>
