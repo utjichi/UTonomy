@@ -16,11 +16,14 @@ body {
   color: #333333;
 }
 
+main{
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .flex{
   display:flex;
-  flex-wrap:wrap;
-  width:100%;
-  align-content: space-between;
+  justify-content: space-between;
 }
 
 h2 {
@@ -30,8 +33,6 @@ h2 {
 ul {
   list-style: none;
   padding: 0;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 #posts > li {
