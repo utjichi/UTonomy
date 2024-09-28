@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "BIZ UDGothic";
+    src: url('/BIZUDGothic-Regular.ttf') format('truetype');
+}
+
 :root {
   --ui-l: 95%;
   --padding: 15px;
