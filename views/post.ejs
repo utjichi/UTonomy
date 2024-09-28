@@ -35,8 +35,8 @@
   </header>
     <form id="post" action="/post" method="post">
       <% if (user.id) { %>
-          <input name="nickname" value="<%= user.displayName %>" placeholder="藤井輝夫">
-          <textarea class="main" name="content" placeholder="総長万歳" required></textarea>
+          <input name="nickname" value="<%= user.displayName %>" placeholder="自称理事">
+          <textarea class="main" name="content" placeholder="東京大学がグローバルな競争を勝ち抜くため、学費の年間150万円への改定は待ったなしです。" required></textarea>
           <label for="viewer">閲覧</label>
           <select id="viewer" name="viewer">
             <option value="all">🎓全構成員</option>
