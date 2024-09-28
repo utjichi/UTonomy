@@ -1,16 +1,17 @@
+:root {
+  --header-height: 80px;
+}
+
 header {
   position: relative; /* 相対位置に変更 */
-  display: flex;
-  flex-wrap: wrap; /* Allow wrapping for smaller screens */
   background: #4caf50;
   color: white;
   padding: 10px 20px;
-  justify-content: space-between;
-  align-items: center;
 }
 
-.account {
-  margin-left: auto;
+h1 {
+  display:block;
+  text-align:center;
 }
 
 .account a {
@@ -55,7 +56,7 @@ nav ul li a:hover {
   z-index: 1000; /* 他の要素の上に表示 */
   width: auto; /* 幅を自動に設定 */
   display: none;
-  font-size: 30px;
+  font-size: 35px;
 }
 
 @media (width >= 950px) {
@@ -73,7 +74,7 @@ nav ul li a:hover {
   header {
     flex-direction: column; /* Stack header elements vertically */
     align-items: center; /* Align items to the start */
-    height:50px
+    height: var(--header-height);
   }
 
   nav ul {
@@ -102,7 +103,7 @@ nav ul li a:hover {
     height: 100%;
     background: #4caf50; /* 背景色 */
     color: white; /* 文字色 */
-    padding: 60px 20px;
+    padding: var(--header-height) 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     transform: translateX(-100%); /* Hide off-screen */
     transition: transform 0.3s ease;
