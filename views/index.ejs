@@ -16,10 +16,14 @@
     <div id="drawer" class="drawer">
       <div class="account">
         <% if (user.id) { %>
-            <a href="/user">
+            <a class="user" href="/user">
               <img src="<%= user.photos[0].value %>">
-              <%= user.displayName %>
-              <%= user.emails[0].value %>
+              <p>
+                <%= user.displayName %>
+              </p>
+              <p>
+                <%= user.emails[0].value %>
+              </p>
             </a>
             <a class="button" href="/logout">ログアウト</a>
         <% } else { %>

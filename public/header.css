@@ -25,7 +25,6 @@ h1 {
 }
 
 .account img{
-  display:block;
   border-radius:50%;
 }
 
@@ -73,6 +72,10 @@ nav ul li a:hover {
   .account {
     display: inline-block;
   }
+  
+  .account img{
+    height:40px;
+  }
 
   nav {
     display: inline-block;
@@ -99,6 +102,10 @@ nav ul li a:hover {
 
   .account {
     margin-top: 10px; /* Add margin for spacing */
+  }
+  
+  .account img{
+  display:block;
   }
 
   #drawer-toggle {
@@ -146,14 +153,8 @@ nav ul li a:hover {
     text-align: center; /* 中央揃え */
   }
 
-  .drawer .account {
-    margin-top: 20px; /* アカウントセクションの上にマージン */
-    text-align: center; /* 中央揃え */
-  }
-
-  .drawer .account a {
-    margin: 0 10px; /* 左右のマージン */
-    display: inline-block; /* インラインブロック */
+  .user {
+    display: block; /* インラインブロック */
   }
 
   .drawer ul li a:hover {

@@ -81,6 +81,11 @@ select {
   border-radius: 4px;
 }
 
+.button {
+  display:inline-block;
+  text-decoration:none;
+}
+
 button,.button {
   padding: 10px 15px; /* 上下10px、左右15pxのパディング */
   border-radius: 4px;
@@ -88,7 +93,6 @@ button,.button {
   color: white; /* ボタンの文字色 */
   cursor: pointer;
   border: none; /* ボーダーをなしに */
-  text-decoration:none;
 }
 
 button:hover,.button:hover {
