@@ -31,10 +31,6 @@ header {
   margin-left: auto;
 }
 
-header h1 {
-  margin: 0;
-}
-
 nav ul {
   list-style: none;
   padding: 0;
@@ -170,16 +166,15 @@ button:hover {
   cursor: pointer;
   z-index: 1000; /* 他の要素の上に表示 */
   width: auto; /* 幅を自動に設定 */
-  display: none; /* インラインブロックに設定 */
+  display: none;
+  font-size:32px;
 }
-
-
 
 /* Responsive Styles */
 @media (max-width: 950px) {
   header {
     flex-direction: column; /* Stack header elements vertically */
-    align-items: flex-start; /* Align items to the start */
+    align-items: center; /* Align items to the start */
   }
 
   nav ul {
