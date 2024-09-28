@@ -1,6 +1,7 @@
 :root {
   --ui-l: 95%;
   --padding: 15px;
+  --black: #333333;
 }
 
 * {
@@ -14,7 +15,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
-  color: #333333;
+  color: var(--black);
 }
 
 main{
@@ -22,11 +23,14 @@ main{
   margin: 0 auto;
 }
 
+main > *{
+  padding:var(--padding);
+}
+
 .flex{
   display:flex;
   justify-content: space-between;
   align-items: center;
-  padding:var(--padding);
 }
 
 h2 {

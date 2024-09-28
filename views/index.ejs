@@ -18,12 +18,14 @@
         <% if (user.id) { %>
             <a class="user" href="/user">
               <img src="<%= user.photos[0].value %>">
-              <p>
-                <%= user.displayName %>
-              </p>
-              <p>
-                <%= user.emails[0].value %>
-              </p>
+              <div class="userinfo">
+                <p>
+                  <%= user.displayName %>
+                </p>
+                <p>
+                  <%= user.emails[0].value %>
+                </p>
+              </div>
             </a>
             <a class="button" href="/logout">ログアウト</a>
         <% } else { %>
@@ -47,6 +49,9 @@
         新しい提起+
       </a>
     </div>
+    <p>
+      学内の問題や要望などを提起し、学生・教職員で集めて「見える化」する広場です。
+    </p>
     <!-- エラーメッセージの表示 -->
     <% if (error) { %>
         <div style="color: red;"><%= error %></div>

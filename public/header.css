@@ -16,7 +16,7 @@ header a{
 
 header .button {
   background: white;
-  color: #333333;
+  color: var(--black);
 }
 
 h1 {
@@ -76,6 +76,11 @@ nav ul li a:hover {
   .account img{
     height:40px;
   }
+  
+  .userinfo {
+    display:inline-block;
+    margin: 0 var(--padding);
+  }
 
   nav {
     display: inline-block;
@@ -106,6 +111,10 @@ nav ul li a:hover {
   
   .account img{
   display:block;
+  }
+  
+  .userinfo {
+    margin: var(--padding) 0;
   }
 
   #drawer-toggle {
