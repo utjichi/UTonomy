@@ -1,18 +1,24 @@
 const postForm = document.getElementById("post");
 const voteType = postForm.voteType;
-if(voteType)voteType.onchange = () => {
-  postForm.voter.style.display = voteType.value == "none" ? "none" : "inline";
-  const selectElement = document.getElementById("voteType");
-  const inputContainer = document.getElementById("inputContainer");
-  const selectedOption = selectElement.options[selectElement.selectedIndex];
+// ログイン済の場合
+if (voteType) {
+  voteType.onchange = () => {
+    postForm.voter.style.display = voteType.value == "none" ? "none" : "inline";
+    const selectElement = document.getElementById("voteType");
+    const inputContainer = document.getElementById("inputContainer");
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
 
-  if (selectedOption.classList.contains("customOptions")) {
-    inputContainer.style.display = "block";
-  } else {
-    inputContainer.style.display = "none";
-    document.getElementById("optionList").innerHTML = ""; // リストをクリア
-  }
-};
+    if (selectedOption.classList.contains("customOptions")) {
+      inputContainer.style.display = "block";
+    } else {
+      inputContainer.style.display = "none";
+      document.getElementById("optionList").innerHTML = ""; // リストをクリア
+    }
+  };
+
+  // 追加ボタンのonclickイベントを設定
+  document.getElementById("addOptionButton").onclick = addOption;
+}
 
 const addOption = () => {
   const optionList = document.getElementById("optionList");
@@ -49,9 +55,6 @@ const removeOption = (button) => {
   const listItem = button.parentElement;
   listItem.remove();
 };
-
-// 追加ボタンのonclickイベントを設定
-document.getElementById("addOptionButton").onclick = addOption;
 
 const dragStart = (event) => {
   event.dataTransfer.setData("text/plain", event.target.innerHTML);

@@ -175,7 +175,6 @@ button:hover {
 }
 
 .drawer {
-  display: none; /* Hide the drawer by default */
   position: fixed;
   top: 0;
   left: 0;
@@ -193,7 +192,7 @@ button:hover {
   transform: translateX(0); /* Show the drawer */
 }
 
-.drawer-toggle {
+#drawer-toggle {
   display: none; /* Hide the toggle button by default */
 }
 
