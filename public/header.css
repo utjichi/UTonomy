@@ -50,19 +50,30 @@ nav ul li a:hover {
   background: #4caf50;
   color: white;
   border: none;
-  padding: 5px 15px; /* 上下10px、左右15pxのパディング */
+  padding: 5px 15px; /* 上下5px、左右15pxのパディング */
   cursor: pointer;
   z-index: 1000; /* 他の要素の上に表示 */
   width: auto; /* 幅を自動に設定 */
   display: none;
-  font-size: 32px;
+  font-size: 30px;
+}
+
+@media (width >= 950px) {
+  .account {
+    display: inline-block;
+  }
+
+  nav {
+    display: inline-block;
+  }
 }
 
 /* Responsive Styles */
-@media (max-width: 950px) {
+@media (width < 950px) {
   header {
     flex-direction: column; /* Stack header elements vertically */
     align-items: center; /* Align items to the start */
+    height:50px
   }
 
   nav ul {
