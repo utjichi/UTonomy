@@ -81,7 +81,7 @@ select {
   border-radius: 4px;
 }
 
-button {
+button,.button {
   padding: 10px 15px; /* 上下10px、左右15pxのパディング */
   border-radius: 4px;
   background: #4caf50; /* ボタンの背景色 */
@@ -90,7 +90,7 @@ button {
   border: none; /* ボーダーをなしに */
 }
 
-button:hover {
+button:hover,.button:hover {
   background: oklch(85% none none);
 }
 

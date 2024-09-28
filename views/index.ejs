@@ -36,9 +36,9 @@
   <main>
     <div class="flex">
       <h2>提起ひろば</h2>
-      <button type="button">
+      <a class="button" href="/post">
         新しい提起+
-      </button>
+      </a>
     </div>
     <!-- エラーメッセージの表示 -->
     <% if (error) { %>
@@ -50,12 +50,12 @@
         表示範囲
       </h3>
       <ul>
-        <li><label><input type="checkbox" name="show" value="world" <% if (showing.includes("world")) { %>checked<% } %>>🌏全世界</label></li>
+        <li><label><input type="checkbox" name="show" value="world" <% if (showing.includes("world")) { %>checked<% } %>> 🌏全世界</label></li>
         <% if (user.id) { %>
-          <li><label><input type="checkbox" name="show" value="all" <% if (showing.includes("all")) { %>checked<% } %>>🎓全構成員</label></li>
+          <li><label><input type="checkbox" name="show" value="all" <% if (showing.includes("all")) { %>checked<% } %>> 🎓全構成員</label></li>
         <% } %>
         <% (permissions || []).forEach(permission => { %>
-          <li><label><input type="checkbox" name="show" value="<%= permission.target %>" <% if (showing.includes(permission.target)) { %>checked<% } %>><%= permission.group.name %></label></li>
+          <li><label><input type="checkbox" name="show" value="<%= permission.target %>" <% if (showing.includes(permission.target)) { %>checked<% } %>> <%= permission.group.name %></label></li>
         <% }) %>
       </ul>
       <button>
@@ -141,43 +141,6 @@
         </li>
       <% }) %>
     </ul>
-  <form id="post" action="/post" method="post">
-      <% if (user.id) { %>
-          <input name="nickname" value="<%= user.displayName %>" placeholder="藤井輝夫">
-          <textarea name="content" placeholder="総長万歳" required></textarea>
-          <label for="viewer">閲覧</label>
-          <select id="viewer" name="viewer">
-            <option value="all">🎓全構成員</option>
-            <option value="world">🌏全世界</option>
-            <% (permissions || []).forEach(permission => { %>
-              <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
-            <% }) %>
-          </select>
-          <label for="voteType">投票</label>
-          <select id="voteType" name="voteType">
-              <option value="none">無効</option>
-              <option value="up/down">👍/👎</option>
-              <option value="radio" class="customOptions">🔘択一</option>
-              <option value="checkbox" class="customOptions">☑複数選択</option>
-          </select>
-
-          <div id="inputContainer" class="input-container" style="display: none;">
-              <ul id="optionList"></ul>
-              <button type="button" id="addOptionButton">選択肢を追加</button>
-          </div>
-          <select name="voter" hidden>
-            <option value="all">🎓全構成員</option>
-            <% (permissions || []).forEach(permission => { %>
-              <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
-            <% }) %>
-          </select>
-          <button type="submit">投稿</button>
-      <% } else{ %>
-        <p>
-          投稿するには<a href="/auth/google">ログイン</a>
-        </p>
-      <% } %>
-  </form>
   </main>
 </body>
 </html>

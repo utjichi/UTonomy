@@ -30,6 +30,10 @@ exports.getPosts = async (userId, groups) => {
   return Promise.all(promises);
 };
 
+exports.newPost=(req,res)=>{
+  res.render("new-post")
+}
+
 exports.addPost = (req, res) => {
   console.log("addPost");
   if (!req.isAuthenticated()) res.redirect("/");
