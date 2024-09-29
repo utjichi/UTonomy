@@ -5,6 +5,7 @@ const commentController = require("../controllers/commentController");
 
 // 新しい投稿の作成
 router.get("/comments/:id", commentController.comments);
+router.get("/comment/:id", commentController.newComment);
 router.post("/comment/:id", commentController.addComment);
 
 module.exports = router;
