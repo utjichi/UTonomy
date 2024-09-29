@@ -44,23 +44,23 @@ exports.newComment = async (req, res) => {
     }
   } else {
     res.render("comment", {
-        user:null,
-        post: await db.getPost(postId),
-      });
+      user: null,
+      post: await db.getPost(postId),
+    });
   }
 };
 
-exports.addComment = async(req, res) => {
+exports.addComment = async (req, res) => {
+  const data = req.body;
+  const postId = req.params.id;
   if (req.isAuthenticated()) {
     const userId = req.user.id;
-    const data = req.body;
-      const postId=req.params.id
-    try{
-      if(!(await post.checkPermission(userId, postId)))throw "権限なし"
-      db.addComment(userId,postId, data);
-    }catch(err){
-      console.error(err)
+    try {
+      if (!(await post.checkPermission(userId, postId))) throw "権限なし";
+      db.addComment(userId, postId, data);
+    } catch (err) {
+      console.error(err);
     }
   }
-  res.redirect("/comments/");
+  res.redirect("/comments/" + postId);
 };
