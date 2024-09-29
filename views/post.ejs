@@ -5,9 +5,7 @@
     <title>提起の作成</title>
     <link rel="stylesheet" href="/header.css">
     <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="/post.css">
     <script type="module" src="/ui.js"></script>
-    <% if (user.id) { %><script type="module" src="/post.js"></script><% } %>
   </head>
 
   <body>
@@ -40,14 +38,14 @@
     <form id="post" action="/post" method="post">
       <% if (user.id) { %>
           <input name="nickname" value="<%= user.displayName %>" placeholder="自称理事">
-          <select id="viewer" name="viewer">
+          <input name="title" placeholder="学費を年間150万円に" required>
+          <select name="group">
             <option value="all">🎓全構成員</option>
             <option value="world">🌏全世界</option>
             <% (permissions || []).forEach(permission => { %>
               <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
             <% }) %>
           </select>
-          <textarea class="main" name="content" placeholder="T大学がグローバルな競争を勝ち抜くため、学費の年間150万円への改定は待ったなしです。J国の与党総裁が学費の無償化を主張していますが、この主張をそのまま受け入れることは大学の自治を損なうものであり、学生の学修環境を損なう政策には毅然と反対していきます。本学には授業料の減免制度が存在し、年収が一定以下の世帯につきましてはこちらのさじ加減で柔軟に支援策を実施していきます。いわゆる経済的DV等でこれらの支援策を受けることができない学生につきましては、M奨学金を推奨しております。これは本学の学生であれば誰でも年10%の低金利で借りることのできる奨学金で、いかなる経済状況の学生でも本学で学ぶ機会が損なわれることのないよう、M銀行と協議して創設したものです。本学は今後とも在学生の声の大きさや数の多さに惑わされることなく文部科学省や財界と対話し社会の声を聞くことで、重要な顧客である未来の学生によりよい環境を提供するための施策を実施していきます。" required></textarea>
           <button type="submit">投稿</button>
       <% } else{ %>
         <p>

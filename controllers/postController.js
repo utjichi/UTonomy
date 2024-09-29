@@ -51,39 +51,15 @@ exports.newPost = async (req, res) => {
 
 exports.addPost = (req, res) => {
   console.log("addPost");
-  if (!req.isAuthenticated()) res.redirect("/");
+  if (req.isAuthenticated()){
   const userId = req.user.id;
   const data = req.body;
-  let nullVote = {};
-  switch (data.voteType) {
-    case "up/down":
-      nullVote.updown = 0;
-      break;
-    case "radio":
-    case "checkbox":
-      for (const option of lib.toArray(data.option)) {
-        nullVote[option] = 0;
-      }
-  }
-  db.addPost(userId, data).then((id) => {
-    db.votePost(userId, id, nullVote);
-  });
+  db.addPost(userId, data);}
   res.redirect("/");
 };
 
-const nullVote = async (postId) => {
-  const vote = {};
-  const options = await db.getOptions(postId);
-  for (const option of options) {
-    vote[option] = 0;
-  }
-  return vote;
-};
-
 exports.votePost = async (req, res) => {
-  if (!req.isAuthenticated()) {
-    res.redirect("/");
-  }
+  if (req.isAuthenticated()) {
   const postId = req.params.id;
   const userId = req.user.id;
   const data = req.body;
@@ -92,32 +68,11 @@ exports.votePost = async (req, res) => {
   if (!isVotable) res.redirect("/");
   db.getPost(postId)
     .then(async (row) => {
-      let vote;
-      switch (row.vote_type) {
-        case "none":
-          vote = {};
-          break;
-        case "up/down":
-          vote = { updown: parseFloat(value) };
-          break;
-        case "radio":
-          if (Array.isArray(value))
-            throw new Error("択一式なのに複数選択された");
-        case "checkbox":
-          vote = await nullVote(postId);
-          for (const newOption of lib.toArray(data.newOption)) {
-            vote[newOption] = 0;
-          }
-          for (const checked of lib.toArray(value)) {
-            vote[checked] = 1;
-          }
-      }
-      console.log("vote", vote);
-      return db.votePost(userId, postId, vote);
+      return db.votePost(userId, postId);
     })
     .then(() => res.redirect("/")) // 投票後は / へリダイレクト
     .catch((err) => {
       console.error("Failed to vote post:", err);
       res.redirect("/?error=" + encodeURIComponent(err.message));
-    });
+    });}
 };
