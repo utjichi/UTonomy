@@ -76,8 +76,7 @@
 
     <ul id="posts">
       <% (posts || []).forEach(post => { %>
-        <li>
-          <a href="/comments/<%= post.id %>">
+          <li class="post" id="<%= post.id %>">
             <div class="meta">
               <strong><%= post.nickname %></strong>
               <time><%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %></time>
@@ -88,8 +87,7 @@
             <form action="/post/<%= post.id %>/vote" method="post">
               <button type="submit" <% if(post.myVote){ %>class="toggled"<% } %>>♡<%= post.votes %></button>
             </form>
-          </a>
-        </li>
+          </li>
       <% }) %>
     </ul>
   </main>

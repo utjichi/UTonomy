@@ -51,18 +51,19 @@ const addPost = (req, res) => {
   res.redirect("/");
 };
 
-const checkPermission=async(userId,postId)=>{
-  const post=await db.getPost(postId);
-  return db.checkPermission(userId,post.label)
-}
+const checkPermission = async (userId, postId) => {
+  const post = await db.getPost(postId);
+  return db.checkPermission(userId, post.label);
+};
 
 const votePost = async (req, res) => {
-  try{
-  if (!req.isAuthenticated()) throw "ログインしてない";
+  console.log("votePost")
+  try {
+    if (!req.isAuthenticated()) throw "ログインしてない";
     const postId = req.params.id;
     const userId = req.user.id;
     const isVotable = await checkPermission(userId, postId);
-    if (isVotable)throw "権限なし"
+    if (isVotable) throw "権限なし";
     db.getPost(postId)
       .then(async (row) => {
         return db.votePost(userId, postId);
@@ -72,7 +73,8 @@ const votePost = async (req, res) => {
         console.error("Failed to vote post:", err);
         res.redirect("/?error=" + encodeURIComponent(err.message));
       });
-  } catch(err) {
+  } catch (err) {
+    console.error(err)
     res.redirect("/");
   }
 };
@@ -82,5 +84,5 @@ module.exports = {
   newPost,
   addPost,
   votePost,
- checkPermission
+  checkPermission,
 };
