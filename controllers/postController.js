@@ -52,12 +52,17 @@ exports.addPost = (req, res) => {
   res.redirect("/");
 };
 
+export const checkPermission=async(userId,postId)=>{
+  const post=await db.getpost(postId);
+  return db.checkPermission(userId,post.label)
+}
+
 exports.votePost = async (req, res) => {
   try{
   if (!req.isAuthenticated()) throw "ログインしてない";
     const postId = req.params.id;
     const userId = req.user.id;
-    const isVotable = await db.checkPermission(userId, postId);
+    const isVotable = await checkPermission(userId, postId);
     if (isVotable)throw "権限なし"
     db.getPost(postId)
       .then(async (row) => {
