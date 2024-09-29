@@ -14,7 +14,7 @@
     <button id="drawer-toggle">☰</button>
     <div id="drawer" class="drawer">
       <div class="account">
-        <% if (user.id) { %>
+        <% if (user) { %>
             <a class="user" href="/user">
               <img src="<%= user.photos[0].value %>">
               <div class="userinfo">
@@ -34,7 +34,7 @@
       <nav>
         <ul>
             <li><a href="/">提起ひろば</a></li>
-            <% if (user.id) { %>
+            <% if (user) { %>
               <li><a href="/group">グループ</a></li>
             <% } %>
         </ul>

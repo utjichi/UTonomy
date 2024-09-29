@@ -6,7 +6,7 @@ db.run(`CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     nickname TEXT DEFAULT "東大構成員",
-    group TEXT NOT NULL,
+    label TEXT NOT NULL,
     title TEXT NOT NULL,
     timestamp INTEGER NOT NULL
   )`);
@@ -14,13 +14,12 @@ db.run(`CREATE TABLE IF NOT EXISTS posts (
 const addPost = (userId, data) => {
   return new Promise((resolve, reject) => {
     db.run(
-      "INSERT INTO posts (user_id, nickname, group, title, timestamp) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO posts (user_id, nickname, label, title, timestamp) VALUES (?, ?, ?, ?, ?)",
       [
         userId,
         data.nickname,
-        data.group,
+        data.label,
         data.title,
-        data.voteType,
         Date.now(),
       ],
       function (err) {

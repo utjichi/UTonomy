@@ -9,7 +9,7 @@ exports.getPosts = async (userId, group) => {
   const posts = await db.getPosts(group);
   const promises = posts.map(async (post) => {
     try {
-        post.myVote = await db.getMyVote(userId, post.id);
+      post.myVote = await db.getMyVote(userId, post.id);
       post.votes = await db.getVotes(post.id);
     } catch (err) {
       console.error("投稿の情報取得に失敗:", err);

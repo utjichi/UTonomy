@@ -6,7 +6,7 @@ db.run(`CREATE TABLE IF NOT EXISTS votes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     post_id INTEGER NOT NULL,
-    UNIQUE(user_id, post_id, option)
+    UNIQUE(user_id, post_id)
   )`);
 
 const votePost = (userId, postId) => {
@@ -43,7 +43,7 @@ const votePost = (userId, postId) => {
 const getMyVote = (userId, postId) => {
   return new Promise((resolve, reject) => {
     db.get(
-      "SELECT option, value FROM votes WHERE user_id = ? AND post_id = ?",
+      "SELECT id FROM votes WHERE user_id = ? AND post_id = ?",
       [userId, postId],
       (err, row) => {
         if (err) reject(err);
@@ -53,57 +53,17 @@ const getMyVote = (userId, postId) => {
   });
 };
 
-const getOptions = (postId) => {
-  return new Promise((resolve, reject) => {
-    db.all(
-      "SELECT DISTINCT option FROM votes WHERE post_id = ?",
-      [postId],
-      (err, rows) => {
-        if (err) reject(err);
-        resolve(rows.map((row) => row.option));
-      }
-    );
-  });
-};
-
 const getVotes = (postId, voteType) => {
-  switch (voteType) {
-    case "up/down":
       return new Promise((resolve, reject) => {
-        db.all(
-          "SELECT value, COUNT(*) AS count FROM votes WHERE post_id = ? GROUP BY value",
+        db.get(
+          "SELECT COUNT(*) AS count FROM votes WHERE post_id = ?",
           [postId],
-          (err, rows) => {
+          (err, row) => {
             if (err) reject(err);
-            const votes = {};
-            for (const row of rows) {
-              votes[row.value] = row.count;
-            }
-            resolve(votes);
+            resolve(row.count);
           }
         );
       });
-    case "radio":
-    case "checkbox":
-      return new Promise((resolve, reject) => {
-        db.all(
-          "SELECT option, SUM(value) AS sum FROM votes WHERE post_id = ? GROUP BY option",
-          [postId],
-          (err, rows) => {
-            if (err) reject(err);
-            const votes = {};
-            if (rows) {
-              for (const row of rows) {
-                votes[row.option] = row.sum;
-              }
-            }
-            resolve(votes);
-          }
-        );
-      });
-    default:
-      return {};
-  }
 };
 
 // 他の投票関連の関数もここに追加
@@ -111,6 +71,5 @@ const getVotes = (postId, voteType) => {
 module.exports = {
   votePost,
   getMyVote,
-  getOptions,
   getVotes,
 };

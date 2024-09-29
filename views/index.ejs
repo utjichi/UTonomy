@@ -16,7 +16,7 @@
     <button id="drawer-toggle">☰</button>
     <div id="drawer" class="drawer">
       <div class="account">
-        <% if (user.id) { %>
+        <% if (user) { %>
             <a class="user" href="/user">
               <img src="<%= user.photos[0].value %>">
               <div class="userinfo">
@@ -36,7 +36,7 @@
       <nav>
         <ul>
             <li><a href="/">提起ひろば</a></li>
-            <% if (user.id) { %>
+            <% if (user) { %>
               <li><a href="/group">グループ</a></li>
             <% } %>
         </ul>
@@ -61,7 +61,7 @@
     <form id="viewOpt" method="get" action="/">
       <select name="show">
         <option value="world" <% if (showing=="world") { %>selected<% } %>> 🌏全世界</option>
-        <% if (user.id) { %>
+        <% if (user) { %>
           <option value="all" <% if (showing=="all") { %>selected<% } %>> 🎓全構成員</option>
         <% } %>
         <% (permissions || []).forEach(permission => { %>
@@ -78,74 +78,9 @@
             <time><%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %></time>
           </div>
           <%= post.content %>
-       <% if(post.vote_type!="none"){ %>
-              <form action="/post/<%= post.id %>/vote" method="post">
-                <button type="submit">♡<%= post.votes %></button>
-              <% switch(post.vote_type){
-                   case "up/down": %>
-                     <% const updown=post.myVote[0] || { option:"updown", value:0 } %>
-                     <button type="submit" name="vote" <%= updown.value==+1 ? "value=0 class=toggled" : "value=+1" %> <% if(!post.isVotable){ %>disabled<% } %>>👍 <%= post.votes[+1] || 0 %></button>
-                     <button type="submit" name="vote" <%= updown.value==-1 ? "value=0 class=toggled" : "value=-1" %> <% if(!post.isVotable){ %>disabled<% } %>>👎 <%= post.votes[-1] || 0 %></button>
-                <%   break;
-                   case "radio": %>
-                     <ul id="options<%= post.id %>" class="radio">
-                <%     if(post.isVotable){ %>
-                       <li><label>
-                         <input type="radio" name="vote" value="none"
-                             <% if(post.myVote.every(row=>row.value==0)){ %>checked<% } %>>
-                         未選択
-                       </label></li>
-                <%     } %>
-                <%     (post.options || []).forEach(option => { %>
-                         <li><label>
-                           <input type="radio" name="vote" value="<%= option %>"
-                <%         if(post.isVotable){
-                             if((post.myVote.find(row=>row.option==option) || 0).value){ %>
-                               checked
-                <%           }
-                           }else{ %>
-                             disabled
-                <%         } %>>
-                           <%= option %> (<%= post.votes[option] %>)
-                         </label></li>
-                <%     }) %>
-                     </ul>
-                <%   if(post.isVotable){ %>
-                       <button type="button" id="addOption<%= post.id %>" class="addOption">
-                         選択肢を追加
-                       </button>
-                       <button>
-                         投票
-                       </button>
-                <%   } %>
-                <%   break;
-                   case "checkbox": %>
-                     <ul id="options<%= post.id %>" class="checkbox">
-                <%     (post.options || []).forEach(option => { %>
-                         <li><label>
-                           <input type="checkbox" name="vote" value="<%= option %>"
-                <%         if(post.isVotable){
-                             if((post.myVote.find(row=>row.option==option) || 0).value){ %>
-                               checked
-                <%           }
-                           }else{ %>
-                             disabled
-                <%         } %>>
-                           <%= option %> (<%= post.votes[option] %>)
-                         </label></li>
-                <%     }) %>
-                     </ul>
-                <%   if(post.isVotable){ %>
-                       <button type="button" id="addOption<%= post.id %>" class="addOption">
-                         選択肢を追加
-                       </button>
-                       <button>
-                         投票
-                       </button>
-                <%   } %>
-            <%   } %>
-              </form>
-       <% } %>
+          <form action="/post/<%= post.id %>/vote" method="post">
+            <button type="submit">♡<%= post.votes %></button>
+          </form>
         </li>
       <% }) %>
     </ul>
