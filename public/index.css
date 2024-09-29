@@ -1,0 +1,17 @@
+#posts > li {
+  background: white;
+  margin: 10px 0;
+  padding: var(--padding);
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#posts>li>a{
+  text-decoration:none;
+  color:var(--black)
+}
+
+#posts > li > form {
+  margin:0;
+  padding:0;
+}

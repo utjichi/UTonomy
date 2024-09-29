@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UTonomy</title>
+  <link rel="stylesheet" href="/header.css">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/ui.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">UTonomy</a></h1>
+    <button id="drawer-toggle">☰</button>
+    <div id="drawer" class="drawer">
+      <div class="account">
+        <% if (user) { %>
+            <a class="user" href="/user">
+              <img src="<%= user.photos[0].value %>">
+              <div class="userinfo">
+                <p>
+                  <%= user.displayName %>
+                </p>
+                <p>
+                  <%= user.emails[0].value %>
+                </p>
+              </div>
+            </a>
+            <a class="button" href="/logout">ログアウト</a>
+        <% } else { %>
+            <a class="button" href="/auth/google">ログイン</a>
+        <% } %>
+      </div>
+      <nav>
+        <ul>
+            <li><a href="/">提起ひろば</a></li>
+            <% if (user) { %>
+              <li><a href="/group">グループ</a></li>
+            <% } %>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+  </main>
+</body>
+</html>
