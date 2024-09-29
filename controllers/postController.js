@@ -1,13 +1,12 @@
 // controllers/postController.js
-const lib=require("../lib")
+const lib = require("../lib");
 const db = require("../db/index");
+const group = require("./groupController");
 
-exports.getPosts = async (userId, groups) => {
+exports.getPosts = async (userId, group) => {
   console.log("getPosts");
-  groups = groups.filter(
-    async (group) => await db.checkPermission(userId, group)
-  );
-  const posts = await db.getPosts(groups)
+  if(!(await db.checkPermission(userId, group)))return []
+  const posts = await db.getPosts(group);
   const promises = posts.map(async (post) => {
     try {
       post.isVotable = await db.checkVotable(userId, post.id);
@@ -28,6 +27,26 @@ exports.getPosts = async (userId, groups) => {
     return post;
   });
   return Promise.all(promises);
+};
+
+exports.newPost = async (req, res) => {
+  const user = req.isAuthenticated() ? req.user : { id: null };
+  try {
+    const permissions = await group.getMyGroups(user.id);
+    res.render("post", {
+      user,
+      permissions,
+    });
+  } catch (err) {
+    console.error("Failed to retrieve data:", err);
+    res.render("index", {
+      user,
+      showing: [],
+      posts: [],
+      permissions: [],
+      error: err.message,
+    });
+  }
 };
 
 exports.addPost = (req, res) => {

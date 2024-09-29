@@ -1,19 +1,3 @@
-const postForm = document.getElementById("post");
-const voteType = postForm.voteType;
-voteType.onchange = () => {
-  postForm.voter.style.display = voteType.value == "none" ? "none" : "inline";
-  const selectElement = document.getElementById("voteType");
-  const inputContainer = document.getElementById("inputContainer");
-  const selectedOption = selectElement.options[selectElement.selectedIndex];
-
-  if (selectedOption.classList.contains("customOptions")) {
-    inputContainer.style.display = "block";
-  } else {
-    inputContainer.style.display = "none";
-    document.getElementById("optionList").innerHTML = ""; // リストをクリア
-  }
-};
-
 const addOption = () => {
   const optionList = document.getElementById("optionList");
 
@@ -45,13 +29,29 @@ const addOption = () => {
   newOption.ondrop = drop;
 };
 
-const removeOption = (button) => {
-  const listItem = button.parentElement;
-  listItem.remove();
+const postForm = document.getElementById("post");
+const voteType = postForm.voteType;
+voteType.onchange = () => {
+  postForm.voter.style.display = voteType.value == "none" ? "none" : "inline";
+  const selectElement = document.getElementById("voteType");
+  const inputContainer = document.getElementById("inputContainer");
+  const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+  if (selectedOption.classList.contains("customOptions")) {
+    inputContainer.style.display = "block";
+  } else {
+    inputContainer.style.display = "none";
+    document.getElementById("optionList").innerHTML = ""; // リストをクリア
+  }
 };
 
 // 追加ボタンのonclickイベントを設定
 document.getElementById("addOptionButton").onclick = addOption;
+
+const removeOption = (button) => {
+  const listItem = button.parentElement;
+  listItem.remove();
+};
 
 const dragStart = (event) => {
   event.dataTransfer.setData("text/plain", event.target.innerHTML);

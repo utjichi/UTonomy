@@ -1,28 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UTonomy</title>
+  <link rel="stylesheet" href="/header.css">
   <link rel="stylesheet" href="/style.css">
   <script type="module" src="/group.js"></script>
 </head>
+
 <body>
   <header>
-    <h1>UTonomy</h1>
-    <nav>
+    <h1><a href="/">UTonomy</a></h1>
+    <button id="drawer-toggle">☰</button>
+    <div id="drawer" class="drawer">
+      <div class="account">
+        <% if (user.id) { %>
+            <a class="user" href="/user">
+              <img src="<%= user.photos[0].value %>">
+              <div class="userinfo">
+                <p>
+                  <%= user.displayName %>
+                </p>
+                <p>
+                  <%= user.emails[0].value %>
+                </p>
+              </div>
+            </a>
+            <a class="button" href="/logout">ログアウト</a>
+        <% } else { %>
+            <a class="button" href="/auth/google">ログイン</a>
+        <% } %>
+      </div>
+      <nav>
         <ul>
-            <li><a href="/">HOME</a></li>
+            <li><a href="/">提起ひろば</a></li>
             <% if (user.id) { %>
-                <li><a href="/group">GROUP</a></li>
+              <li><a href="/group">グループ</a></li>
             <% } %>
         </ul>
-    </nav>
-    <div class="account">
-        <% if (user.id) { %>
-            <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
-            <a href="/logout">ログアウト</a>
-        <% } else { %>
-            <a href="/auth/google">ログイン</a>
-        <% } %>
+      </nav>
     </div>
   </header>
   <main>
@@ -40,7 +56,7 @@
             <td><%= permission.target %></td>
             <td><%= permission.group.name %></td>
             <td><%= permission.role %></td>
-            <td><%= permission.group.member_limit||"なし" %></td>
+            <td><%= permission.group.member_limit||"-" %></td>
             <td>
               <% if(permission.role=="owner"||permission.role=="admin"){ %>
                 <form action="/group/<%= permission.target %>/invite" method="post">
