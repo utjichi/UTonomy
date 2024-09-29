@@ -9,6 +9,13 @@ db.run(`CREATE TABLE IF NOT EXISTS comments (
     UNIQUE(id)
   )`);
 
-const getComments=async(postId)=>{
-  return db.all("SELECT * FROM comments WHERE post_id = ?",[postId],(err,rows)=>)
+const getComments=(postId)=>{
+  return new Promise((resolve,reject)=>{db.all("SELECT * FROM comments WHERE post_id = ?",[postId],(err,rows)=>{
+    if(err)reject(err);
+    else resolve(rows)
+  })})
 }
+
+module.exports = {
+ getComments
+};

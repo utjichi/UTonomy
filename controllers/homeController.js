@@ -15,7 +15,7 @@ exports.showHome = async (req, res) => {
         showing,
         posts,
         permissions,
-        error: null,
+        error: req.query.error,
       });
     } catch (err) {
       console.error("Failed to retrieve posts:", err);

@@ -3,8 +3,7 @@ const lib = require("../lib");
 const db = require("../db/index");
 const group = require("./groupController");
 
-exports.getPosts = async (userId, label) => {
-  console.log("getPosts");
+const getPosts = async (userId, label) => {
   if (!(await db.checkPermission(userId, label))) return [];
   const posts = await db.getPosts(label);
   const promises = posts.map(async (post) => {
@@ -20,7 +19,7 @@ exports.getPosts = async (userId, label) => {
   return Promise.all(promises);
 };
 
-exports.newPost = async (req, res) => {
+const newPost = async (req, res) => {
   if (req.isAuthenticated()) {
     const user = req.user;
     try {
@@ -42,7 +41,7 @@ exports.newPost = async (req, res) => {
   }
 };
 
-exports.addPost = (req, res) => {
+const addPost = (req, res) => {
   console.log("addPost");
   if (req.isAuthenticated()) {
     const userId = req.user.id;
@@ -52,12 +51,12 @@ exports.addPost = (req, res) => {
   res.redirect("/");
 };
 
-export const checkPermission=async(userId,postId)=>{
-  const post=await db.getpost(postId);
+const checkPermission=async(userId,postId)=>{
+  const post=await db.getPost(postId);
   return db.checkPermission(userId,post.label)
 }
 
-exports.votePost = async (req, res) => {
+const votePost = async (req, res) => {
   try{
   if (!req.isAuthenticated()) throw "ログインしてない";
     const postId = req.params.id;
@@ -76,4 +75,12 @@ exports.votePost = async (req, res) => {
   } catch(err) {
     res.redirect("/");
   }
+};
+
+module.exports = {
+  getPosts,
+  newPost,
+  addPost,
+  votePost,
+ checkPermission
 };

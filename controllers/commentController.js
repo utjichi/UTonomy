@@ -9,9 +9,14 @@ exports.comments = async (req, res) => {
     )
       throw "権限なし";
     // 権限あり
-    res.render("comments", { user: req.user,comments:await db.getComments(postId) });
+    res.render("comments", {
+      user: req.user,
+      title: (await db.getPost(postId)).title,
+      comments: await db.getComments(postId),
+    });
   } catch (err) {
-    res.redirect("/");
+    console.error(err)
+    res.redirect("/?error="+err);
   }
 };
 

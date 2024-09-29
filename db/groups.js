@@ -42,8 +42,6 @@ const getMyGroups = (member) => {
   });
 };
 
-// 他のグループ関連の関数もここに追加
-
 module.exports = {
   addGroup,
   getGroup,
