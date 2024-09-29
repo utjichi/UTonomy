@@ -81,9 +81,11 @@
             <strong><%= post.nickname %></strong>
             <time><%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %></time>
           </div>
-          <%= post.content %>
+          <h3>
+            <%= post.title %>
+          </h3>
           <form action="/post/<%= post.id %>/vote" method="post">
-            <button type="submit">♡<%= post.votes %></button>
+            <button type="submit" <% if(post.myVote){ %>class="toggled"<% } %>>♡<%= post.votes %></button>
           </form>
         </li>
       <% }) %>

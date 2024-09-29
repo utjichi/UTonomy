@@ -4,9 +4,10 @@
 }
 
 :root {
-  --ui-l: 95%;
+  --ui-l: 70%;
   --padding: 15px;
   --black: #333333;
+  --green:oklch(67.31% 0.162 144.21);
 }
 
 * {
@@ -82,7 +83,7 @@ select {
   width: 100%;
   padding: 10px;
   margin: 5px 0;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   border-radius: 4px;
 }
 
@@ -94,7 +95,7 @@ select {
 button,.button {
   padding: 10px 15px; /* 上下10px、左右15pxのパディング */
   border-radius: 4px;
-  background: #4caf50; /* ボタンの背景色 */
+  background: var(--green); /* ボタンの背景色 */
   color: white; /* ボタンの文字色 */
   cursor: pointer;
   border: none; /* ボーダーをなしに */

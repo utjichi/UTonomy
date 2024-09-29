@@ -4,7 +4,7 @@
 
 header {
   position: relative; /* 相対位置に変更 */
-  background: #4caf50;
+  background: var(--green);
   color: white;
   padding: 10px 20px;
 }
@@ -44,7 +44,7 @@ nav ul li a {
   text-decoration: none;
   padding: 10px 15px;
   border-radius: 4px;
-  background-color: #4caf50;
+  background-color: var(--green);
   transition: background-color 0.3s;
   display: inline-block;
 }
@@ -57,7 +57,7 @@ nav ul li a:hover {
   position: fixed; /* 固定位置に変更 */
   top: 5px; /* 上からの距離 */
   left: 10px; /* 左からの距離 */
-  background: #4caf50;
+  background: var(--green);
   color: white;
   border: none;
   padding: 5px 15px; /* 上下5px、左右15pxのパディング */
@@ -127,7 +127,7 @@ nav ul li a:hover {
     left: 0;
     width: 250px;
     height: 100%;
-    background: #4caf50; /* 背景色 */
+    background: var(--green); /* 背景色 */
     padding: var(--header-height) 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     transform: translateX(-100%); /* Hide off-screen */

@@ -53,11 +53,12 @@ exports.addPost = (req, res) => {
 };
 
 exports.votePost = async (req, res) => {
-  if (req.isAuthenticated()) {
+  try{
+  if (!req.isAuthenticated()) throw "ログインしてない";
     const postId = req.params.id;
     const userId = req.user.id;
-    const isVotable = await db.checkVotable(userId, postId);
-    if (!isVotable) res.redirect("/");
+    const isVotable = await db.checkPermission(userId, postId);
+    if (isVotable)throw "権限なし"
     db.getPost(postId)
       .then(async (row) => {
         return db.votePost(userId, postId);
@@ -67,7 +68,7 @@ exports.votePost = async (req, res) => {
         console.error("Failed to vote post:", err);
         res.redirect("/?error=" + encodeURIComponent(err.message));
       });
-  } else {
+  } catch(err) {
     res.redirect("/");
   }
 };
