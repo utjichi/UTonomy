@@ -57,18 +57,17 @@ const checkPermission = async (userId, postId) => {
 };
 
 const votePost = async (req, res) => {
-  console.log("votePost")
   try {
     if (!req.isAuthenticated()) throw "ログインしてない";
     const postId = req.params.id;
     const userId = req.user.id;
     const isVotable = await checkPermission(userId, postId);
-    if (isVotable) throw "権限なし";
+    if (!isVotable) throw "権限なし";
     db.getPost(postId)
       .then(async (row) => {
         return db.votePost(userId, postId);
       })
-      .then(() => res.redirect("/")) // 投票後は / へリダイレクト
+      .then(() => res.redirect("/?show="+req.body.show)) // 投票後は / へリダイレクト
       .catch((err) => {
         console.error("Failed to vote post:", err);
         res.redirect("/?error=" + encodeURIComponent(err.message));
