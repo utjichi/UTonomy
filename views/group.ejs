@@ -61,7 +61,7 @@
             <td>
               <% if(permission.role=="owner"||permission.role=="admin"){ %>
                 <form action="/group/<%= permission.target %>/invite" method="post">
-                  <label><input name="email" placeholder="great-president031">@g.ecc.u-tokyo.ac.jp</label>
+                  <label><input type="text" name="email" placeholder="great-president031">@g.ecc.u-tokyo.ac.jp</label>
                   <button>
                     招待
                   </button>
@@ -78,7 +78,7 @@
     <div>
       <button type="button" id="newGroup">新しいグループ+</button>
       <form id="newGroupConfig" method="post" action="/group/new" hidden>
-        <label>グループ名<input name="name" placeholder="新規グループ" required></label>
+        <label>グループ名<input type="text" name="name" placeholder="新規グループ" required></label>
         <button>
           作成
         </button>

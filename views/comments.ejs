@@ -54,8 +54,8 @@
       <% } %>
     </div>
     <form action="/post/<%= post.id %>/vote" method="post">
-      <input name="show" value="/comments/<%= post.id %>" hidden>
-      <button type="submit" class="like" <% if(post.myVote){ %>class="toggled"<% } %>>♡<%= post.votes %></button>
+      <input type="hidden" name="show" value="/comments/<%= post.id %>">
+      <button type="submit" class="like<% if(post.myVote){ %> toggled<% } %>">♡<%= post.votes %></button>
     </form>
     <!-- エラーメッセージの表示 -->
     <% if (error) { %>

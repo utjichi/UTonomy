@@ -95,6 +95,7 @@ const votePost = async (req, res) => {
 };
 
 module.exports = {
+  getPost,
   getPosts,
   newPost,
   addPost,

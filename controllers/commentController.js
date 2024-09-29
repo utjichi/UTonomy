@@ -2,8 +2,8 @@ const post = require("./postController");
 const db = require("../db/index");
 
 exports.comments = async (req, res) => {
+  const user=req.user
   try {
-    const user=req.user
     const postId = req.params.id;
     if (
       !post.checkPermission(req.isAuthenticated() ? user.id : null, postId)
@@ -16,9 +16,14 @@ exports.comments = async (req, res) => {
       comments: await db.getComments(postId),
       error: null,
     });
-  } catch (err) {
-    console.error(err);
-    res.redirect("/?error=" + err);
+  } catch (error) {
+    console.error(error);
+    res.render("comments",{
+      user,
+      post:{},
+      comments:[],
+      error
+    });
   }
 };
 

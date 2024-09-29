@@ -61,7 +61,6 @@ form {
   max-width: 600px;
   margin: 20px auto;
   padding:var(--padding);
-  background: white;
   border-radius: 5px;
 }
 

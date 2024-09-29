@@ -85,7 +85,7 @@
               <%= post.title %>
             </h3>
             <form action="/post/<%= post.id %>/vote" method="post">
-              <input name="show" value="/?show=<%= showing %>" hidden>
+              <input type="hidden" name="show" value="/?show=<%= showing %>">
               <button type="submit" class="like<% if(post.myVote){ %> toggled<% } %>">♡<%= post.votes %></button>
             </form>
           </li>

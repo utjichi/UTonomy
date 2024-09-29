@@ -37,8 +37,8 @@
     </h1>
     <form id="post" action="/comment/<%= post.id %>" method="post">
       <% if (user) { %>
-          <input name="nickname" value="<%= user.displayName %>" placeholder="自称理事">
-          <input name="content" placeholder="こういう問題があるのでは？" required>
+          <input type="text" name="nickname" value="<%= user.displayName %>" placeholder="自称理事">
+          <input type="text" name="content" placeholder="こういう問題があるのでは？" required>
           <button type="submit">送信</button>
       <% } else{ %>
         <p>

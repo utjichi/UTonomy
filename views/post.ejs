@@ -37,8 +37,8 @@
     </h1>
     <form id="post" action="/post" method="post">
       <% if (user) { %>
-          <input name="nickname" value="<%= user.displayName %>" placeholder="自称理事">
-          <input name="title" placeholder="学費を年間150万円に" required>
+          <input type="text" name="nickname" value="<%= user.displayName %>" placeholder="自称理事">
+          <input type="text" name="title" placeholder="学費を年間150万円に" required>
           <select name="label">
             <option value="all">🎓全構成員</option>
             <option value="world">🌏全世界</option>
