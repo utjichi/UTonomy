@@ -80,6 +80,7 @@
           <%= post.content %>
        <% if(post.vote_type!="none"){ %>
               <form action="/post/<%= post.id %>/vote" method="post">
+                <button type="submit">♡<%= post.votes %></button>
               <% switch(post.vote_type){
                    case "up/down": %>
                      <% const updown=post.myVote[0] || { option:"updown", value:0 } %>

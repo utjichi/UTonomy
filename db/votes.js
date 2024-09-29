@@ -6,48 +6,48 @@ db.run(`CREATE TABLE IF NOT EXISTS votes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     post_id INTEGER NOT NULL,
-    option TEXT,
-    value REAL,
     UNIQUE(user_id, post_id, option)
   )`);
 
-const votePost = (userId, postId, vote) => {
+const votePost = (userId, postId) => {
   return new Promise((resolve, reject) => {
-    db.run(
-      "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
+    db.get(
+      "SELECT id FROM votes WHERE user_id = ? AND post_id = ?",
       [userId, postId],
-      (err) => {
+      (err, row) => {
         if (err) reject(err);
-        resolve();
+        if (row) {
+          db.run(
+            "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
+            [userId, postId],
+            (err) => {
+              if (err) reject(err);
+              resolve();
+            }
+          );
+        } else {
+          db.run(
+            "INSERT INTO votes (user_id, post_id) VALUES (?, ?)",
+            [userId, postId],
+            (err) => {
+              if (err) reject(err);
+              resolve();
+            }
+          );
+        }
       }
-    );
-  }).then(() => {
-    return Promise.all(
-      Object.entries(vote).map(
-        (entry) =>
-          new Promise((resolve, reject) => {
-            db.run(
-              "INSERT INTO votes (user_id, post_id, option, value) VALUES (?, ?, ?, ?)",
-              [userId, postId, entry[0], entry[1]],
-              (err) => {
-                if (err) reject(err);
-                resolve();
-              }
-            );
-          })
-      )
     );
   });
 };
 
 const getMyVote = (userId, postId) => {
   return new Promise((resolve, reject) => {
-    db.all(
+    db.get(
       "SELECT option, value FROM votes WHERE user_id = ? AND post_id = ?",
       [userId, postId],
-      (err, rows) => {
+      (err, row) => {
         if (err) reject(err);
-        else resolve(rows);
+        else resolve(row);
       }
     );
   });
@@ -66,7 +66,7 @@ const getOptions = (postId) => {
   });
 };
 
-const getVotes = (postId,voteType) => {
+const getVotes = (postId, voteType) => {
   switch (voteType) {
     case "up/down":
       return new Promise((resolve, reject) => {
