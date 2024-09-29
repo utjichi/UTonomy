@@ -22,10 +22,10 @@ exports.comments = async (req, res) => {
 };
 
 exports.newComment = async (req, res) => {
+  const postId = req.params.id;
   if (req.isAuthenticated()) {
     const user = req.user;
     try {
-      const postId = req.params.id;
       if (!post.checkPermission(req.user.id, postId)) throw "権限なし";
       // 権限あり
       res.render("comment", {
@@ -43,7 +43,10 @@ exports.newComment = async (req, res) => {
       });
     }
   } else {
-    res.redirect("/?error=ログインしてください");
+    res.render("comment", {
+        user:null,
+        post: await db.getPost(postId),
+      });
   }
 };
 

@@ -38,8 +38,11 @@ const newPost = async (req, res) => {
         error: err.message,
       });
     }
-  }else{
-    res.redirect("/?error=ログインしてください")
+  } else {
+    res.render("post", {
+      user: null,
+      permissions: [],
+    });
   }
 };
 
@@ -69,13 +72,13 @@ const votePost = async (req, res) => {
       .then(async (row) => {
         return db.votePost(userId, postId);
       })
-      .then(() => res.redirect("/?show="+req.body.show)) // 投票後は / へリダイレクト
+      .then(() => res.redirect("/?show=" + req.body.show)) // 投票後は / へリダイレクト
       .catch((err) => {
         console.error("Failed to vote post:", err);
         res.redirect("/?error=" + encodeURIComponent(err.message));
       });
   } catch (err) {
-    console.error(err)
+    console.error(err);
     res.redirect("/");
   }
 };
