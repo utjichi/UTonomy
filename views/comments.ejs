@@ -42,9 +42,53 @@
     </div>
   </header>
   <main>
-    <h1>
-      <%= title %>
-    </h1>
+    <div class="flex">
+      <h2>提起ひろば</h2>
+      <% if(user){ %>
+        <a class="button" href="/post">
+          新しい提起+
+        </a>
+      <% }else{ %>
+        <a class="button" href="/auth/google">ログイン</a>
+      <% } %>
+    </div>
+    <p>
+      学内の問題や要望などを提起し、学生・教職員で集めて「見える化」する広場です。
+    </p>
+    <!-- エラーメッセージの表示 -->
+    <% if (error) { %>
+        <div style="color: red;"><%= error %></div>
+    <% } %>
+    
+    <form id="viewOpt" method="get" action="/">
+      <select name="show">
+        <option value="world" <% if (showing=="world") { %>selected<% } %>> 🌏全世界</option>
+        <% if (user) { %>
+          <option value="all" <% if (showing=="all") { %>selected<% } %>> 🎓全構成員</option>
+        <% } %>
+        <% (permissions || []).forEach(permission => { %>
+          <option value="<%= permission.target %>" <% if (showing==permission.target) { %>selected<% } %>> <%= permission.group.name %></option>
+        <% }) %>
+      </select>
+    </form>
+
+    <ul id="posts">
+      <% (posts || []).forEach(post => { %>
+          <li class="post" id="<%= post.id %>">
+            <div class="meta">
+              <strong><%= post.nickname %></strong>
+              <time><%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %></time>
+            </div>
+            <h3>
+              <%= post.title %>
+            </h3>
+            <form action="/post/<%= post.id %>/vote" method="post">
+              <input name="show" value=<%= showing %> hidden>
+              <button type="submit" <% if(post.myVote){ %>class="toggled"<% } %>>♡<%= post.votes %></button>
+            </form>
+          </li>
+      <% }) %>
+    </ul>
   </main>
 </body>
 </html>
