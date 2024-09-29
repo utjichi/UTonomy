@@ -9,6 +9,7 @@ const db = require("./db/index");
 const homeRoutes = require("./routes/homeRoutes");
 const authRoutes = require("./routes/authRoutes");
 const postRoutes = require("./routes/postRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 const groupRoutes = require("./routes/groupRoutes");
 
 const app = express();
@@ -58,6 +59,7 @@ passport.deserializeUser((obj, done) => {
 // ルートの使用
 app.use("/", homeRoutes);
 app.use("/", postRoutes);
+app.use("/", commentRoutes);
 app.use("/", groupRoutes);
 app.use("/", authRoutes);
 
