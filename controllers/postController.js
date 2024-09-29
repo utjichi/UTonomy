@@ -3,13 +3,19 @@ const lib = require("../lib");
 const db = require("../db/index");
 const group = require("./groupController");
 
+const getPost=async(userId,postId)=>{
+  const post=await db.getPost(postId);
+  post.myVote = userId?await db.getMyVote(userId, postId):null;
+  post.votes = await db.getVotes(postId);
+  return post;
+}
+
 const getPosts = async (userId, label) => {
   if (!(await db.checkPermission(userId, label))) return [];
   const posts = await db.getPosts(label);
   const promises = posts.map(async (post) => {
     try {
-      post.myVote = await db.getMyVote(userId, post.id);
-      post.votes = await db.getVotes(post.id);
+      post=await getPost(userId,post.id)
     } catch (err) {
       console.error("投稿の情報取得に失敗:", err);
       post.myVote = null;

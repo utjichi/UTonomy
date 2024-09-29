@@ -43,7 +43,7 @@ const getPost = (id) => {
 const getPosts = (label) => {
   return new Promise((resolve, reject) => {
     db.all(
-      "SELECT * from posts WHERE label = ? ORDER BY timestamp DESC",
+      "SELECT id from posts WHERE label = ? ORDER BY timestamp DESC",
       label,
       (err, rows) => {
         if (err) reject(err);

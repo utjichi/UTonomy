@@ -3,15 +3,16 @@ const db = require("../db/index");
 
 exports.comments = async (req, res) => {
   try {
+    const user=req.user
     const postId = req.params.id;
     if (
-      !post.checkPermission(req.isAuthenticated() ? req.user.id : null, postId)
+      !post.checkPermission(req.isAuthenticated() ? user.id : null, postId)
     )
       throw "権限なし";
     // 権限あり
     res.render("comments", {
-      user: req.user,
-      post: await db.getPost(postId),
+      user,
+      post: await post.getPost(user?user.id:null,postId),
       comments: await db.getComments(postId),
       error: null,
     });
