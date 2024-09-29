@@ -77,7 +77,7 @@ const votePost = async (req, res) => {
       .then(async (row) => {
         return db.votePost(userId, postId);
       })
-      .then(() => res.redirect("/?show=" + req.body.show)) // 投票後は / へリダイレクト
+      .then(() => res.redirect(req.body.show)) // 投票後は / へリダイレクト
       .catch((err) => {
         console.error("Failed to vote post:", err);
         res.redirect("/?error=" + encodeURIComponent(err.message));
