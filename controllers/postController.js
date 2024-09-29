@@ -1,104 +1,104 @@
 // controllers/postController.js
-const lib=require("../lib")
+const lib = require("../lib");
 const db = require("../db/index");
+const group = require("./groupController");
 
-exports.getPosts = async (userId, groups) => {
-  console.log("getPosts");
-  groups = groups.filter(
-    async (group) => await db.checkPermission(userId, group)
-  );
-  const posts = await db.getPosts(groups)
+const getPost=async(userId,postId)=>{
+  const post=await db.getPost(postId);
+  post.myVote = userId?await db.getMyVote(userId, postId):null;
+  post.votes = await db.getVotes(postId);
+  return post;
+}
+
+const getPosts = async (userId, label) => {
+  if (!(await db.checkPermission(userId, label))) return [];
+  const posts = await db.getPosts(label);
   const promises = posts.map(async (post) => {
     try {
-      post.isVotable = await db.checkVotable(userId, post.id);
-      if (post.isVotable) {
-        post.myVote = await db.getMyVote(userId, post.id);
-      }
-      switch (post.vote_type) {
-        case "radio":
-        case "checkbox":
-          post.options = await db.getOptions(post.id);
-      }
-      post.votes = await db.getVotes(post.id, post.vote_type);
+      post=await getPost(userId,post.id)
     } catch (err) {
       console.error("投稿の情報取得に失敗:", err);
       post.myVote = null;
-      post.isVotable = false; // デフォルト値
     }
     return post;
   });
   return Promise.all(promises);
 };
 
-exports.addPost = (req, res) => {
-  console.log("addPost");
-  if (!req.isAuthenticated()) res.redirect("/");
-  const userId = req.user.id;
-  const data = req.body;
-  let nullVote = {};
-  switch (data.voteType) {
-    case "up/down":
-      nullVote.updown = 0;
-      break;
-    case "radio":
-    case "checkbox":
-      for (const option of lib.toArray(data.option)) {
-        nullVote[option] = 0;
-      }
+const newPost = async (req, res) => {
+  if (req.isAuthenticated()) {
+    const user = req.user;
+    try {
+      const permissions = await group.getMyGroups(user.id);
+      res.render("post", {
+        user,
+        permissions,
+      });
+    } catch (err) {
+      console.error("Failed to retrieve data:", err);
+      res.render("index", {
+        user,
+        showing: [],
+        posts: [],
+        permissions: [],
+        error: err.message,
+      });
+    }
+  } else {
+    res.render("post", {
+      user: null,
+      permissions: [],
+    });
   }
-  db.addPost(userId, data).then((id) => {
-    db.votePost(userId, id, nullVote);
-  });
+};
+
+const addPost = async(req, res) => {
+  console.log("addPost");
+  if (req.isAuthenticated()) {
+    const userId = req.user.id;
+    const data = req.body;
+    try{
+      if(!(await db.checkPermission(userId, data.label)))throw "権限なし"
+      db.addPost(userId, data);
+    }catch(err){
+      console.error(err)
+    }
+  }
   res.redirect("/");
 };
 
-const nullVote = async (postId) => {
-  const vote = {};
-  const options = await db.getOptions(postId);
-  for (const option of options) {
-    vote[option] = 0;
-  }
-  return vote;
+const checkPermission = async (userId, postId) => {
+  const post = await db.getPost(postId);
+  return db.checkPermission(userId, post.label);
 };
 
-exports.votePost = async (req, res) => {
-  if (!req.isAuthenticated()) {
+const votePost = async (req, res) => {
+  try {
+    if (!req.isAuthenticated()) throw "ログインしてない";
+    const postId = req.params.id;
+    const userId = req.user.id;
+    const isVotable = await checkPermission(userId, postId);
+    if (!isVotable) throw "権限なし";
+    db.getPost(postId)
+      .then(async (row) => {
+        return db.votePost(userId, postId);
+      })
+      .then(() => res.redirect(req.body.show)) // 投票後は / へリダイレクト
+      .catch((err) => {
+        console.error("Failed to vote post:", err);
+        res.redirect("/?error=" + encodeURIComponent(err.message));
+      });
+  } catch (err) {
+    console.error(err);
     res.redirect("/");
   }
-  const postId = req.params.id;
-  const userId = req.user.id;
-  const data = req.body;
-  const value = data.vote;
-  const isVotable = await db.checkVotable(userId, postId);
-  if (!isVotable) res.redirect("/");
-  db.getPost(postId)
-    .then(async (row) => {
-      let vote;
-      switch (row.vote_type) {
-        case "none":
-          vote = {};
-          break;
-        case "up/down":
-          vote = { updown: parseFloat(value) };
-          break;
-        case "radio":
-          if (Array.isArray(value))
-            throw new Error("択一式なのに複数選択された");
-        case "checkbox":
-          vote = await nullVote(postId);
-          for (const newOption of lib.toArray(data.newOption)) {
-            vote[newOption] = 0;
-          }
-          for (const checked of lib.toArray(value)) {
-            vote[checked] = 1;
-          }
-      }
-      console.log("vote", vote);
-      return db.votePost(userId, postId, vote);
-    })
-    .then(() => res.redirect("/")) // 投票後は / へリダイレクト
-    .catch((err) => {
-      console.error("Failed to vote post:", err);
-      res.redirect("/?error=" + encodeURIComponent(err.message));
-    });
+};
+
+module.exports = {
+  getPost,
+  getPosts,
+  newPost,
+  addPost,
+  votePost,
+  checkPermission,
 };

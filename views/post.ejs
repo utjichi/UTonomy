@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提起の作成</title>
+    <link rel="stylesheet" href="/header.css">
+    <link rel="stylesheet" href="/style.css">
+    <script type="module" src="/ui.js"></script>
+  </head>
+
+  <body>
+  <header>
+    <h1><a href="/">UTonomy</a></h1>
+    <button id="drawer-toggle">☰</button>
+    <div id="drawer" class="drawer">
+      <div class="account">
+        <% if (user) { %>
+            <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
+            <a href="/logout">ログアウト</a>
+        <% } else { %>
+            <a href="/auth/google">ログイン</a>
+        <% } %>
+      </div>
+      <nav>
+        <ul>
+            <li><a href="/">提起ひろば</a></li>
+            <% if (user) { %>
+              <li><a href="/group">グループ</a></li>
+            <% } %>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <h1>
+      提起の作成
+    </h1>
+    <form id="post" action="/post" method="post">
+      <% if (user) { %>
+          <input type="text" name="nickname" value="<%= user.displayName %>" placeholder="自称理事">
+          <input type="text" name="title" placeholder="学費を年間150万円に" required>
+          <select name="label">
+            <option value="all">🎓全構成員</option>
+            <option value="world">🌏全世界</option>
+            <% (permissions || []).forEach(permission => { %>
+              <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
+            <% }) %>
+          </select>
+          <button type="submit">投稿</button>
+      <% } else{ %>
+        <p>
+          投稿するには<a href="/auth/google">ログイン</a>
+        </p>
+      <% } %>
+    </form>
+  </main>
+  </body>
+</html>

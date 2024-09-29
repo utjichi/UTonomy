@@ -1,6 +1,14 @@
-/* style.css */
-:root{
-  --ui-l:95%;
+@font-face {
+    font-family: "BIZ UDGothic";
+    src: url('/BIZUDGothic-Regular.ttf') format('truetype');
+}
+
+:root {
+  --ui-l: 70%;
+  --ui-c: 0.162;
+  --padding: 15px;
+  --black: #333333;
+  --green:oklch(var(--ui-l) var(--ui-c) 140);
 }
 
 * {
@@ -10,78 +18,35 @@
 }
 
 body {
-  font-family: "Arial", sans-serif;
+  font-family: "BIZ UDGothic", "Arial", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
-  color: #333;
+  color: var(--black);
 }
 
-header {
-  display: flex;
-  background: #4caf50;
-  color: white;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between; /* Space between header elements */
+main{
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+main > *{
+  padding:var(--padding);
+}
+
+.flex{
+  display:flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.account {
-  margin-left: auto; /* Pushes the account section to the right */
-}
-
-header h1 {
-  margin: 0;
-}
-
-nav ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-}
-
-nav ul li {
-  margin-left: 20px;
-}
-
-nav ul li a {
-  color: white; /* テキストの色を白に設定 */
-  text-decoration: none; /* 下線を消す */
-  padding: 10px 15px; /* パディングを追加 */
-  border-radius: 4px; /* 角を丸くする */
-  background-color: #4caf50; /* ボタンの背景色を設定 */
-  transition: background-color 0.3s; /* ホバー時のスムーズな変化 */
-  display: inline-block; /* インラインブロックにしてボタンのように見せる */
-}
-
-nav ul li a:hover {
-  background-color: #45a049; /* ホバー時に背景色を変更 */
-}
-
-.account a {
-  color: white;
-  margin-right: 15px;
-}
-
-h2 {
+h2,h3 {
   margin: 20px 0;
-  text-align: center;
 }
 
 ul {
   list-style: none;
   padding: 0;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-#posts > li {
-  background: white;
-  margin: 10px 0;
-  padding: 15px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 time {
@@ -93,40 +58,42 @@ time {
 }
 
 form {
-  max-width: 600px; /* フォームの最大幅を設定 */
-  margin: 20px auto; /* 上下にマージンを追加し、中央に配置 */
-  background: white; /* 背景色を白に設定 */
-  border-radius: 5px; /* 角を丸くする */
-}
-
-#post {
-  padding: 20px; /* 内側のパディングを追加 */
+  max-width: 600px;
+  margin: 20px auto;
+  padding:var(--padding);
+  border-radius: 5px;
 }
 
 input[type="text"],
 textarea,
 select {
-  width: 100%; /* 幅を100%に設定して親要素に合わせる */
-  padding: 10px; /* パディングを追加 */
-  margin: 5px 0; /* 上下のマージンを追加 */
-  border: 1px solid #ccc; /* ボーダーを設定 */
-  border-radius: 4px; /* 角を丸くする */
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
 }
 
-button {
-  width: auto; /* ボタンの幅を自動に設定 */
-  padding: 10px; /* パディングを追加 */
-  border-radius: 4px; /* 角を丸くする */
-  background:oklch(var(--ui-l) none none);
-  cursor: pointer; /* カーソルをポインターに変更 */
+.button {
+  display:inline-block;
+  text-decoration:none;
 }
 
-button:hover {
-  background: oklch(85% none none);
+button,.button {
+  padding: 10px 15px; /* 上下10px、左右15pxのパディング */
+  border-radius: 4px;
+  background: var(--green); /* ボタンの背景色 */
+  color: white; /* ボタンの文字色 */
+  cursor: pointer;
+  border: none; /* ボーダーをなしに */
 }
 
-.toggled{
-  background:oklch(var(--ui-l) 100% 240deg);
+button:hover,.button:hover {
+  background: oklch(var(--ui-l) none none);
+}
+
+.toggled {
+  background: oklch(var(--ui-l) var(--ui-c) -40);
 }
 
 .error-message {
@@ -137,4 +104,8 @@ button:hover {
 .radio,
 .checkbox {
   margin: 10px 0;
+}
+
+td{
+  text-align:center;
 }

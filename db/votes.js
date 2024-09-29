@@ -6,104 +6,64 @@ db.run(`CREATE TABLE IF NOT EXISTS votes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     post_id INTEGER NOT NULL,
-    option TEXT,
-    value REAL,
-    UNIQUE(user_id, post_id, option)
+    UNIQUE(user_id, post_id)
   )`);
 
-const votePost = (userId, postId, vote) => {
+const votePost = (userId, postId) => {
   return new Promise((resolve, reject) => {
-    db.run(
-      "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
+    db.get(
+      "SELECT id FROM votes WHERE user_id = ? AND post_id = ?",
       [userId, postId],
-      (err) => {
+      (err, row) => {
         if (err) reject(err);
-        resolve();
+        if (row) {
+          db.run(
+            "DELETE FROM votes WHERE user_id = ? AND post_id = ?",
+            [userId, postId],
+            (err) => {
+              if (err) reject(err);
+              resolve();
+            }
+          );
+        } else {
+          db.run(
+            "INSERT INTO votes (user_id, post_id) VALUES (?, ?)",
+            [userId, postId],
+            (err) => {
+              if (err) reject(err);
+              resolve();
+            }
+          );
+        }
       }
-    );
-  }).then(() => {
-    return Promise.all(
-      Object.entries(vote).map(
-        (entry) =>
-          new Promise((resolve, reject) => {
-            db.run(
-              "INSERT INTO votes (user_id, post_id, option, value) VALUES (?, ?, ?, ?)",
-              [userId, postId, entry[0], entry[1]],
-              (err) => {
-                if (err) reject(err);
-                resolve();
-              }
-            );
-          })
-      )
     );
   });
 };
 
 const getMyVote = (userId, postId) => {
   return new Promise((resolve, reject) => {
-    db.all(
-      "SELECT option, value FROM votes WHERE user_id = ? AND post_id = ?",
+    db.get(
+      "SELECT id FROM votes WHERE user_id = ? AND post_id = ?",
       [userId, postId],
-      (err, rows) => {
+      (err, row) => {
         if (err) reject(err);
-        else resolve(rows);
+        else resolve(row);
       }
     );
   });
 };
 
-const getOptions = (postId) => {
-  return new Promise((resolve, reject) => {
-    db.all(
-      "SELECT DISTINCT option FROM votes WHERE post_id = ?",
-      [postId],
-      (err, rows) => {
-        if (err) reject(err);
-        resolve(rows.map((row) => row.option));
-      }
-    );
-  });
-};
-
-const getVotes = (postId,voteType) => {
-  switch (voteType) {
-    case "up/down":
+const getVotes = (postId, voteType) => {
       return new Promise((resolve, reject) => {
-        db.all(
-          "SELECT value, COUNT(*) AS count FROM votes WHERE post_id = ? GROUP BY value",
+        db.get(
+          "SELECT COUNT(*) AS count FROM votes WHERE post_id = ?",
           [postId],
-          (err, rows) => {
+          (err, row) => {
             if (err) reject(err);
-            const votes = {};
-            for (const row of rows) {
-              votes[row.value] = row.count;
-            }
-            resolve(votes);
+            resolve(row.count);
           }
         );
       });
-    case "radio":
-    case "checkbox":
-      return new Promise((resolve, reject) => {
-        db.all(
-          "SELECT option, SUM(value) AS sum FROM votes WHERE post_id = ? GROUP BY option",
-          [postId],
-          (err, rows) => {
-            if (err) reject(err);
-            const votes = {};
-            if (rows) {
-              for (const row of rows) {
-                votes[row.option] = row.sum;
-              }
-            }
-            resolve(votes);
-          }
-        );
-      });
-    default:
-      return {};
-  }
 };
 
 // 他の投票関連の関数もここに追加
@@ -111,6 +71,5 @@ const getVotes = (postId,voteType) => {
 module.exports = {
   votePost,
   getMyVote,
-  getOptions,
   getVotes,
 };

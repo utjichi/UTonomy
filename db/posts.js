@@ -6,30 +6,25 @@ db.run(`CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     nickname TEXT DEFAULT "東大構成員",
-    viewer TEXT NOT NULL,
-    voter TEXT,
-    content TEXT NOT NULL,
-    vote_type TEXT DEFAULT "none",
+    label TEXT NOT NULL,
+    title TEXT NOT NULL,
     timestamp INTEGER NOT NULL
   )`);
 
 const addPost = (userId, data) => {
   return new Promise((resolve, reject) => {
     db.run(
-      "INSERT INTO posts (user_id, nickname, viewer, voter, content, vote_type, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO posts (user_id, nickname, label, title, timestamp) VALUES (?, ?, ?, ?, ?)",
       [
         userId,
         data.nickname,
-        data.viewer,
-        data.voter,
-        data.content,
-        data.voteType,
+        data.label,
+        data.title,
         Date.now(),
       ],
       function (err) {
         if (err) reject(err);
-        console.log(this.lastID);
-        resolve(this.lastID);
+        resolve();
       }
     );
   });
@@ -45,11 +40,11 @@ const getPost = (id) => {
   });
 };
 
-const getPosts = (groups) => {
+const getPosts = (label) => {
   return new Promise((resolve, reject) => {
     db.all(
-      `SELECT * from posts WHERE viewer IN (${groups.map(() => "?").join(",")}) ORDER BY timestamp`,
-      groups,
+      "SELECT id from posts WHERE label = ? ORDER BY timestamp DESC",
+      label,
       (err, rows) => {
         if (err) reject(err);
         resolve(rows);

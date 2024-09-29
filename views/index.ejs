@@ -1,171 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UTonomy</title>
+  <link rel="stylesheet" href="/header.css">
   <link rel="stylesheet" href="/style.css">
-  <script type="module" src="/post.js"></script>
-  <script type="module" src="/vote.js"></script>
+  <link rel="stylesheet" href="/index.css">
+  <script type="module" src="/index.js"></script>
+  <script type="module" src="/ui.js"></script>
 </head>
+
 <body>
   <header>
-    <h1>UTonomy</h1>
-    <nav>
+    <h1><a href="/">UTonomy</a></h1>
+    <button id="drawer-toggle">☰</button>
+    <div id="drawer" class="drawer">
+      <div class="account">
+        <% if (user) { %>
+            <a class="user" href="/user">
+              <img src="<%= user.photos[0].value %>">
+              <div class="userinfo">
+                <p>
+                  <%= user.displayName %>
+                </p>
+                <p>
+                  <%= user.emails[0].value %>
+                </p>
+              </div>
+            </a>
+            <a class="button" href="/logout">ログアウト</a>
+        <% } else { %>
+            <a class="button" href="/auth/google">ログイン</a>
+        <% } %>
+      </div>
+      <nav>
         <ul>
-            <li><a href="/">HOME</a></li>
-            <% if (user.id) { %>
-                <li><a href="/group">GROUP</a></li>
+            <li><a href="/">提起ひろば</a></li>
+            <% if (user) { %>
+              <li><a href="/group">グループ</a></li>
             <% } %>
         </ul>
-    </nav>
-    <div class="account">
-        <% if (user.id) { %>
-            <a href="/user"><img src="<%= user.photos[0].value %>"><%= user.displayName %></a>
-            <a href="/logout">ログアウト</a>
-        <% } else { %>
-            <a href="/auth/google">ログイン</a>
-        <% } %>
+      </nav>
     </div>
   </header>
-
-    <h2>Posts</h2>
-
+  <main>
+    <div class="flex">
+      <h2>提起ひろば</h2>
+      <% if(user){ %>
+        <a class="button" href="/post">
+          新しい提起+
+        </a>
+      <% }else{ %>
+        <a class="button" href="/auth/google">ログイン</a>
+      <% } %>
+    </div>
+    <p>
+      学内の問題や要望などを提起し、学生・教職員で集めて「見える化」する広場です。
+    </p>
     <!-- エラーメッセージの表示 -->
     <% if (error) { %>
         <div style="color: red;"><%= error %></div>
     <% } %>
     
-    <form action="/">
-      <h3>
-        表示範囲
-      </h3>
-      <ul>
-        <li><label><input type="checkbox" name="show" value="world" <% if (showing.includes("world")) { %>checked<% } %>>🌏全世界</label></li>
-        <% if (user.id) { %>
-          <li><label><input type="checkbox" name="show" value="all" <% if (showing.includes("all")) { %>checked<% } %>>🎓全構成員</label></li>
+    <form id="viewOpt" method="get" action="/">
+      <select name="show">
+        <option value="world" <% if (showing=="world") { %>selected<% } %>> 🌏全世界</option>
+        <% if (user) { %>
+          <option value="all" <% if (showing=="all") { %>selected<% } %>> 🎓全構成員</option>
         <% } %>
         <% (permissions || []).forEach(permission => { %>
-          <li><label><input type="checkbox" name="show" value="<%= permission.target %>" <% if (showing.includes(permission.target)) { %>checked<% } %>><%= permission.group.name %></label></li>
+          <option value="<%= permission.target %>" <% if (showing==permission.target) { %>selected<% } %>> <%= permission.group.name %></option>
         <% }) %>
-      </ul>
-      <button>
-        適用
-      </button>
+      </select>
     </form>
 
     <ul id="posts">
       <% (posts || []).forEach(post => { %>
-        <li>
-          <div class="meta">
-            <strong><%= post.nickname %></strong>
-            <time><%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %></time>
-          </div>
-          <%= post.content %>
-       <% if(post.vote_type!="none"){ %>
-              <form action="/post/<%= post.id %>/vote" method="post" style="display:inline;">
-              <% switch(post.vote_type){
-                   case "up/down": %>
-                     <% const updown=post.myVote[0] || { option:"updown", value:0 } %>
-                     <button type="submit" name="vote" <%= updown.value==+1 ? "value=0 class=toggled" : "value=+1" %> <% if(!post.isVotable){ %>disabled<% } %>>👍 <%= post.votes[+1] || 0 %></button>
-                     <button type="submit" name="vote" <%= updown.value==-1 ? "value=0 class=toggled" : "value=-1" %> <% if(!post.isVotable){ %>disabled<% } %>>👎 <%= post.votes[-1] || 0 %></button>
-                <%   break;
-                   case "radio": %>
-                     <ul id="options<%= post.id %>" class="radio">
-                <%     if(post.isVotable){ %>
-                       <li><label>
-                         <input type="radio" name="vote" value="none"
-                             <% if(post.myVote.every(row=>row.value==0)){ %>checked<% } %>>
-                         未選択
-                       </label></li>
-                <%     } %>
-                <%     (post.options || []).forEach(option => { %>
-                         <li><label>
-                           <input type="radio" name="vote" value="<%= option %>"
-                <%         if(post.isVotable){
-                             if((post.myVote.find(row=>row.option==option) || 0).value){ %>
-                               checked
-                <%           }
-                           }else{ %>
-                             disabled
-                <%         } %>>
-                           <%= option %> (<%= post.votes[option] %>)
-                         </label></li>
-                <%     }) %>
-                     </ul>
-                <%   if(post.isVotable){ %>
-                       <button type="button" id="addOption<%= post.id %>" class="addOption">
-                         選択肢を追加
-                       </button>
-                       <button>
-                         投票
-                       </button>
-                <%   } %>
-                <%   break;
-                   case "checkbox": %>
-                     <ul id="options<%= post.id %>" class="checkbox">
-                <%     (post.options || []).forEach(option => { %>
-                         <li><label>
-                           <input type="checkbox" name="vote" value="<%= option %>"
-                <%         if(post.isVotable){
-                             if((post.myVote.find(row=>row.option==option) || 0).value){ %>
-                               checked
-                <%           }
-                           }else{ %>
-                             disabled
-                <%         } %>>
-                           <%= option %> (<%= post.votes[option] %>)
-                         </label></li>
-                <%     }) %>
-                     </ul>
-                <%   if(post.isVotable){ %>
-                       <button type="button" id="addOption<%= post.id %>" class="addOption">
-                         選択肢を追加
-                       </button>
-                       <button>
-                         投票
-                       </button>
-                <%   } %>
-            <%   } %>
-              </form>
-       <% } %>
-        </li>
+          <li class="post" id="<%= post.id %>">
+            <div class="meta">
+              <strong><%= post.nickname %></strong>
+              <time><%= new Date(post.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) %></time>
+            </div>
+            <h3>
+              <%= post.title %>
+            </h3>
+            <form action="/post/<%= post.id %>/vote" method="post">
+              <input type="hidden" name="show" value="/?show=<%= showing %>">
+              <button type="submit" class="like<% if(post.myVote){ %> toggled<% } %>">♡<%= post.votes %></button>
+            </form>
+          </li>
       <% }) %>
     </ul>
-  <form id="post" action="/post" method="post">
-      <% if (user.id) { %>
-          <input name="nickname" value="<%= user.displayName %>" placeholder="藤井輝夫">
-          <textarea name="content" placeholder="総長万歳" required></textarea>
-          <label for="viewer">閲覧</label>
-          <select id="viewer" name="viewer">
-            <option value="all">🎓全構成員</option>
-            <option value="world">🌏全世界</option>
-            <% (permissions || []).forEach(permission => { %>
-              <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
-            <% }) %>
-          </select>
-          <label for="voteType">投票</label>
-          <select id="voteType" name="voteType">
-              <option value="none">無効</option>
-              <option value="up/down">👍/👎</option>
-              <option value="radio" class="customOptions">🔘択一</option>
-              <option value="checkbox" class="customOptions">☑複数選択</option>
-          </select>
-
-          <div id="inputContainer" class="input-container" style="display: none;">
-              <ul id="optionList"></ul>
-              <button type="button" id="addOptionButton">選択肢を追加</button>
-          </div>
-          <select name="voter" hidden>
-            <option value="all">🎓全構成員</option>
-            <% (permissions || []).forEach(permission => { %>
-              <option value="<%= permission.target %>"><%= permission.group.name %>(<%= permission.target %>)</option>
-            <% }) %>
-          </select>
-          <button type="submit">投稿</button>
-      <% } else{ %>
-        <p>
-          投稿するには<a href="/auth/google">ログイン</a>
-        </p>
-      <% } %>
-  </form>
+  </main>
 </body>
 </html>

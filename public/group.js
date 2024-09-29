@@ -1,6 +1,7 @@
 const newGroupBtn=document.getElementById("newGroup");
+const ngbInit=newGroupBtn.textContent
 newGroupBtn.onclick=()=>{
-  const isHidden=newGroupBtn.textContent=="新規グループ";
-  newGroupBtn.textContent=isHidden?"キャンセル":"新規グループ";
+  const isHidden=newGroupBtn.textContent==ngbInit;
+  newGroupBtn.textContent=isHidden?"キャンセル":ngbInit;
   document.getElementById("newGroupConfig").style.display=isHidden?"block":"none"
 };

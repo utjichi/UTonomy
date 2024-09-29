@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^5.0.0",
+    "sqlite3": "^5.1.7",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "express-session": "^1.18.0",
+    "connect-sqlite3": "^0.9.15",
+    "ejs": "^3.1.10",
+    "uuid": "^10.0.0"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}
