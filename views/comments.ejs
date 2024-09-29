@@ -44,9 +44,9 @@
   </header>
   <main>
     <div class="flex">
-      <h2><%= title %></h2>
+      <h2><%= post.title %></h2>
       <% if(user){ %>
-        <a class="button" href="/comment">
+        <a class="button" href="/comment/<%= post.id %>">
           新しいコメント+
         </a>
       <% }else{ %>

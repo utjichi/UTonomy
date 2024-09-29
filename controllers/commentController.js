@@ -11,13 +11,13 @@ exports.comments = async (req, res) => {
     // 権限あり
     res.render("comments", {
       user: req.user,
-      title: (await db.getPost(postId)).title,
+      post: await db.getPost(postId),
       comments: await db.getComments(postId),
-      error:null
+      error: null,
     });
   } catch (err) {
-    console.error(err)
-    res.redirect("/?error="+err);
+    console.error(err);
+    res.redirect("/?error=" + err);
   }
 };
 
@@ -25,10 +25,12 @@ exports.newComment = async (req, res) => {
   if (req.isAuthenticated()) {
     const user = req.user;
     try {
-      const permissions = await group.getMyGroups(user.id);
-      res.render("post", {
+      const postId = req.params.id;
+      if (!post.checkPermission(req.user.id, postId)) throw "権限なし";
+      // 権限あり
+      res.render("comment", {
         user,
-        permissions,
+        post: await db.getPost(postId),
       });
     } catch (err) {
       console.error("Failed to retrieve data:", err);
@@ -40,6 +42,8 @@ exports.newComment = async (req, res) => {
         error: err.message,
       });
     }
+  } else {
+    res.redirect("/?error=ログインしてください");
   }
 };
 

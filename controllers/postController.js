@@ -38,6 +38,8 @@ const newPost = async (req, res) => {
         error: err.message,
       });
     }
+  }else{
+    res.redirect("/?error=ログインしてください")
   }
 };
 
