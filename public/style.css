@@ -5,9 +5,10 @@
 
 :root {
   --ui-l: 70%;
+  --ui-c: 0.162;
   --padding: 15px;
   --black: #333333;
-  --green:oklch(67.31% 0.162 144.21);
+  --green:oklch(var(--ui-l) var(--ui-c) 140);
 }
 
 * {
@@ -39,7 +40,7 @@ main > *{
   align-items: center;
 }
 
-h2 {
+h2,h3 {
   margin: 20px 0;
 }
 
@@ -102,11 +103,11 @@ button,.button {
 }
 
 button:hover,.button:hover {
-  background: oklch(85% none none);
+  background: oklch(var(--ui-l) none none);
 }
 
 .toggled {
-  background: oklch(var(--ui-l) 100% 240deg);
+  background: oklch(var(--ui-l) var(--ui-c) -40);
 }
 
 .error-message {
