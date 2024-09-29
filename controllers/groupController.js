@@ -5,7 +5,7 @@ exports.getUser = async (req, res) => {
   if (req.isAuthenticated()) {
     res.render("user", { user: req.user, error: null });
   } else {
-    res.render("index", { user: req.user, posts: [], error: null });
+    res.redirect("/");
   }
 };
 

@@ -41,11 +41,11 @@ const getPost = (id) => {
   });
 };
 
-const getPosts = (group) => {
+const getPosts = (label) => {
   return new Promise((resolve, reject) => {
     db.all(
-      "SELECT * from posts WHERE viewer = ? ORDER BY timestamp",
-      group,
+      "SELECT * from posts WHERE label = ? ORDER BY timestamp DESC",
+      label,
       (err, rows) => {
         if (err) reject(err);
         resolve(rows);
