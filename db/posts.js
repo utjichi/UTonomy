@@ -24,8 +24,7 @@ const addPost = (userId, data) => {
       ],
       function (err) {
         if (err) reject(err);
-        console.log(this.lastID);
-        resolve(this.lastID);
+        resolve();
       }
     );
   });

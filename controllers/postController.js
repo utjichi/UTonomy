@@ -46,12 +46,17 @@ const newPost = async (req, res) => {
   }
 };
 
-const addPost = (req, res) => {
+const addPost = async(req, res) => {
   console.log("addPost");
   if (req.isAuthenticated()) {
     const userId = req.user.id;
     const data = req.body;
-    db.addPost(userId, data);
+    try{
+      if(!(await db.checkPermission(userId, data.label)))throw "権限なし"
+      db.addPost(userId, data);
+    }catch(err){
+      console.error(err)
+    }
   }
   res.redirect("/");
 };

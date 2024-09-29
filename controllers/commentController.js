@@ -50,4 +50,17 @@ exports.newComment = async (req, res) => {
   }
 };
 
-exports.addComment = (req, res) => {};
+exports.addComment = async(req, res) => {
+  if (req.isAuthenticated()) {
+    const userId = req.user.id;
+    const data = req.body;
+      const postId=req.params.id
+    try{
+      if(!(await post.checkPermission(userId, postId)))throw "権限なし"
+      db.addComment(userId,postId, data);
+    }catch(err){
+      console.error(err)
+    }
+  }
+  res.redirect("/comments/");
+};
