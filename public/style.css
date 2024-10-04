@@ -109,8 +109,8 @@ td{
     justify-content: center; /* 水平方向の中央揃え */
     align-items: center; /* 垂直方向の中央揃え */
   position: fixed; /* 固定位置に変更 */
-  bottom: 5px; /* 上からの距離 */
-  right: 10px; /* 左からの距離 */
+  bottom: var(--padding); /* 上からの距離 */
+  right: var(--padding); /* 左からの距離 */
   background: var(--green);
   color: white;
   border: none;
