@@ -109,3 +109,18 @@ button:hover,.button:hover {
 td{
   text-align:center;
 }
+
+.bottom-right {
+  position: fixed; /* 固定位置に変更 */
+  bottom: 5px; /* 上からの距離 */
+  right: 10px; /* 左からの距離 */
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 5px 15px; /* 上下5px、左右15pxのパディング */
+  text-decoration:none;
+  cursor: pointer;
+  z-index: 1000; /* 他の要素の上に表示 */
+  width: auto; /* 幅を自動に設定 */
+  font-size: 35px;
+}
