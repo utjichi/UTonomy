@@ -44,16 +44,7 @@
     </div>
   </header>
   <main>
-    <div class="flex">
-      <h2>提起ひろば</h2>
-      <% if(user){ %>
-        <a class="button" href="/post">
-          新しい提起+
-        </a>
-      <% }else{ %>
-        <a class="button" href="/auth/google">ログイン</a>
-      <% } %>
-    </div>
+    <h2>提起ひろば</h2>
     <p>
       学内の問題や要望などを提起し、学生・教職員で集めて「見える化」する広場です。
     </p>
@@ -92,5 +83,8 @@
       <% }) %>
     </ul>
   </main>
+  <a class="bottom-right" href="/post">
+    +
+  </a>
 </body>
 </html>

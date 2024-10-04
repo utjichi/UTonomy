@@ -43,16 +43,7 @@
     </div>
   </header>
   <main>
-    <div class="flex">
-      <h2><%= post.title %></h2>
-      <% if(user){ %>
-        <a class="button" href="/comment/<%= post.id %>">
-          新しいコメント+
-        </a>
-      <% }else{ %>
-        <a class="button" href="/auth/google">ログイン</a>
-      <% } %>
-    </div>
+    <h2><%= post.title %></h2>
     <form action="/post/<%= post.id %>/vote" method="post">
       <input type="hidden" name="show" value="/comments/<%= post.id %>">
       <button type="submit" class="like<% if(post.myVote){ %> toggled<% } %>">♡<%= post.votes %></button>
@@ -76,5 +67,8 @@
       <% }) %>
     </ul>
   </main>
+  <a class="bottom-right" href="/comment/<%= post.id %>">
+    +
+  </a>
 </body>
 </html>

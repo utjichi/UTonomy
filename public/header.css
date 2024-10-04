@@ -55,8 +55,8 @@ nav ul li a:hover {
 
 #drawer-toggle {
   position: fixed; /* 固定位置に変更 */
-  top: 5px; /* 上からの距離 */
-  left: 10px; /* 左からの距離 */
+  top: var(--padding); /* 上からの距離 */
+  left: var(--padding); /* 左からの距離 */
   background: var(--green);
   color: white;
   border: none;
