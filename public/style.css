@@ -116,6 +116,6 @@ td{
   text-decoration:none;
   cursor: pointer;
   z-index: 1000; /* 他の要素の上に表示 */
-  width: auto; /* 幅を自動に設定 */
-  font-size: 35px;
+  width: 60px; /* 幅を自動に設定 */
+  font-size: 50px;
 }
