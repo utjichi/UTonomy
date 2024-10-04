@@ -11,6 +11,9 @@
 </head>
 
 <body>
+  <a class="button" href="/post">
+    +
+  </a>
   <header>
     <h1><a href="/">UTonomy</a></h1>
     <button id="drawer-toggle">☰</button>
@@ -46,13 +49,6 @@
   <main>
     <div class="flex">
       <h2>提起ひろば</h2>
-      <% if(user){ %>
-        <a class="button" href="/post">
-          新しい提起+
-        </a>
-      <% }else{ %>
-        <a class="button" href="/auth/google">ログイン</a>
-      <% } %>
     </div>
     <p>
       学内の問題や要望などを提起し、学生・教職員で集めて「見える化」する広場です。
