@@ -34,12 +34,6 @@ main > *{
   padding:var(--padding);
 }
 
-.flex{
-  display:flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 h2,h3 {
   margin: 20px 0;
 }
@@ -118,6 +112,7 @@ td{
   color: white;
   border: none;
   padding: 5px 15px; /* 上下5px、左右15pxのパディング */
+  border-radius:4px;
   text-decoration:none;
   cursor: pointer;
   z-index: 1000; /* 他の要素の上に表示 */
